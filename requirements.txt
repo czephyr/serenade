@@ -3,5 +3,4 @@ uvicorn
 sqlalchemy 
 psycopg2-binary
 cryptography
-python-keycloak 
-python-jose[cryptography]
+python-keycloak

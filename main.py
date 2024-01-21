@@ -3,14 +3,32 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
-from jose import jwt
+from keycloak import KeycloakOpenID
+from fastapi.security import OAuth2PasswordBearer
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 from typing import List, Optional
 import hashlib
 import os
+import traceback
 
 app = FastAPI()
+
+KEYCLOAK_URL = "http://localhost:8080/auth/"
+KEYCLOAK_REALM = "serenade"
+KEYCLOAK_CLIENT_ID = "fastapi-be"
+KEYCLOAK_CLIENT_SECRET = "KYPkWwY5pc2dtbVX3rNuLNS8CQeE3YeW"  # If needed
+KEYCLOAK_PUBLIC_KEY = '''-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAygpENRdkI6KGUNCGKXbkmKPME994cJE2fOeSafl/xt9UiYH0o8CIXZT1sK6IDfkVN7QeHvG9llChW7iW0S1OOb90RQ4msO7LafW9Fs0o7I4rmGnIbQd3Xv8OiwntxAVGadRbXmQ8+xkYQ5/GQRrVYTIfJeTS0tV4Fga7LCA7HURKLFU3T0OT2JwIH/hmWD4iKHn8WAfBmST8DFWY9MN73LBe32kaa2xGoyZZ7gg5EJpRsO7mlPbjaxR72/jaI7vABTvlT90KdoJlZ0QMFeisp1APhYp7b6gUP1Psz7rp9ElKFFEsuMtv3oYN0sckxGMHQCN9Hpp3QA8hjsADGKJPcwIDAQAB
+-----END PUBLIC KEY-----'''
+
+keycloak_openid = KeycloakOpenID(
+    server_url=KEYCLOAK_URL,
+    client_id=KEYCLOAK_CLIENT_ID,
+    realm_name=KEYCLOAK_REALM,
+    client_secret_key=KEYCLOAK_CLIENT_SECRET
+)
+
 
 DATABASE_URL = "postgresql://user:password@localhost/mydatabase"
 engine = create_engine(DATABASE_URL)
@@ -72,21 +90,27 @@ class PatientStatus(Base):
 # Create tables
 Base.metadata.create_all(bind=engine)
 
-def verify_token(request: Request):
-    token = request.query_params.get("token")
-    if token != HOSPITAL_TOKEN:
-        raise HTTPException(status_code=403, detail="Invalid token")
-    
-def verify_get_install_nums_token(request: Request):
-    token = request.query_params.get("token")
-    if token != IMT_TOKEN:
-        raise HTTPException(status_code=403, detail="Invalid token for get_install_nums")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="http://localhost:8080/realms/serenade/protocol/openid-connect/token")
 
-def verify_iit_token(request: Request):
-    token = request.query_params.get("token")
-    if token != IIT_TOKEN:
-        raise HTTPException(status_code=403, detail="Invalid token for get_install_nums")
+def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
+    try:
+        # Decode the token
+        token_info = keycloak_openid.decode_token(token=token,key=KEYCLOAK_PUBLIC_KEY, options={"verify_signature": True, "verify_aud": False})
+        # Get user info
+        print(token_info)
+        user_info = keycloak_openid.userinfo(token)
+        # Merge token info and user info
+        current_user = {**token_info, **user_info}
+        return current_user
+    except Exception as e:
+        print(traceback.format_exc())
+        raise HTTPException(status_code=403, detail=f"Could not validate credentials Exeception {e}")
 
+
+def is_user_in_group(current_user: dict, group_name: str) -> bool:
+    if 'groups' in current_user and group_name in current_user['groups']:
+        return True
+    return False
 
 # Dependency to get the database session
 def get_db():
@@ -110,9 +134,17 @@ def encrypt_patient_id(patient_id: int) -> str:
 @app.post("/add_patient/")
 def add_patient(
     user_data: UserData,
-    token: Optional[str] = Depends(verify_token),
+    current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    
+    required_group = "hospital"
+
+    # Check if the user is in the required group
+    if not is_user_in_group(current_user, required_group):
+        raise HTTPException(status_code=403, detail=f"Access denied, user must be in {required_group} group")
+
+
     try:
         # Add patient to the database
         new_patient = Patient(**user_data.dict())
@@ -149,8 +181,15 @@ def add_patient(
 
 
 # Endpoint to get a list of patients with their SHA and AES identifiers
-@app.get("/patients/", response_model=List[UserData])
-def get_patients(token: str = Depends(verify_token), db: Session = Depends(get_db)):
+@app.post("/patients/", response_model=List[UserData])
+def get_patients(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+
+    required_group = "hospital"
+
+    # Check if the user is in the required group
+    if not is_user_in_group(current_user, required_group):
+        raise HTTPException(status_code=403, detail=f"Access denied, user must be in {required_group} group")
+
     # Joining patients, patient_PID, and patient_INSTNUM tables
     results = db.query(
         Patient,
@@ -179,7 +218,7 @@ def get_patients(token: str = Depends(verify_token), db: Session = Depends(get_d
 
 # New endpoint to get installation numbers, status, and SHA identifier
 @app.get("/get_install_nums/")
-def get_install_nums(token: str = Depends(verify_get_install_nums_token), db: Session = Depends(get_db)):
+def get_install_nums(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     # Joining patient_INSTNUM, patient_PID, and patient_status tables
     results = db.query(
         PatientINSTNUM.INSTNUM_aes_indentifier,
@@ -202,7 +241,7 @@ def get_install_nums(token: str = Depends(verify_get_install_nums_token), db: Se
 
 # New endpoint to get patient details with AES identifier
 @app.get("/patient_details/")
-def get_patient_details(token: str = Depends(verify_iit_token), db: Session = Depends(get_db)):
+def get_patient_details(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     # Joining patients and patient_INSTNUM tables
     results = db.query(
         Patient,
