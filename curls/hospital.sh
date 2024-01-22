@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ### adding patient
 
 curl -X POST "http://localhost:8000/add_patient/?token=fake_hospital_token" \
