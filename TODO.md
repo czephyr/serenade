@@ -1,0 +1,22 @@
+# TODO
+
+- [ ] KeyCloak
+  - [x] debug versioni compatibili
+  - [ ] inserire tre ruoli:
+    - dottori
+    - tecnici
+    - monitor
+  - [ ] inserire 2 client
+    - dottori
+    - ticketing
+    - cli?
+- [ ] API REST
+  - [ ] paziente (get, post, put, delete)
+  - [ ] ticket (get, post, put, delete)
+  - [ ] lookup
+  - [ ] auth
+  - [ ] access control
+  - [ ] logging
+- [ ] DataBase
+- [ ] front-end dottori
+- [ ] front-end ticketing
