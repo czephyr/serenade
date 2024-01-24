@@ -19,7 +19,7 @@ app = FastAPI(
 patients_db = []
 
 # Keycloak configuration
-keycloak_url = "http://localhost:8080"
+keycloak_url = "http://keycloak:8080/"
 client_id = "cli-dottori"
 client_secret = "dFVs0dyOq8okog72gsn5z7h8qCzp6PW9"
 realm_name = "serenade"
@@ -98,3 +98,9 @@ async def delete_patient(
         raise HTTPException(status_code=404, detail="Patient not found")
     deleted_patient = patients_db.pop(patient_id)
     return deleted_patient
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -16,7 +16,8 @@ services:
       PGDATABASE: keycloak
       PGUSER: admin
       PGPASSWORD: admin
-      PGHOST: localhost
+      PGHOST: postgres
+      PGPORT: 5432
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/keycloak-server.crt.pem
