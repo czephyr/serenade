@@ -14,7 +14,7 @@ import traceback
 
 app = FastAPI()
 
-KEYCLOAK_URL = "http://localhost:8080/auth/"
+KEYCLOAK_URL = "http://localhost:8080/"
 KEYCLOAK_REALM = "serenade"
 KEYCLOAK_CLIENT_ID = "fastapi-be"
 KEYCLOAK_CLIENT_SECRET = "KYPkWwY5pc2dtbVX3rNuLNS8CQeE3YeW"  # If needed
