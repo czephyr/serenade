@@ -23,3 +23,14 @@ services:
       - "8080:8080"
     command:
       - "start-dev"
+  fastapi:
+    image: python:3.12
+    volumes:
+      - ./api:/api
+    working_dir: /api
+    command: >
+      bash -c "python -m venv venv && source venv/bin/activate &&
+               pip install --no-cache-dir -r requirements.txt --upgrade &&
+               python main.py"
+    ports:
+      - "8000:8000"
