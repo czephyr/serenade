@@ -18,9 +18,9 @@ services:
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/keycloak-server.crt.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/keycloak-server.key.pem
       KC_HTTP_RELAITVE_PATH: /auth
-      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
     volumes:
-      - realm-export.json:/opt/jboss/keycloak/imports/realm-export.json
+      - ./keys:/opt/keycloak/conf
+      - ./keycloak_data:/opt/keycloak/data/h2
     ports:
       - "8080:8080"
       - "8443:8443"
