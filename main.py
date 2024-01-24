@@ -30,7 +30,14 @@ keycloak_openid = KeycloakOpenID(
 )
 
 
-DATABASE_URL = "postgresql://user:password@localhost/mydatabase"
+db_env = {
+    "user": os.getenv("POSTGRES_USER", "admin"),
+    "password": os.getenv("POSTGRES_PASSWORD", "admin"),
+    "host": os.getenv("POSTGRES_HOST", "localhost"),
+    "dbname": os.getenv("POSTGRES_DB"),
+}
+
+DATABASE_URL = "postgresql://{user}:{password}@{host}/{dbname}".format(**db_env)
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
