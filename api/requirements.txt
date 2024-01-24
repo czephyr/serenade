@@ -1,7 +1,5 @@
 fastapi 
 uvicorn
-sqlalchemy 
-psycopg2-binary
-cryptography
 python-keycloak
 requests
+python-multipart
