@@ -1,7 +1,7 @@
 from typing import List
 
 from fastapi import Depends, FastAPI, HTTPException
-from fastapi.security import OAuth2AuthorizationCodeBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from keycloak import KeycloakOpenID
 from pydantic import BaseModel
 
@@ -32,16 +32,17 @@ keycloak_openid = KeycloakOpenID(
     client_secret_key=client_secret,
 )
 
-# OAuth2 configuration
-oauth2_scheme = OAuth2AuthorizationCodeBearer(
-    tokenUrl="token",
-    # flows=OAuthFlowsModel(
-    #     authorizationCode=OAuthFlowAuthorizationCode(
-    #         tokenUrl="token",
-    #         refreshUrl="token",
-    #     )
-    # ),
-)
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
+
+@app.post("/login")
+async def gen_token_to_login(input_data: OAuth2PasswordRequestForm = Depends()):
+    token = keycloak_openid.token(
+        username=input_data.username,
+        password=input_data.password,
+    )
+    return {"access_token": token["access_token"], "token_type": "bearer"}
 
 
 # Dependency to validate the access token
