@@ -20,8 +20,8 @@ patients_db = []
 
 # Keycloak configuration
 keycloak_url = "http://keycloak:8080/"
-client_id = "cli-dottori"
-client_secret = "dFVs0dyOq8okog72gsn5z7h8qCzp6PW9"
+client_id = "fastapi-be"
+client_secret = "32lfgwv1jLynVSoUpNveN5ieP5qVR9ZJ"
 realm_name = "serenade"
 
 # Configure Keycloak client
@@ -30,10 +30,11 @@ keycloak_openid = KeycloakOpenID(
     client_id=client_id,
     realm_name=realm_name,
     client_secret_key=client_secret,
+    custom_headers={"scope":'openid'}
 )
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login",scopes={"scope":'openid'})
 
 
 @app.post("/login")
@@ -47,8 +48,9 @@ async def gen_token_to_login(input_data: OAuth2PasswordRequestForm = Depends()):
 
 # Dependency to validate the access token
 async def get_current_user(token: str = Depends(oauth2_scheme)):
-    credentials = keycloak_openid.userinfo(token)
-    if not credentials:
+    credentials = keycloak_openid.introspect(token)
+    print(f"get_current_user ################# {credentials}")
+    if not credentials["active"]:
         raise HTTPException(status_code=401, detail="Invalid credentials")
     return credentials
 
@@ -63,11 +65,14 @@ async def read_hello(current_user: str = Depends(get_current_user)):
 # Sample in-memory patient database
 patients_db = []
 
-
 @app.get("/patients", response_model=List[Patient])
-async def read_patients():
-    return patients_db
+async def read_patients(current_user: dict = Depends(get_current_user)):
+    print(f"read_patients ################# {current_user}")
 
+    if "dottore" in current_user["realm_access"]["roles"]:
+        return patients_db
+    else:
+        raise HTTPException(status_code=403, detail="Unauthorized")
 
 @app.get("/patients/{patient_id}", response_model=Patient)
 async def get_patient(patient_id: int):

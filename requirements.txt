@@ -3,4 +3,4 @@ uvicorn
 sqlalchemy 
 psycopg2-binary
 cryptography
-python-keycloak
+python-keycloak==3.7
