@@ -34,8 +34,8 @@ services:
     image: python:3.12
     environment:
       KEYCLOAK_URL: http://keycloak:8080/
-      CLIENT_ID: "cli-dottori"
-      CLIENT_SECRET: dFVs0dyOq8okog72gsn5z7h8qCzp6PW9
+      CLIENT_ID: "fastapi-be"
+      CLIENT_SECRET: 32lfgwv1jLynVSoUpNveN5ieP5qVR9ZJ
       REALM_NAME: serenade
     volumes:
       - ./api:/api
