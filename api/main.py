@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from fastapi import Depends, FastAPI, HTTPException
@@ -31,18 +32,15 @@ app.add_middleware(
 
 patients_db = []
 
-# Keycloak configuration
-keycloak_url = "http://keycloak:8080/"
-client_id = "cli-dottori"
-client_secret = "dFVs0dyOq8okog72gsn5z7h8qCzp6PW9"
-realm_name = "serenade"
 
 # Configure Keycloak client
 keycloak_openid = KeycloakOpenID(
-    server_url=keycloak_url,
-    client_id=client_id,
-    realm_name=realm_name,
-    client_secret_key=client_secret,
+    server_url=os.getenv(
+        "KEYCLOAK_URL",
+    ),
+    client_id=os.getenv("CLIENT_ID"),
+    realm_name=os.getenv("REALM_NAME"),
+    client_secret_key=os.getenv("CLIENT_SECRET"),
 )
 
 
