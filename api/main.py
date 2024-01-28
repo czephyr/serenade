@@ -1,6 +1,7 @@
 import os
 from typing import List
 
+import keycloak
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from keycloak import KeycloakOpenID
@@ -58,9 +59,17 @@ async def gen_token_to_login(input_data: OAuth2PasswordRequestForm = Depends()):
 
 # Dependency to validate the access token
 async def get_current_user(token: str = Depends(oauth2_scheme)):
-    credentials = keycloak_openid.userinfo(token)
+    try:
+        credentials = keycloak_openid.userinfo(token)
+    except keycloak.exceptions.KeycloakAuthenticationError as inst:
+        raise HTTPException(
+            status_code=inst.response_code,
+            detail=f'{{"error": "Invalid credentials", "message": "{inst.error_message}", "body": "{inst.response_body}"}}',
+        )
     if not credentials:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+        raise HTTPException(
+            status_code=401, detail="Empty response for this credentials"
+        )
     return credentials
 
 
