@@ -4,6 +4,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from keycloak import KeycloakOpenID
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 
 class Patient(BaseModel):
@@ -14,6 +15,18 @@ class Patient(BaseModel):
 app = FastAPI(
     debug=True,
     title="serenade",
+)
+
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 patients_db = []
