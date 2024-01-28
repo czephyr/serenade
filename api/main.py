@@ -1,9 +1,12 @@
+import os
 from typing import List
 
+import keycloak
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from keycloak import KeycloakOpenID
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 
 class Patient(BaseModel):
@@ -16,21 +19,29 @@ app = FastAPI(
     title="serenade",
 )
 
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 patients_db = []
 
-# Keycloak configuration
-keycloak_url = "http://keycloak:8080/"
-client_id = "fastapi-be"
-client_secret = "32lfgwv1jLynVSoUpNveN5ieP5qVR9ZJ"
-realm_name = "serenade"
 
 # Configure Keycloak client
 keycloak_openid = KeycloakOpenID(
-    server_url=keycloak_url,
-    client_id=client_id,
-    realm_name=realm_name,
-    client_secret_key=client_secret,
-    custom_headers={"scope":'openid'}
+    server_url=os.getenv(
+        "KEYCLOAK_URL",
+    ),
+    client_id=os.getenv("CLIENT_ID"),
+    realm_name=os.getenv("REALM_NAME"),
+    client_secret_key=os.getenv("CLIENT_SECRET"),
 )
 
 
@@ -48,10 +59,17 @@ async def gen_token_to_login(input_data: OAuth2PasswordRequestForm = Depends()):
 
 # Dependency to validate the access token
 async def get_current_user(token: str = Depends(oauth2_scheme)):
-    credentials = keycloak_openid.introspect(token)
-    print(f"get_current_user ################# {credentials}")
+    try:
+        credentials = keycloak_openid.introspect(token)
+    except keycloak.exceptions.KeycloakAuthenticationError as inst:
+        raise HTTPException(
+            status_code=inst.response_code,
+            detail=f'{{"error": "Invalid credentials", "message": "{inst.error_message}", "body": "{inst.response_body}"}}',
+        )
     if not credentials["active"]:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+        raise HTTPException(
+            status_code=401, detail="Empty response for this credentials"
+        )
     return credentials
 
 
@@ -67,15 +85,16 @@ patients_db = []
 
 @app.get("/patients", response_model=List[Patient])
 async def read_patients(current_user: dict = Depends(get_current_user)):
-    print(f"read_patients ################# {current_user}")
-
     if "dottore" in current_user["realm_access"]["roles"]:
         return patients_db
     else:
         raise HTTPException(status_code=403, detail="Unauthorized")
 
 @app.get("/patients/{patient_id}", response_model=Patient)
-async def get_patient(patient_id: int):
+async def get_patient(
+    patient_id: int,
+    current_user: dict = Depends(get_current_user),
+):
     if patient_id < 0 or patient_id >= len(patients_db):
         raise HTTPException(status_code=404, detail="Patient not found")
     return patients_db[patient_id]

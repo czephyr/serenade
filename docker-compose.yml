@@ -32,6 +32,11 @@ services:
       - "start-dev"
   fastapi:
     image: python:3.12
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080/
+      CLIENT_ID: "cli-dottori"
+      CLIENT_SECRET: dFVs0dyOq8okog72gsn5z7h8qCzp6PW9
+      REALM_NAME: serenade
     volumes:
       - ./api:/api
     working_dir: /api
