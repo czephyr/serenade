@@ -65,12 +65,17 @@ patients_db = []
 
 
 @app.get("/patients", response_model=List[Patient])
-async def read_patients():
+async def read_patients(
+    current_user: dict = Depends(get_current_user),
+):
     return patients_db
 
 
 @app.get("/patients/{patient_id}", response_model=Patient)
-async def get_patient(patient_id: int):
+async def get_patient(
+    patient_id: int,
+    current_user: dict = Depends(get_current_user),
+):
     if patient_id < 0 or patient_id >= len(patients_db):
         raise HTTPException(status_code=404, detail="Patient not found")
     return patients_db[patient_id]
