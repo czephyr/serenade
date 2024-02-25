@@ -9,9 +9,18 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 
+# class Patient(BaseModel):
+#     PID: str
+#     DataNick: str
+
 class Patient(BaseModel):
-    PID: str
-    DataNick: str
+    first_name: str
+    last_name: str
+    age: int
+    gender: str
+    ssn: str
+    address: str
+    phone_number: str
 
 
 app = FastAPI(
@@ -21,6 +30,7 @@ app = FastAPI(
 
 origins = [
     "*",
+    "http://localhost:3000",
 ]
 
 app.add_middleware(
@@ -60,7 +70,9 @@ async def gen_token_to_login(input_data: OAuth2PasswordRequestForm = Depends()):
 # Dependency to validate the access token
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
+        print(f"token from get_current_user: {token}")
         credentials = keycloak_openid.introspect(token)
+        print(f"output of introspect api {credentials}")
     except keycloak.exceptions.KeycloakAuthenticationError as inst:
         raise HTTPException(
             status_code=inst.response_code,
@@ -86,6 +98,7 @@ patients_db = []
 @app.get("/patients", response_model=List[Patient])
 async def read_patients(current_user: dict = Depends(get_current_user)):
     if "dottore" in current_user["realm_access"]["roles"]:
+        print(f"returning {patients_db}")
         return patients_db
     else:
         raise HTTPException(status_code=403, detail="Unauthorized")
@@ -105,8 +118,12 @@ async def create_patient(
     patient: Patient,
     current_user: dict = Depends(get_current_user),
 ):
-    patients_db.append(patient)
-    return patient
+    if "dottore" in current_user["realm_access"]["roles"]:
+        print(f"adding patient {patient}")
+        patients_db.append(patient)
+        return patient
+    else:
+        raise HTTPException(status_code=403, detail="Unauthorized")
 
 
 @app.put("/patients/{patient_id}", response_model=Patient)
