@@ -29,9 +29,9 @@ export default function NewPatientForm() {
   
   if (status == "loading") {
     return (
-      <main>
-        <h1 className="text-4xl text-center">Create patient</h1>
-        <div className="text-center text-2xl">Loading...</div>
+      <main className="text-white">
+        <h1 className="text-4xl text-center text-white">Create patient</h1>
+        <div className="text-center text-2xl text-white">Loading...</div>
       </main>
     );
   }
@@ -76,25 +76,25 @@ export default function NewPatientForm() {
     };
 
     return (
-      <main>
-        <h1 className="text-4xl text-center">Create product</h1>
+      <main className="text-white">
+        <h1 className="text-4xl text-center">Create patient</h1>
 
         <form onSubmit={handleSubmit} className="mt-6">
         <div className="field">
             <label htmlFor="firstName" className="label">First Name:</label>
-            <input type="text" id="firstName" ref={firstNameRef} required />
+            <input type="text" id="firstName" ref={firstNameRef} className="text-black" required />
           </div>
           <div className="field">
             <label htmlFor="lastName" className="label">Last Name:</label>
-            <input type="text" id="lastName" ref={lastNameRef} required />
+            <input type="text" id="lastName" ref={lastNameRef} className="text-black" required />
           </div>
           <div className="field">
             <label htmlFor="age" className="label">Age:</label>
-            <input type="number" id="age" ref={ageRef} required />
+            <input type="number" id="age" ref={ageRef} className="text-black" required />
           </div>
           <div className="field">
             <label htmlFor="gender" className="label">Gender:</label>
-            <select id="gender" ref={genderRef} required>
+            <select id="gender" ref={genderRef} className="text-black" required>
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -103,15 +103,15 @@ export default function NewPatientForm() {
           </div>
           <div className="field">
             <label htmlFor="ssn" className="label">Social Security Number (SSN):</label>
-            <input type="text" id="ssn" ref={ssnRef} required />
+            <input type="text" id="ssn" ref={ssnRef} className="text-black" required />
           </div>
           <div className="field">
             <label htmlFor="address" className="label">Address:</label>
-            <textarea id="address" ref={addressRef} required />
+            <textarea id="address" ref={addressRef} className="text-black" required />
           </div>
           <div className="field">
             <label htmlFor="phoneNumber" className="label">Phone Number:</label>
-            <input type="tel" id="phoneNumber" ref={phoneNumberRef} required />
+            <input type="tel" id="phoneNumber" ref={phoneNumberRef} className="text-black" required />
           </div>
           <button type="submit" className="button is-link">Create Patient</button>
         </form>

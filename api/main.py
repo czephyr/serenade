@@ -1,12 +1,13 @@
 import os
-from typing import List
-
+from typing import List, Optional
+from datetime import datetime
 import keycloak
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from keycloak import KeycloakOpenID
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Body
 
 
 # class Patient(BaseModel):
@@ -14,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 #     DataNick: str
 
 class Patient(BaseModel):
+    id: Optional[int] = None
     first_name: str
     last_name: str
     age: int
@@ -22,6 +24,11 @@ class Patient(BaseModel):
     address: str
     phone_number: str
 
+class Ticket(BaseModel):
+    id: Optional[int] = None
+    datetime: datetime
+    notes: List[str]
+    status: str
 
 app = FastAPI(
     debug=True,
@@ -94,6 +101,7 @@ async def read_hello(current_user: str = Depends(get_current_user)):
 
 # Sample in-memory patient database
 patients_db = []
+tickets_db = []
 
 @app.get("/patients", response_model=List[Patient])
 async def read_patients(current_user: dict = Depends(get_current_user)):
@@ -119,8 +127,22 @@ async def create_patient(
     current_user: dict = Depends(get_current_user),
 ):
     if "dottore" in current_user["realm_access"]["roles"]:
-        print(f"adding patient {patient}")
+        # Assign an ID based on the current length of the patients_db
+        patient_id = len(patients_db)
+        patient.id = patient_id
+
+        # Create a corresponding ticket
+        ticket = Ticket(
+            id=patient_id,
+            datetime=datetime.now(),
+            notes=[],
+            status="unready",  # Assuming default status is 'unready'
+        )
+        tickets_db.append(ticket)
+
+        # Add the patient with the assigned ID
         patients_db.append(patient)
+        print(f"Added patient {patient} with ticket {ticket}")
         return patient
     else:
         raise HTTPException(status_code=403, detail="Unauthorized")
@@ -147,6 +169,42 @@ async def delete_patient(
         raise HTTPException(status_code=404, detail="Patient not found")
     deleted_patient = patients_db.pop(patient_id)
     return deleted_patient
+
+###################
+
+@app.get("/tickets", response_model=List[Ticket])
+async def read_tickets(current_user: dict = Depends(get_current_user)):
+    # Adjust the role check as per your requirement, for example 'iit' or 'iim'
+    if "iit" in current_user["realm_access"]["roles"] or "imt" in current_user["realm_access"]["roles"]:
+        print(f"Returning {tickets_db}")
+        return tickets_db
+    else:
+        raise HTTPException(status_code=403, detail="Unauthorized")
+
+
+@app.get("/tickets/{ticket_id}", response_model=Ticket)
+async def get_ticket(
+    ticket_id: int,
+    current_user: dict = Depends(get_current_user),
+):
+    # Assuming ticket_id is a valid index in the tickets_db list for simplicity
+    # In a real application, you would query a database
+    ticket = next((ticket for ticket in tickets_db if ticket.id == ticket_id), None)
+    if ticket is None:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    # Here you might want to check if the current user is authorized to view the ticket
+    # For simplicity, this example assumes all authenticated users can view any ticket
+    return ticket
+
+@app.post("/tickets/{ticket_id}/add_message")
+async def add_message_to_ticket(ticket_id: int, message: str = Body(...), current_user: dict = Depends(get_current_user)):
+    if ticket_id < 0 or ticket_id >= len(tickets_db):
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    # Append the message to the ticket's notes
+    tickets_db[ticket_id].notes.append(message)
+    return {"message": "Message added successfully", "ticket": tickets_db[ticket_id]}
 
 
 if __name__ == "__main__":

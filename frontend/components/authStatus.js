@@ -4,9 +4,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect } from "react";
 
 async function keycloakSessionLogOut() {
-    console.log("not appearing??")
     try {
-      console.log("sign out")
       await fetch(`/api/auth/logout`, { method: "GET" });
     } catch (err) {
       console.error(err);

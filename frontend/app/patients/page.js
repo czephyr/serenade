@@ -24,7 +24,7 @@ async function getAllPatients() {
   throw new Error("Failed to fetch data. Status: " + resp.status);
 }
 
-export default async function Products() {
+export default async function Patients() {
   const session = await getServerSession(authOptions);
 
   if (session && session.roles?.includes("dottore")) {
@@ -35,7 +35,7 @@ export default async function Products() {
       return (
         <main>
           <SetDynamicRoute></SetDynamicRoute>
-          <main>
+          <main className="text-white">
             <h1 className="text-4xl text-center">Patients List</h1>
             <div className="overflow-x-auto">
               <table className="min-w-full leading-normal">
@@ -50,7 +50,9 @@ export default async function Products() {
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
                     last_name
                     </th>
-                    {/* Add more columns as necessary */}
+                    <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
+                    installation status
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -65,7 +67,9 @@ export default async function Products() {
                       <td className="px-5 py-5 border-b">
                         {patient.last_name}
                       </td>
-                      {/* Render more patient data as necessary */}
+                      <td className="px-5 py-5 border-b">
+                        status
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -79,7 +83,7 @@ export default async function Products() {
 
       return (
         <main>
-          <h1 className="text-4xl text-center">Products</h1>
+          <h1 className="text-4xl text-center">Patients</h1>
           <p className="text-red-600 text-center text-lg">
             Sorry, an error happened. Check the server logs.
           </p>
