@@ -39,7 +39,7 @@ function TicketDetails({ ticket }) {
   return (
     <div className="ticket-details">
       <h2>Ticket Details</h2>
-      <p>Ticket ID: {ticket.id}</p>
+      <p>Ticket ID: {ticket.key}</p>
       <p>Status: {ticket.status}</p>
     </div>
   );

@@ -9,11 +9,6 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Body
 
-
-# class Patient(BaseModel):
-#     PID: str
-#     DataNick: str
-
 class Patient(BaseModel):
     id: Optional[int] = None
     first_name: str
@@ -23,12 +18,14 @@ class Patient(BaseModel):
     ssn: str
     address: str
     phone_number: str
+    installation_status: Optional[str] = None
 
 class Ticket(BaseModel):
     id: Optional[int] = None
     datetime: datetime
     notes: List[str]
     status: str
+    key: str
 
 app = FastAPI(
     debug=True,
@@ -63,6 +60,26 @@ keycloak_openid = KeycloakOpenID(
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login",scopes={"scope":'openid'})
+
+salt = 'SALT'  # encryption salt
+def vigenere_encode(num, salt):
+    """Encodes an integer using a Vigenère cipher with a salt."""
+    num_str = str(num).rjust(4, '0')
+    encoded_chars = []
+    for i, char in enumerate(num_str):
+        offset = ord(salt[i % len(salt)]) - ord('A')
+        encoded_char = chr(((int(char) + offset) % 10) + ord('A'))
+        encoded_chars.append(encoded_char)
+    return ''.join(encoded_chars)
+
+def vigenere_decode(encoded_str, salt):
+    """Decodes a string encoded with a Vigenère cipher using a salt."""
+    decoded_chars = []
+    for i, char in enumerate(encoded_str):
+        offset = ord(salt[i % len(salt)]) - ord('A')
+        decoded_char = str((ord(char) - ord('A') - offset) % 10)
+        decoded_chars.append(decoded_char)
+    return int(''.join(decoded_chars))
 
 
 @app.post("/login")
@@ -107,7 +124,14 @@ tickets_db = []
 async def read_patients(current_user: dict = Depends(get_current_user)):
     if "dottore" in current_user["realm_access"]["roles"]:
         print(f"returning {patients_db}")
-        return patients_db
+        patient_list = []
+        for patient in patients_db:
+            for ticket in tickets_db:
+                if ticket.id == patient.id:
+                    show_patient = patient.copy()
+                    show_patient.installation_status = ticket.status
+                    patient_list.append(show_patient)
+        return patient_list
     else:
         raise HTTPException(status_code=403, detail="Unauthorized")
 
@@ -137,6 +161,7 @@ async def create_patient(
             datetime=datetime.now(),
             notes=[],
             status="unready",  # Assuming default status is 'unready'
+            key=vigenere_encode(num=patient_id,salt=salt)
         )
         tickets_db.append(ticket)
 

@@ -68,7 +68,7 @@ export default async function Patients() {
                         {patient.last_name}
                       </td>
                       <td className="px-5 py-5 border-b">
-                        status
+                        {patient.installation_status}
                       </td>
                     </tr>
                   ))}

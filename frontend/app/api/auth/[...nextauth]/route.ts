@@ -3,6 +3,30 @@ import KeycloakProvider from "next-auth/providers/keycloak";
 import {jwtDecode} from 'jwt-decode'
 import { encrypt } from "@/utils/encryption"; 
 
+async function refreshAccessToken(token) {
+    const resp = await fetch(`${process.env.REFRESH_TOKEN_URL}`, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        client_id: process.env.OIDC_ID,
+        client_secret: process.env.OIDC_SECRET,
+        grant_type: "refresh_token",
+        refresh_token: token.refresh_token,
+      }),
+      method: "POST",
+    });
+    const refreshToken = await resp.json();
+    if (!resp.ok) throw refreshToken;
+  
+    return {
+      ...token,
+      access_token: refreshToken.access_token,
+      decoded: jwtDecode(refreshToken.access_token),
+      id_token: refreshToken.id_token,
+      expires_at: Math.floor(Date.now() / 1000) + refreshToken.expires_in,
+      refresh_token: refreshToken.refresh_token,
+    };
+  }
+
 export const authOptions = {
     providers: [
         KeycloakProvider({
@@ -32,7 +56,14 @@ export const authOptions = {
             } else {
                 // token is expired, try to refresh it
                 console.log("Token has expired. Will refresh...")
-
+                try {
+                    const refreshedToken = await refreshAccessToken(token);
+                    console.log("Token is refreshed.")
+                    return refreshedToken;
+                  } catch (error) {
+                    console.error("Error refreshing access token", error);
+                    return { ...token, error: "RefreshAccessTokenError" };
+                  }
                 return token
             }
         },

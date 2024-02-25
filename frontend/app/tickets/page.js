@@ -56,7 +56,7 @@ export default async function Tickets() {
                                     {tickets.map((ticket) => (
                                         <tr key={ticket.id}>
                                             <td className="px-5 py-5 border-b">
-                                                Ticket #{ticket.id}
+                                                Ticket {ticket.key}
                                             </td>
                                             <td className="px-5 py-5 border-b">
                                                 {ticket.status}
