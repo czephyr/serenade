@@ -6,10 +6,16 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
+  percona:
+    image: perconalab/postgres-tde-ext
+    environment:
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/wewe.sql
+    ports:
+      - "5433:5432"
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.4
     environment:

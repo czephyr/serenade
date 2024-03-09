@@ -1,41 +1,35 @@
 CREATE TABLE IF NOT EXISTS patients (
-    id SERIAL PRIMARY KEY,
+    patient_id INT UNIQUE,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
-    age INT,
-    gender VARCHAR(50),
-    ssn VARCHAR(255),
+    cf VARCHAR(255) PRIMARY KEY,
     address TEXT,
-    phone_number VARCHAR(255)
+    contact VARCHAR(255),
+    medical_notes VARCHAR(255),
+    install_num INT UNIQUE,
+    install_time TIMESTAMP, -- Changed datetime to timestamp
+    CONSTRAINT patients_install_num_fkey FOREIGN KEY (install_num) REFERENCES patients(install_num)
+) USING pg_tde;
+
+CREATE TABLE IF NOT EXISTS notes (
+    install_num INT, 
+    install_notes VARCHAR(255),
+    FOREIGN KEY (install_num) REFERENCES patients(install_num)
 );
 
-CREATE TABLE IF NOT EXISTS patient_PID (
-    patient_id INT PRIMARY KEY,
-    PID_sha_identifier VARCHAR(255),
-    FOREIGN KEY (patient_id) REFERENCES patients(id)
+CREATE TABLE IF NOT EXISTS tickets (
+    ticket_id SERIAL PRIMARY KEY,
+    install_num INT, -- Added missing column to create a foreign key relationship
+    ticket_open_time TIMESTAMP, -- Changed datetime to timestamp
+    ticket_close_time TIMESTAMP, -- Changed datetime to timestamp
+    status VARCHAR(255),
+    CONSTRAINT tickets_install_num_fkey FOREIGN KEY (install_num) REFERENCES patients(install_num)
 );
 
-CREATE TABLE IF NOT EXISTS patient_INSTNUM (
-    patient_id INT PRIMARY KEY,
-    INSTNUM_aes_indentifier  VARCHAR(255),
-    FOREIGN KEY (patient_id) REFERENCES patients(id)
+CREATE TABLE IF NOT EXISTS ticket_messages ( -- Table name changed to be plural for consistency
+    message_id SERIAL PRIMARY KEY,
+    message_time TIMESTAMP, -- Changed datetime to timestamp
+    sender VARCHAR(255),
+    ticket_id INT,
+    CONSTRAINT ticket_messages_ticket_id_fkey FOREIGN KEY (ticket_id) REFERENCES tickets(ticket_id)
 );
-
-CREATE TABLE IF NOT EXISTS patient_status (
-    patient_id INT PRIMARY KEY,
-    imt_installation BOOLEAN DEFAULT FALSE,
-    iim_validation BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (patient_id) REFERENCES patients(id)
-);
-
-CREATE OR REPLACE FUNCTION insert_patient_status() RETURNS TRIGGER AS $$
-BEGIN
-    INSERT INTO patient_status (patient_id)
-    VALUES (NEW.id);
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER patient_insert_after
-AFTER INSERT ON patients
-FOR EACH ROW EXECUTE FUNCTION insert_patient_status();
