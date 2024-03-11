@@ -1,3 +1,5 @@
+CREATE TYPE ticket_status AS ENUM ('todo', 'toverify', 'closed');
+
 CREATE TABLE IF NOT EXISTS patients (
     patient_id INT UNIQUE,
     first_name VARCHAR(255),
@@ -8,7 +10,6 @@ CREATE TABLE IF NOT EXISTS patients (
     medical_notes VARCHAR(255),
     install_num INT UNIQUE,
     install_time TIMESTAMP, -- Changed datetime to timestamp
-    CONSTRAINT patients_install_num_fkey FOREIGN KEY (install_num) REFERENCES patients(install_num)
 ) USING pg_tde;
 
 CREATE TABLE IF NOT EXISTS notes (
@@ -22,7 +23,7 @@ CREATE TABLE IF NOT EXISTS tickets (
     install_num INT, -- Added missing column to create a foreign key relationship
     ticket_open_time TIMESTAMP, -- Changed datetime to timestamp
     ticket_close_time TIMESTAMP, -- Changed datetime to timestamp
-    status VARCHAR(255),
+    status ticket_status,
     CONSTRAINT tickets_install_num_fkey FOREIGN KEY (install_num) REFERENCES patients(install_num)
 );
 
