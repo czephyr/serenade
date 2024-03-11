@@ -1,12 +1,12 @@
-from typing import Generator
-from sqlalchemy.orm import Session
-from ..db.session import SessionLocal
-from fastapi import Depends, HTTPException, Security
-from fastapi.security import OAuth2PasswordBearer
-from ..core.keycloak_config import keycloak_openid, oauth2_scheme
+from typing import Dict, Generator, List
+
 import keycloak.exceptions
-from fastapi import Depends, HTTPException, status
-from typing import Dict, List
+from core.keycloak_config import keycloak_openid, oauth2_scheme
+from db.session import SessionLocal
+from fastapi import Depends, HTTPException, Security, status
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
+
 
 def get_db() -> Generator:
     try:

@@ -1,16 +1,19 @@
+from typing import Dict, List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
-from .. import crud, schemas
-from ...crud.crud_patient import get_patients,create_patient 
-from ..api.deps import get_db, require_role 
-from ...schemas.patient import PatientCreate, Patient
-from typing import Dict
+from sqlalchemy.orm.exc import NoResultFound
+
+from crud.crud_patient import (create_patient, delete_patient, get_patient,
+                                  get_patients, update_patient)
+from schemas.patient import Patient, PatientCreate
+from api.deps import get_db, require_role
 
 router = APIRouter()
 
+
 @router.get("/patients/", response_model=List[Patient])
-def list_patients(
+async def list_patients_endpoint(
     current_user: Dict = Depends(require_role(["dottore"])),
     db: Session = Depends(get_db),
 ):
@@ -18,8 +21,12 @@ def list_patients(
 
 
 @router.get("/patients/{patient_id}", response_model=Patient)
-def get_patient(patient_id: int, db: Session = Depends(get_db)):
-    db_patient = get_patient(db, patient_id=patient_id)
+async def get_patient_endpoint(
+    cf: str,
+    current_user: Dict = Depends(require_role(["dottore"])),
+    db: Session = Depends(get_db),
+):
+    db_patient = get_patient(db, cf=cf)
     if db_patient is None:
         raise HTTPException(status_code=404, detail="Patient not found")
     return db_patient
@@ -37,3 +44,28 @@ async def create_patient_endpoint(
     new_patient = create_patient(db=db, patient=patient)
 
     return new_patient
+
+@router.put("/patients/{patient_id}", response_model=Patient)
+async def update_patient_endpoint(
+    cf: str,
+    updated_patient: Patient,
+    current_user: Dict = Depends(require_role(["dottore"])),
+    db: Session = Depends(get_db),
+):
+    try:
+        updated_patient = update_patient(db=db, cf=cf, patient=updated_patient)
+        return updated_patient
+    except NoResultFound as excp:
+        raise HTTPException(status_code=404, detail="Patient not found") from excp
+
+
+@router.delete("/patients/{patient_id}", response_model=Patient)
+async def delete_patient_endpoint(
+    cf: str,
+    updated_patient: Patient,
+    current_user: Dict = Depends(require_role(["dottore"])),
+    db: Session = Depends(get_db),
+):
+    deleted = delete_patient(db=db, cf=cf)
+
+    return deleted

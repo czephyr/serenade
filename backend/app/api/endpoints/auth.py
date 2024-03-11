@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from ...core.keycloak_config import keycloak_openid
+from core.keycloak_config import keycloak_openid
 
 router = APIRouter()
 

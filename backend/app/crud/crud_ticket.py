@@ -1,13 +1,13 @@
 from sqlalchemy.orm import Session
 from typing import Optional
 
-from ..models.ticket import Ticket
-from ..schemas.ticket import TicketCreate, TicketUpdate 
+from models.tickets import Ticket
+from schemas.ticket import TicketCreate, TicketUpdate 
 
-def create_ticket(db: Session, ticket: TicketCreate, patient_id: int):
+def create_ticket(db: Session, ticket_create: TicketCreate):
     db_ticket = Ticket(
-        install_num=ticket.install_num,
-        ticket_open_time=ticket.ticket_open_time,
+        install_num=ticket_create.install_num,
+        ticket_open_time=ticket_create.ticket_open_time,
         ticket_close_time=None,
         status="todo",
     )

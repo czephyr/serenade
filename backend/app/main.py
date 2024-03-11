@@ -2,10 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-from app.api.api import api_router
-from app.db.session import engine
-from app.db.base_class import Base  # Import all models
-from app.core.config import settings
+from api.api import api_router
+from db.session import engine
+from db.base_class import Base
+from core.config import settings
 
 # Create all tables in the database.
 # Comment this out if you're using Alembic migrations.

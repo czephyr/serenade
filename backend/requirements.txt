@@ -2,4 +2,9 @@ fastapi
 uvicorn
 python-keycloak
 requests
+pydantic
 python-multipart
+sqlalchemy
+arrow
+psycopg
+pydantic-settings
