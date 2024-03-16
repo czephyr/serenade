@@ -43,3 +43,9 @@ def require_role(required_roles: List[str]):
         return current_user
 
     return role_checker
+
+def is_imt_or_iit(current_user: Dict = Depends(get_current_user)):
+    user_roles = current_user.get("realm_access", {}).get("roles", [])
+    for role in ["imt", "iit"]:
+        if role in user_roles:
+            return role

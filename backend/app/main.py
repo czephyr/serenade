@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+import os
 
 from api.api import api_router
 from db.session import engine
@@ -39,5 +40,12 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 # You might want to add more endpoints or configurations here
 
 if __name__ == "__main__":
+    for route in app.routes:
+        if hasattr(route, "methods"):  # Filter out routes that support HTTP methods
+            methods = ", ".join(route.methods)
+            print(f"Path: {route.path}, Methods: {methods}")
+        else:
+            print(f"Path: {route.path}")
+    print(os.getenv("KEYCLOAK_REALM"))
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

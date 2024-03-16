@@ -1,18 +1,17 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
+from .ticket_message import TicketMessage
 
-class TicketCreate(BaseModel):
+class TicketBase(BaseModel):
     status: str
     install_num: int
     ticket_open_time: datetime
-
-class TicketUpdate(TicketCreate):
-    pass
-
-class Ticket(TicketCreate):
     ticket_id: int
-    ticket_close_time: datetime
+    ticket_close_time: Optional[datetime]
+
+class Ticket(TicketBase):
+    ticketmessage_list: List[TicketMessage]
 
     class Config:
         orm_mode = True

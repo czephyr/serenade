@@ -2,9 +2,9 @@ from sqlalchemy.orm import Session
 from typing import Optional
 
 from models.tickets import Ticket
-from schemas.ticket import TicketCreate, TicketUpdate 
+from schemas.ticket import TicketBase
 
-def create_ticket(db: Session, ticket_create: TicketCreate):
+def create_ticket(db: Session, ticket_create: TicketBase):
     db_ticket = Ticket(
         install_num=ticket_create.install_num,
         ticket_open_time=ticket_create.ticket_open_time,

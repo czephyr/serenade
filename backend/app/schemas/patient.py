@@ -11,22 +11,24 @@ class PatientBase(BaseModel):
     contact: Optional[str] = None
     medical_notes: Optional[str] = None
     install_num: Optional[int] = None
-    install_time: Optional[datetime] = None
+    creation_time: Optional[datetime] = None
 
 # Schema for creating a patient (without ID, which is auto-generated)
-class PatientCreate(PatientBase):
+class PatientCreate(BaseModel):
     first_name: str
     last_name: str
     cf: str
     address: Optional[str] = None
     contact: Optional[str] = None
     medical_notes: Optional[str] = None
-    install_num: Optional[int] = None
-    install_time: Optional[datetime] = None
 
-# Schema for updating a patient
-class PatientUpdate(PatientBase):
-    pass
+# Schema for creating a patient (without ID, which is auto-generated)
+class ListPatient(BaseModel):
+    first_name: str
+    last_name: str
+    patient_id: int
+    status: str
+
 
 # Schema for response model including the ID and any other attributes not present in PatientBase
 class Patient(PatientBase):
