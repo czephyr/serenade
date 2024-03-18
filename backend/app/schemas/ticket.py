@@ -10,6 +10,11 @@ class TicketBase(BaseModel):
     ticket_id: int
     ticket_close_time: Optional[datetime]
 
+class TicketCreate(BaseModel):
+    status: str
+    install_num: int
+    ticket_open_time: datetime
+
 class Ticket(TicketBase):
     ticketmessage_list: List[TicketMessage]
 

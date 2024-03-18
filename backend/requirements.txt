@@ -10,3 +10,6 @@ psycopg
 pydantic-settings
 python-codicefiscale
 sqlmodel #not being used currently, but would fix a the TicketList problem
+opentelemetry-distro
+opentelemetry-exporter-otlp-proto-grpc
+opentelemetry-instrumentation-fastapi

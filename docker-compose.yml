@@ -54,24 +54,46 @@
     #     bash -c "pip install --no-cache-dir -r requirements.txt && python main.py"
     #   ports:
     #     - "8000:8000"
-    grafana:
-      image: grafana/grafana:latest
-      depends_on:
-        - keycloak
-      environment:
-        GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
-        GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP: "true"
-        GF_AUTH_GENERIC_OAUTH_CLIENT_ID: "grafana-data"
-        GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: "Ut0mhMHSTnA5AKbYDUlgutourwox2q7J"
-        GF_AUTH_GENERIC_OAUTH_AUTH_URL: "http://keycloak:8080/auth/realms/serenade/protocol/openid-connect/auth"
-        GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "http://keycloak:8080/auth/realms/serenade/protocol/openid-connect/token"
-        GF_AUTH_GENERIC_OAUTH_API_URL: "http://keycloak:8080/auth/realms/serenade/protocol/openid-connect/userinfo"
-        GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(roles[], 'imt') && 'Admin' || 'Viewer'"
-        GF_SERVER_ROOT_URL: "http://localhost:4000/"
-      ports:
-        - "4000:3000"
+    # grafana:
+    #   image: grafana/grafana:latest
+    #   depends_on:
+    #     - keycloak
+    #   environment:
+    #     GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
+    #     GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP: "true"
+    #     GF_AUTH_GENERIC_OAUTH_CLIENT_ID: "grafana-data"
+    #     GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: "Ut0mhMHSTnA5AKbYDUlgutourwox2q7J"
+    #     GF_AUTH_GENERIC_OAUTH_AUTH_URL: "http://keycloak:8080/auth/realms/serenade/protocol/openid-connect/auth"
+    #     GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "http://keycloak:8080/auth/realms/serenade/protocol/openid-connect/token"
+    #     GF_AUTH_GENERIC_OAUTH_API_URL: "http://keycloak:8080/auth/realms/serenade/protocol/openid-connect/userinfo"
+    #     GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(roles[], 'imt') && 'Admin' || 'Viewer'"
+    #     GF_SERVER_ROOT_URL: "http://localhost:4000/"
+    #   ports:
+    #     - "4000:3000"
+    #   volumes:
+    #     - grafana_data:/var/lib/grafana
+    otel-collector:
+      image: otel/opentelemetry-collector-contrib
       volumes:
-        - grafana_data:/var/lib/grafana
+        - ./otel-collector-config.yml:/etc/otelcol-contrib/config.yaml
+      ports:
+        - 4317:4317 # OTLP gRPC receiver
+        - 4318:4318 # OTLP http receiver
+    jaeger:
+      image: jaegertracing/all-in-one:1.55
+      environment: 
+        COLLECTOR_OTLP_ENABLED: "true"
+        COLLECTOR_OLTP_GRPC_TLS_ENABLED: "false"
+        COLLECTOR_OLTP_HTTP_TLS_ENABLED: "false"
+        COLLECTOR_GRPC_TLS_ENABLED: "false"
+        COLLECTOR_HTTP_TLS_ENABLED: "false"
+        COLLECTOR_ZIPKIN_HOST_PORT: 9411
+      ports:
+        - 16686:16686
+        - 4316:4317
+        - 4319:4318
+  # volumes:
+  #   grafana_data:
 
-  volumes:
-    grafana_data:
+
+  # opentelemetry-instrument --service_name backend --traces_exporter otlp python main.py

@@ -22,15 +22,15 @@ def get_ticket(db: Session, ticket_id: int) -> Optional[Ticket]:
 def get_tickets(db: Session, skip: int = 0, limit: int = 100) -> list[Ticket]:
     return db.query(Ticket).offset(skip).limit(limit).all()
 
-def update_ticket(db: Session, ticket_id: int, ticket_update: TicketUpdate) -> Optional[Ticket]:
-    db_ticket = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
-    if db_ticket:
-        update_data = ticket_update.dict(exclude_unset=True)
-        for key, value in update_data.items():
-            setattr(db_ticket, key, value)
-        db.commit()
-        db.refresh(db_ticket)
-    return db_ticket
+# def update_ticket(db: Session, ticket_id: int, ticket_update: TicketUpdate) -> Optional[Ticket]:
+#     db_ticket = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
+#     if db_ticket:
+#         update_data = ticket_update.dict(exclude_unset=True)
+#         for key, value in update_data.items():
+#             setattr(db_ticket, key, value)
+#         db.commit()
+#         db.refresh(db_ticket)
+#     return db_ticket
 
 def delete_ticket(db: Session, ticket_id: int):
     db_ticket = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
