@@ -1,44 +1,47 @@
-  version: '3.8'
-  
-  services:
-    dbkeycloak:
-      image: postgres:latest
-      env_file:
-        - .envars/.env.dbkeycloak
-      ports:
-        - ${DB_KEYCLOAK_PORT}:5432
-    dbpercona:
-      image: perconalab/postgres-tde-ext:latest
-      env_file:
-        - .envars/.env.dbpercona
-      volumes:
+version: '3.8'
+
+services:
+  dbkeycloak:
+    image: postgres:latest
+    env_file:
+      - .envars/.env.dbkeycloak
+    ports:
+      - ${DB_KEYCLOAK_PORT}:5432
+  dbpercona:
+    image: perconalab/postgres-tde-ext:latest
+    env_file:
+      - .envars/.env.dbpercona
+    volumes:
       # NOTE : execution order is lexographical order
       # - ./dbpercona/pg-tde-create-ext.sh:/docker-entrypoint-initdb.d/pg-tde-create-ext.sh
       # - ./dbpercona/pg-tde-streaming-repl.sh:/docker-entrypoint-initdb.d/pg-tde-streaming-repl.sh
       - ./dbpercona/pg-xx-init.sql:/docker-entrypoint-initdb.d/pg-xx-init.sql
       - ./dbpercona/pg-xx-populate.sql:/docker-entrypoint-initdb.d/pg-xx-populate.sql
-      ports:
-        - ${DB_PERCONA_PORT}:5432
-    keycloak:
-      image: quay.io/keycloak/keycloak:latest
-      env_file:
-        - .envars/.env.keycloak
-      volumes:
-        - ./.keys:/opt/keycloak/conf
-        - ./.keycloak_data/keycloakdb.mv.db:/opt/keycloak/data/h2/keycloakdb.mv.db
-      ports:
-        - 8080:8080
-        - 8443:8443
-      command:
-        - "start-dev"
-    backend:
-      image: python:3.12
-      env_file:
-        - .envars/.env.backend
-      volumes:
-        - ./backend/app:/app
-      working_dir: /app
-      command: >
-        bash -c "pip install --no-cache-dir -r requirements.txt && python main.py"
-      ports:
-        - ${APP_BACKEND_PORT}:8000
+    ports:
+      - ${DB_PERCONA_PORT}:5432
+  keycloak:
+    depends_on:
+      - dbkeycloak
+    image: quay.io/keycloak/keycloak:latest
+    env_file:
+      - .envars/.env.keycloak
+    volumes:
+      - ./.keys:/opt/keycloak/conf
+      - ./.keycloak_realms:/opt/keycloak/data/import
+    ports:
+      - 8080:8080
+      - 8443:8443
+    command: -v start-dev --import-realm
+  backend:
+    depends_on:
+      - dbpercona
+    image: python:3.12
+    env_file:
+      - .envars/.env.backend
+    volumes:
+      - ./backend/app:/app
+    working_dir: /app
+    command: >
+      bash -c "pip install --no-cache-dir -r requirements.txt && python main.py"
+    ports:
+      - ${APP_BACKEND_PORT}:8000
