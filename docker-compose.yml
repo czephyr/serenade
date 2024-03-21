@@ -12,7 +12,11 @@
       env_file:
         - .envars/.env.dbpercona
       volumes:
-        - ./dbpercona/init.sql:/docker-entrypoint-initdb.d/wewe.sql
+      # NOTE : execution order is lexographical order
+      # - ./dbpercona/pg-tde-create-ext.sh:/docker-entrypoint-initdb.d/pg-tde-create-ext.sh
+      # - ./dbpercona/pg-tde-streaming-repl.sh:/docker-entrypoint-initdb.d/pg-tde-streaming-repl.sh
+      - ./dbpercona/pg-xx-init.sql:/docker-entrypoint-initdb.d/pg-xx-init.sql
+      - ./dbpercona/pg-xx-populate.sql:/docker-entrypoint-initdb.d/pg-xx-populate.sql
       ports:
         - ${DB_PERCONA_PORT}:5432
     keycloak:
