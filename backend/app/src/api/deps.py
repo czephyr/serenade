@@ -15,6 +15,7 @@ def get_db() -> Generator:
     finally:
         db.close()
 
+
 async def get_current_user(token: str = Security(oauth2_scheme)):
     try:
         credentials = keycloak_openid.introspect(token)
@@ -27,6 +28,7 @@ async def get_current_user(token: str = Security(oauth2_scheme)):
         raise HTTPException(status_code=401, detail="Inactive credentials")
     return credentials
 
+
 def require_role(required_roles: List[str]):
     """
     Dependency to enforce role requirements.
@@ -37,12 +39,12 @@ def require_role(required_roles: List[str]):
         user_roles = current_user.get("realm_access", {}).get("roles", [])
         if not any(role in user_roles for role in required_roles):
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Insufficient permissions"
+                status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions"
             )
         return current_user
 
     return role_checker
+
 
 def is_imt_or_iit(current_user: Dict = Depends(get_current_user)):
     user_roles = current_user.get("realm_access", {}).get("roles", [])

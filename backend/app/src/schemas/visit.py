@@ -7,6 +7,7 @@ class VisitCreate(BaseModel):
     comment: str
     patient_id: int
 
+
 class Visit(VisitCreate):
     visit_num: int
 

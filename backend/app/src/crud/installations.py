@@ -28,9 +28,7 @@ def get_installation(db: Session, install_num: int, asker_role: str):
         patient = db.query(Patient).filter(Patient.install_num == install_num).first()
         note = db.query(Note).filter(Note.install_num == install_num).first()
         tickets_list = (
-            db.query(ModelTicket)
-            .filter(ModelTicket.install_num == install_num)
-            .all()
+            db.query(ModelTicket).filter(ModelTicket.install_num == install_num).all()
         )
         pydantic_tickets_list = [
             sqlalchemy_to_pydantic(ticket) for ticket in tickets_list

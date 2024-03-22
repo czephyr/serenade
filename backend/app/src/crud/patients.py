@@ -11,20 +11,30 @@ from sqlalchemy.orm.exc import NoResultFound
 import arrow
 import random
 
+
 def get_patient(db: Session, patient_id: int):
     try:
         return db.query(Patient).filter(Patient.patient_id == patient_id).first()
     except NoResultFound as excp:
-        raise NoResultFound(detail=f"No patient found with id {id}") from excp    
+        raise NoResultFound(detail=f"No patient found with id {id}") from excp
+
 
 def get_patients(db: Session, skip: int = 0, limit: int = 100):
     list_patients = []
     for patient in db.query(Patient).offset(skip).limit(limit).all():
         status = "functional"
-        for ticket_status in db.query(Ticket).filter(Ticket.install_num == patient.install_num).all():
+        for ticket_status in (
+            db.query(Ticket).filter(Ticket.install_num == patient.install_num).all()
+        ):
             if ticket_status != "closed":
                 status = "unready"
-        list_patients.append(ListPatient(first_name=patient.first_name,last_name=patient.last_name,patient_id=patient.patient_id))
+        list_patients.append(
+            ListPatient(
+                first_name=patient.first_name,
+                last_name=patient.last_name,
+                patient_id=patient.patient_id,
+            )
+        )
     return list_patients
 
 
@@ -35,7 +45,7 @@ def create_patient(db: Session, patient_create: PatientCreate):
         pid = int.from_bytes(random.randbytes(7), byteorder="little")
         if not db.query(Patient).filter(Patient.patient_id == pid).first():
             break
-    
+
     while True:
         install_n = int.from_bytes(random.randbytes(7), byteorder="little")
         if not db.query(Patient).filter(Patient.install_num == install_n).first():
@@ -68,9 +78,7 @@ def create_patient(db: Session, patient_create: PatientCreate):
 
     create_note(
         db=db,
-        note_create=NoteCreate(
-            install_num=db_patient.install_num, install_notes=""
-        ),
+        note_create=NoteCreate(install_num=db_patient.install_num, install_notes=""),
     )
 
     return db_patient
@@ -83,7 +91,7 @@ def update_patient(db: Session, id: int, patient: PatientCreate):
         raise NoResultFound(detail=f"No patient found with id {id}") from excp
 
     update_data = patient.dict(exclude_unset=True)
-    
+
     try:
         for key, value in update_data.items():
             setattr(db_patient, key, value)
