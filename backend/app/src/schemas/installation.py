@@ -1,35 +1,29 @@
-from pydantic import BaseModel
 from datetime import datetime
-from typing import List, Optional
-from .ticket import Ticket
+from typing import Optional
+
+from pydantic import BaseModel
+
+from .ticket import TicketBase
 
 
-class BaseInstallation(BaseModel):
+class InstallationBase(BaseModel):
     creation_time: datetime
     install_num: int
-    medical_notes: Optional[str] = None
-    installation_notes: str
-    tickets_list: List[Ticket]
 
 
-class IMTInstallation(BaseInstallation):
+class InstallationIMT(InstallationBase):
     patient_id: int
 
 
-class IITInstallation(BaseInstallation):
+class InstallationIIT(InstallationBase):
+    install_num: str
     first_name: str
     last_name: str
-    age: int
     address: Optional[str] = None
     contact: Optional[str] = None
 
 
-class ListInstallation(BaseModel):
-    creation_time: datetime
-    install_num: int
+class InstallationStatus(InstallationBase):
     status: str
-
-
-class Installation(IMTInstallation, IITInstallation):
-    class Config:
-        orm_mode = True
+    tickets_list: list[TicketBase]
+    # tickets: list[TicketBase] # TODO will it be validate from ORM to pydantic?

@@ -1,10 +1,14 @@
-from pydantic import BaseModel
 from datetime import datetime
-from typing import List, Optional
-from .ticket_message import TicketMessage
+from typing import Optional
+
+from pydantic import BaseModel, ConfigDict
+
+from .ticket_message import TicketMessageBase
 
 
 class TicketBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     status: str
     install_num: int
     ticket_open_time: datetime
@@ -12,8 +16,15 @@ class TicketBase(BaseModel):
     ticket_close_time: Optional[datetime]
 
 
-class Ticket(TicketBase):
-    ticketmessage_list: List[TicketMessage]
+class TicketCreate(BaseModel):
+    install_num: int
 
-    class Config:
-        orm_mode = True
+
+class TicketUpdate(BaseModel):
+    status: str
+    ticket_close_time: Optional[datetime]
+
+
+class TicketDetails(TicketBase):
+    messages_list: list[TicketMessageBase]
+    # messages: list[TicketBase] # TODO will it be valdate from ORM to pydantic?
