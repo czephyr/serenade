@@ -1,12 +1,14 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from .ticket import TicketBase
 
 
 class InstallationBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     creation_time: datetime
     install_num: int
 
@@ -16,7 +18,6 @@ class InstallationIMT(InstallationBase):
 
 
 class InstallationIIT(InstallationBase):
-    install_num: str
     first_name: str
     last_name: str
     address: Optional[str] = None

@@ -1,52 +1,58 @@
-from typing import Dict, List, Union
-from sqlalchemy.exc import IntegrityError
-
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
-from sqlalchemy.orm.exc import NoResultFound
 
-from crud.crud_installation import get_installation, get_installations
-from schemas.installation import ListInstallation, IITInstallation, IMTInstallation
-from api.deps import get_db, require_role, is_imt_or_iit
+from ...api.deps import get_db, is_imt_or_iit, require_role
+from ...crud import installations, installation_status
+from ...core.roles import IIT, IMT
+from ...schemas.installation import (
+    InstallationIIT,
+    InstallationIMT,
+    InstallationStatus,
+    InstallationBase,
+)
 
 router = APIRouter()
 
 
-@router.get("/", response_model=List[ListInstallation])
-async def list_installations_endpoint(
-    current_user: Dict = Depends(require_role(["iit", "imt"])),
+@router.get("/", response_model=list[InstallationBase])
+async def read_many(
+    current_user: dict = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
-):
-    return get_installations(db=db)
+) -> list[InstallationBase]:
+    result = installations.read_many(db)
+    return result
 
 
-@router.get("/{install_num}", response_model=Union[IITInstallation, IMTInstallation])
-async def get_installation_endpoint(
+@router.get("/{install_num}", response_model=InstallationIIT | InstallationIMT)
+async def read_one(
     install_num: int,
-    current_user: Dict = Depends(require_role(["iit", "imt"])),
+    current_user: dict = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
-):
+) -> InstallationIIT | InstallationIMT:
+    role = is_imt_or_iit(current_user)
     try:
-        role = is_imt_or_iit(current_user)
-        installation = get_installation(db, install_num=install_num, asker_role=role)
+        result = installations.read_one(db, install_num=install_num, role=role)
     except NoResultFound as excp:
         raise HTTPException(
-            status_code=404, detail="Patient with id {id} not found"
+            status_code=404,
+            detail=f"Installation {install_num} not found",
         ) from excp
-    return installation
+    return result
 
 
-# @router.put("/{patient_id}", response_model=Patient)
-# async def update_patient_endpoint(
-#     patient_id: int,
-#     updated_patient: PatientCreate,
-#     current_user: Dict = Depends(require_role(["dottore"])),
-#     db: Session = Depends(get_db),
-# ):
-#     try:
-#         updated_patient = update_patient(db=db, id=patient_id, patient=updated_patient)
-#         return updated_patient
-#     except NoResultFound as excp:
-#         raise HTTPException(status_code=404, detail="Patient with id {patient_id} not found") from excp
-#     except IntegrityError as excp:
-#         raise HTTPException(status_code=409, detail=f"Patient with id {patient_id} already exists in database") from excp
+@router.get("/{install_num}/status", response_model=InstallationStatus)
+async def read_one_status(
+    install_num: int,
+    current_user: dict = Depends(require_role([IIT, IMT])),
+    db: Session = Depends(get_db),
+) -> InstallationStatus:
+    role = is_imt_or_iit(current_user)
+    try:
+        result = installation_status.read_one(db, install_num=install_num, role=role)
+    except NoResultFound as excp:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Installation {install_num} not found",
+        ) from excp
+    return result

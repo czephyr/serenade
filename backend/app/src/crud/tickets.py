@@ -1,47 +1,73 @@
+import arrow
 from sqlalchemy.orm import Session
-from typing import Optional
 
-from models.tickets import Ticket
-from schemas.ticket import TicketBase
+from ..core.status import CLOSED, NOT_READY, OPEN, RUNNING
+from ..ormodels import Ticket
+from ..schemas.ticket import TicketBase, TicketCreate
 
 
-def create_ticket(db: Session, ticket_create: TicketBase):
-    db_ticket = Ticket(
-        install_num=ticket_create.install_num,
-        ticket_open_time=ticket_create.ticket_open_time,
-        ticket_close_time=None,
-        status="todo",
+def create(db: Session, ticket: TicketCreate) -> TicketBase:
+    now_time = arrow.utcnow().datetime
+    result_orm = Ticket(
+        install_num=ticket.install_num,
+        ticket_open_time=now_time,
+        status=OPEN,
     )
-    db.add(db_ticket)
+    db.add(result_orm)
     db.commit()
-    db.refresh(db_ticket)
-    return db_ticket
+    db.refresh(result_orm)
+
+    result = TicketBase.model_validate(result_orm)
+    return result
 
 
-def get_ticket(db: Session, ticket_id: int) -> Optional[Ticket]:
-    return db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
+def query_one(db: Session, ticket_id: int) -> Ticket:
+    result_orm = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).one()
+    Ticket.install_num
+    return result_orm
 
 
-def get_tickets(db: Session, skip: int = 0, limit: int = 100) -> list[Ticket]:
-    return db.query(Ticket).offset(skip).limit(limit).all()
+def read_one(db: Session, ticket_id: int) -> TicketBase:
+    result_orm = query_one(db, ticket_id)
+    result = TicketBase.model_validate(result_orm)
+    return result
 
 
-def update_ticket(
-    db: Session, ticket_id: int, ticket_update: TicketUpdate
-) -> Optional[Ticket]:
-    db_ticket = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
-    if db_ticket:
-        update_data = ticket_update.dict(exclude_unset=True)
-        for key, value in update_data.items():
-            setattr(db_ticket, key, value)
-        db.commit()
-        db.refresh(db_ticket)
-    return db_ticket
+def read_many(
+    db: Session, install_num: int | None = None, *, skip: int = 0, limit: int = 100
+) -> list[TicketBase]:
+    results_orm = db.query(Ticket)
+    if install_num is not None:
+        results_orm = results_orm.where(Ticket.install_num == install_num)
+    results_orm = results_orm.offset(skip).limit(limit).all()
+    results = [TicketBase.model_validate(r) for r in results_orm]
+    return results
 
 
-def delete_ticket(db: Session, ticket_id: int):
-    db_ticket = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).first()
-    if db_ticket:
-        db.delete(db_ticket)
-        db.commit()
-    return db_ticket
+def update(db: Session, ticket_id: int, ticket: TicketBase) -> TicketBase:
+    agruments = ticket.model_dump(exclude_unset=True)
+    result_orm = query_one(db, ticket_id)
+    for k, v in agruments.items():
+        setattr(result_orm, k, v)
+    db.commit()
+    db.refresh(result_orm)
+
+    result = TicketBase.model_validate(result_orm)
+    return result
+
+
+def delete(db: Session, ticket_id: int) -> TicketBase:
+    result_orm = query_one(db, ticket_id)
+    db.delete(result_orm)
+    db.commit()
+    result = TicketBase.model_validate(result_orm)
+    return result
+
+
+def status(db: Session, install_num: int) -> str:
+    _tickets = read_many(db, install_num)
+    for ticket in _tickets:
+        if ticket.status != CLOSED:
+            return NOT_READY
+    else:
+        return RUNNING
