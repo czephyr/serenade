@@ -4,9 +4,7 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 
-# Base schema for common attributes
 class PatientBase(BaseModel):
-
     model_config = ConfigDict(from_attributes=True)
 
     first_name: str
@@ -42,5 +40,6 @@ class PatientUpdate(BaseModel):
 class PatientStatus(BaseModel):
     first_name: str
     last_name: str
+    age: int
     patient_id: int
     status: str
