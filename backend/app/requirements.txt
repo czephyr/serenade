@@ -1,11 +1,11 @@
-fastapi 
+fastapi
 uvicorn
-sqlalchemy 
-psycopg
+sqlalchemy
+psycopg[binary,pool]
 cryptography
-python-keycloak
+python-keycloak>=3.9
 arrow
-pydantic
+pydantic>=2.6
 pydantic-settings
 python-codicefiscale
 python-multipart
