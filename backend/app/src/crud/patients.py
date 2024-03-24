@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 
 from ..ormodels import Patient
 from ..schemas.patient import PatientBase, PatientCreate, PatientUpdate
+from ..schemas.ticket import TicketCreate
+from . import tickets
 
 
 def query_one(db: Session, patient_id: int) -> Patient:
@@ -52,6 +54,13 @@ def create(db: Session, patient: PatientCreate) -> PatientBase:
     db.add(result_orm)
     db.commit()
     db.refresh(result_orm)
+
+    ticket = TicketCreate(
+        install_num=install_num,
+    )
+    # TODO  qui ci starebbe bene un bellissimo await
+    tickets.create(db, ticket)
+
     result = PatientBase.model_validate(result_orm)
     return result
 
