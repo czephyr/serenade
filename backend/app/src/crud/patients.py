@@ -1,7 +1,6 @@
 import random
 
 import arrow
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from ..ormodels import Patient
@@ -38,7 +37,7 @@ def create(db: Session, patient: PatientCreate) -> PatientBase:
         if not db.query(Patient).filter(Patient.install_num == install_num).count():
             break
 
-    patient_orm = Patient(
+    result_orm = Patient(
         patient_id=patient_id,
         first_name=patient.first_name,
         last_name=patient.last_name,
@@ -50,17 +49,10 @@ def create(db: Session, patient: PatientCreate) -> PatientBase:
         creation_time=now_time,
     )
 
-    try:
-        db.add(patient_orm)
-    except IntegrityError as excp:
-        db.rollback()
-        raise excp
-
+    db.add(result_orm)
     db.commit()
-
-    # TODO create_ticket
-
-    result = read_one(db, patient_id)
+    db.refresh(result_orm)
+    result = PatientBase.model_validate(result_orm)
     return result
 
 
@@ -70,9 +62,10 @@ def update(db: Session, patient_id: int, patient: PatientUpdate) -> PatientBase:
     for k, v in agruments.items():
         setattr(result_orm, k, v)
     db.commit()
+    db.refresh(result_orm)
 
-    result_orm = read_one(db, patient_id)
-    return result_orm
+    result = PatientBase.model_validate(result_orm)
+    return result
 
 
 def delete(db: Session, patient_id: int) -> PatientBase:
