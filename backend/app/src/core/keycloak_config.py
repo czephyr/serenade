@@ -1,10 +1,6 @@
 import os
 from keycloak import KeycloakOpenID
 from fastapi.security import OAuth2PasswordBearer
-from dotenv import load_dotenv
-
-# load_dotenv("../../.env")
-# print(os.getenv("KEYCLOAK_REALM"))
 
 keycloak_openid = KeycloakOpenID(
     server_url=os.getenv("KEYCLOAK_URL"),

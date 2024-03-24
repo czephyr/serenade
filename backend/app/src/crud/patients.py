@@ -20,7 +20,7 @@ def read_one(db: Session, patient_id: int) -> PatientBase:
     return result
 
 
-def read_many(db: Session, skip: int = 0, limit: int = 100) -> list[PatientBase]:
+def read_many(db: Session, *, skip: int = 0, limit: int = 100) -> list[PatientBase]:
     results_orm = db.query(Patient).offset(skip).limit(limit).all()
     results = [PatientBase.model_validate(r) for r in results_orm]
     return results

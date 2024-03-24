@@ -3,6 +3,7 @@ from fastapi import Depends, HTTPException, Security, status
 
 from ..core.keycloak_config import keycloak_openid, oauth2_scheme
 from ..dbsession import SessionLocal
+from ..core.roles import IIT, IMT
 
 
 def get_db():
@@ -46,6 +47,10 @@ def require_role(required_roles: list[str]):
 
 def is_imt_or_iit(current_user: dict = Depends(get_current_user)):
     user_roles = current_user.get("realm_access", {}).get("roles", [])
-    for role in ["imt", "iit"]:
+    for role in [IMT, IIT]:
         if role in user_roles:
             return role
+    else:
+        raise ValueError(
+            "current_user was supposed to match at least one valid role, but it failed"
+        )
