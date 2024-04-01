@@ -12,10 +12,16 @@ class Settings(BaseSettings):
     # DATABASE_URL: str = "sqlite:///./test.db"
     # SECRET_KEY: str = "your-secret-key"
 
+    KEYCLOAK_URL: str
+    KEYCLOAK_REALM: str
+    KEYCLOAK_CLIENT_ID: str
+    KEYCLOAK_CLIENT_SECRET: str
+    OTEL_COLLECTOR_URL: str
+
     class Config:
         # This is where you can put Pydantic's configuration settings
         # For example, to load the environment variables from a .env file:
-        env_file = ".env"
+        env_file = "../.env"
         env_file_encoding = "utf-8"
 
 

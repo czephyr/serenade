@@ -24,7 +24,7 @@ def get_patients(db: Session, skip: int = 0, limit: int = 100):
         for ticket_status in db.query(Ticket).filter(Ticket.install_num == patient.install_num).all():
             if ticket_status != "closed":
                 status = "unready"
-        list_patients.append(ListPatient(first_name=patient.first_name,last_name=patient.last_name,patient_id=patient.patient_id))
+        list_patients.append(ListPatient(first_name=patient.first_name,last_name=patient.last_name,patient_id=patient.patient_id, status=status))
     return list_patients
 
 

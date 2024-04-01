@@ -5,16 +5,17 @@ import { getAccessToken } from "../../utils/sessionTokenAccessor";
 import { SetDynamicRoute } from "@/utils/setDynamicRoute";
 
 async function getAllPatients() {
-  const url = `http://0.0.0.0:8000/patients/`;
+  const url = `http://0.0.0.0:8000/api/v1/patients/`;
 
   let accessToken = await getAccessToken();
 
   const resp = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + accessToken,
-    },
-  });
+      Authorization: "Bearer " + accessToken
+    }
+  }
+  );
 
   if (resp.ok) {
     const data = await resp.json();
@@ -45,13 +46,13 @@ export default async function Patients() {
                       PID
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
-                    first_name
+                      first_name
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
-                    last_name
+                      last_name
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
-                    installation status
+                      installation status
                     </th>
                   </tr>
                 </thead>

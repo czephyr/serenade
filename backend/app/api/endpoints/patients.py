@@ -1,6 +1,6 @@
 from typing import Dict, List
 from sqlalchemy.exc import IntegrityError
-
+from opentelemetry import trace
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
@@ -17,6 +17,9 @@ async def list_patients_endpoint(
     current_user: Dict = Depends(require_role(["dottore"])),
     db: Session = Depends(get_db),
 ):
+    
+    # tracer = trace.get_tracer(__name__)
+    # with tracer.start_as_current_span("list_patients", attributes={"user.name": current_user.get("username", "unknown")}):
     return get_patients(db=db)
 
 @router.post("/", response_model=Patient)
@@ -25,6 +28,8 @@ async def create_patient_endpoint(
     current_user: Dict = Depends(require_role(["dottore"])),
     db: Session = Depends(get_db),
 ):
+    # tracer = trace.get_tracer(__name__)
+    # with tracer.start_as_current_span("create_patient", attributes={"user.name": current_user.get("username", "unknown")}):
     try:
         new_patient = create_patient(db=db, patient_create=patient)
     except IntegrityError as excp:

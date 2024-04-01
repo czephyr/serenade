@@ -2,14 +2,17 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import os
+from fastapi import Request
+
+# Import OpenTelemetry libraries
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
 
 from api.api import api_router
 from db.session import engine
 from db.base_class import Base
 from core.config import settings
 
-# Create all tables in the database.
-# Comment this out if you're using Alembic migrations.
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -26,6 +29,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Instrument FastAPI app and SQLAlchemy
+FastAPIInstrumentor.instrument_app(app)
+SQLAlchemyInstrumentor().instrument(engine=engine)
+
 # Dependency
 def get_db() -> Session:
     db = Session(autocommit=False, autoflush=False, bind=engine)
@@ -34,14 +41,26 @@ def get_db() -> Session:
     finally:
         db.close()
 
+# debug purposes
+# @app.middleware("http")
+# async def check_trace_context(request: Request, call_next):
+#     traceparent_header = request.headers.get("traceparent")
+#     print(request.headers)
+#     if traceparent_header:
+#         print(f"Traceparent: {traceparent_header}")
+#     else:
+#         print("Traceparent header missing.")
+    
+#     response = await call_next(request)
+#     return response
+
+
 # Include routers
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
-# You might want to add more endpoints or configurations here
-
 if __name__ == "__main__":
     for route in app.routes:
-        if hasattr(route, "methods"):  # Filter out routes that support HTTP methods
+        if hasattr(route, "methods"):
             methods = ", ".join(route.methods)
             print(f"Path: {route.path}, Methods: {methods}")
         else:
