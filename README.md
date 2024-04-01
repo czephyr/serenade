@@ -1,4 +1,98 @@
 # 🎻 serenade
+THE PROJECT IS WIP.
+## Project Overview
+This project is a Pilot study for developing a platform to support the Serenade medical study by Policlinico di Milano in collaboration with Universita' degli studi di Milano. The platform is needed to facilitate the intercollaboration between the Hospital personnel, the hardware installators and the University team of researchers overseeing the study. 
+
+The General Data Protection Regulation (GDPR) recognises data concerning health as a special category of data, reason for which the platform implements to access authorization and system state observability methodologies. The platform tries to make sure the data accesses are correctly served and monitored. For this purpose it employs a RBAC authorization model of access enforced through the OpenID-connect standard and a modern observability stack.
+
+### Platform Actors
+The actors interacting with the system are: hospital personnell (HOS) inputting data about patients, IIM and IIT which are installation teams for the needed hardware in the patients home and UniMi which are the researchers overseeing the study. 
+![actors](images/actors.png)
+
+### System Architecture
+
+![arch](images/architecture.drawio.svg)
+
+
+## Observability
+
+### Tools
+<img src="https://avatars.githubusercontent.com/u/49998002?s=280&v=4" width=36 height=36 /> OpenTelemetry |
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiM_X9eBjE6gh829tNc_-Vq5UjdGMtzcvu6eXaRDdg5tQT9UO3uh7awaTOP7h7h4-sv1U&usqp=CAU" width=36 height=36 /> Jaeger | 
+<img src="https://files.readme.io/e5e1b43-grafana-loki.png" width=36 height=36 /> Loki |
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg" width=36 height=36 /> Grafana |
+
+### Explaination
+
+The platform has an observability oriented side.
+
+
+The Jaeger dashboard gives observability over the requests served by the platform starting from the frontend using [@vercel/otel](https://www.npmjs.com/package/@vercel/otel) automatic NextJs instrumentation, the python lib `opentelemetry-instrumentation-fastapi` for the backend and the python lib `opentelemetry-instrumentation-sqlalchemy` for the database interactions. 
+
+![arch](images/traces_jaeger_view.png)
+
+Logs and metrics are currently WIP.
+
+## Backend 
+The backend of the service is implemented following a REST api structure and serving data under RBAC authorization from the Keycloack IAM module. 
+### Tools
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width=36 height=36 /> Python | <img src="https://www.jetbrains.com/guide/assets/fastapi-6837327b.svg" width=36 height=36 /> FastAPI | <img src="https://avatars.githubusercontent.com/u/110818415?v=4&s=160" width=36 height=36 /> Pydantic | <img src="https://quintagroup.com/cms/python/images/sqlalchemy-logo.png/@@images/eca35254-a2db-47a8-850b-2678f7f8bc09.png" width=120 height=36 /> SqlAlchemy  
+
+
+### Folder structure explaination
+
+```
+── api  ## rest endpoints
+│   ├── api.py  ## url routes
+│   ├── deps.py ## dependency injections
+│   └── endpoints
+│       ├── auth.py
+│       ├── installations.py
+│       └── patients.py
+|       ...
+├── crud  ## functions accessing the db
+│   ├── crud_installation.py
+│   └── crud_patient.py
+|    ...
+├── models  ## SQLAlchemy db object models
+│   ├── notes.py
+│   └── patient.py
+|   ...
+├── schemas ## Pydantic logical object schemas
+│   ├── installation.py
+│   └── patient.py
+|   ...
+├── core  ## various configs
+│   ├── config.py
+│   ├── keycloak_config.py
+│   └── security.py
+├── db   ## db configs
+│   ├── base_class.py
+│   └── session.py
+├── main.py
+└── utils  ## various utils
+    └── local_utils.py
+```
+
+## Database
+### Tools
+<img src="https://netdata.cloud/img/percona.svg" width=36 height=36 /> Percona postgreSQL
+### Explaination
+The database table storing data that could identify patients is stored under transparent data encryption as additional security measure by using the `pg_tde` functionality offered by this Percona postgreSQL16 distribution.
+
+## Frontend
+### Tools
+<img src="https://next-auth.js.org/img/logo/logo-sm.png" width=36 height=36 /> NextAuth.js | <img src="https://static-00.iconduck.com/assets.00/nextjs-icon-512x512-y563b8iq.png" width=36 height=36 /> Next.js
+
+### Explaination
+The frontend has been implemented in NextJS which is a widely used frontend framework and offers good interoperability with the Keycloack IAM module through the NextAuth.js library. 
+
+## IAM
+### Tools
+<img src="https://cf.appdrag.com/dashboard-openvm-clo-b2d42c/uploads/Keycloak-VC4L-19JH.png" width=80 height=80 /> KeyCloak
+
+### Explaination
+The RBAC Auth and AuthZ model is realized through microservices making requests to the Keycloak component. Keycloak is an open-source identity and access management solution that not only provides comprehensive IAM capabilities on its own but also supports extensions and can serve as an adapter for external IdPs.
 
 ## Logic Model
 
