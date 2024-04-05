@@ -7,6 +7,7 @@ from fastapi import Request
 # Import OpenTelemetry libraries
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from api.api import api_router
 from db.session import engine
@@ -32,6 +33,7 @@ app.add_middleware(
 # Instrument FastAPI app and SQLAlchemy
 FastAPIInstrumentor.instrument_app(app)
 SQLAlchemyInstrumentor().instrument(engine=engine)
+# Instrumentator().instrument(app).expose(app)
 
 # Dependency
 def get_db() -> Session:

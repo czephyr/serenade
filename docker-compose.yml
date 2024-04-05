@@ -54,8 +54,8 @@
     #     bash -c "pip install --no-cache-dir -r requirements.txt && python main.py"
     #   ports:
     #     - "8000:8000"
-    # grafana:
-    #   image: grafana/grafana:latest
+    grafana:
+      image: grafana/grafana:latest
     #   depends_on:
     #     - keycloak
     #   environment:
@@ -68,10 +68,10 @@
     #     GF_AUTH_GENERIC_OAUTH_API_URL: "http://keycloak:8080/auth/realms/serenade/protocol/openid-connect/userinfo"
     #     GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(roles[], 'imt') && 'Admin' || 'Viewer'"
     #     GF_SERVER_ROOT_URL: "http://localhost:4000/"
-    #   ports:
-    #     - "4000:3000"
-    #   volumes:
-    #     - grafana_data:/var/lib/grafana
+      ports:
+        - "4000:3000"
+      volumes:
+        - grafana_data:/var/lib/grafana
     otel-collector:
       image: otel/opentelemetry-collector-contrib
       volumes:
@@ -79,6 +79,13 @@
       ports:
         - 4317:4317 # OTLP gRPC receiver
         - 4318:4318 # OTLP http receiver
+        - 9099:9099
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      depends_on:
+        - prometheus
+        - jaeger
+
     jaeger:
       image: jaegertracing/all-in-one:1.55
       environment: 
@@ -92,8 +99,25 @@
         - 16686:16686
         - 4316:4317
         - 4319:4318
-  # volumes:
-  #   grafana_data:
+    prometheus:
+      image: prom/prometheus:latest
+      volumes:
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      ports:
+        - "9090:9090"
+      command:
+        - "--config.file=/etc/prometheus/prometheus.yml"
+        - "--storage.tsdb.path=/prometheus"
+        - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+        - "--web.console.templates=/usr/share/prometheus/consoles"  
+    ubuntu:
+        image: ubuntu:latest
+        command: sleep 9999
+        extra_hosts:
+        - "host.docker.internal:host-gateway"
+  volumes:
+    grafana_data:
+  
 
 
   # opentelemetry-instrument --service_name backend --traces_exporter otlp python main.py
