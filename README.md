@@ -3,7 +3,7 @@ THE PROJECT IS WIP.
 ## Project Overview
 This project is a Pilot study for developing a platform to support the Serenade medical study by Policlinico di Milano in collaboration with Universita' degli studi di Milano. The platform is needed to facilitate the intercollaboration between the Hospital personnel, the hardware installators and the University team of researchers overseeing the study. 
 
-The General Data Protection Regulation (GDPR) recognises data concerning health as a special category of data, reason for which the platform implements to access authorization and system state observability methodologies. The platform tries to make sure the data accesses are correctly served and monitored. For this purpose it employs a RBAC authorization model of access enforced through the OpenID-connect standard and a modern observability stack.
+Considering the GDPR's classification of medical data as Special Category Data, the platform ensures precise management and monitoring of data accesses. To achieve correct data access governance the platform follows RBAC (Role-Based Access Control) authorization using the OpenID Connect standard; the access are monitored and store using a modern observability stack.
 
 ### Platform Actors
 The actors interacting with the system are: hospital personnell (HOS) inputting data about patients, IIM and IIT which are installation teams for the needed hardware in the patients home and UniMi which are the researchers overseeing the study. 
