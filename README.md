@@ -24,7 +24,7 @@ The actors interacting with the system are: hospital personnell (HOS) inputting 
 <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg" width=36 height=36 /> Grafana |
 
 The objective is to observe and store accesses by users to portions of the data. We use logs, metrics and traces are employed to this objective.
-Grafana gives general observability over the health of the platform using the Prometheus metrics exposed by the backend and logs stored on Loki.
+Grafana can give general observability over the health of the platform using the Prometheus metrics exposed by the backend and logs stored on Loki.
 
 <img src="images/grafana_dash_img.png" width=700 />
 
