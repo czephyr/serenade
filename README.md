@@ -25,6 +25,12 @@ The actors interacting with the system are: hospital personnell (HOS) inputting 
 
 The objective is to observe and store accesses by users to portions of the data. We use logs, metrics and traces are employed to this objective.
 Grafana can give general observability over the health of the platform using the Prometheus metrics exposed by the backend and logs stored on Loki.
+Frontend tracing NextJS tracing is achieved by using [@vercel/otel](https://www.npmjs.com/package/@vercel/otel) an Opentelemetry automatic tracing instrumentation.
+Backend tracing is achieved using `opentelemetry-instrumentation-fastapi` and `opentelemetry-instrumentation-sqlalchemy`, automatic OpenTelemetry tracing instrumentation libraries.
+Backend Prometheus metrics exposure is achieved using `prometheus-fastapi-instrumentator` which creates a `/metrics` endpoint.
+Backend logging is achieved using `opentelemetry-instrumentation-logging` interfacing with the Python native logger to export logs in OpenTelemetry protocol (OTLP).
+
+The OpenTelemetry Collector acts as a single interface to send observability data and redistributes them to the relative backends.
 
 <img src="images/grafana_dash_img.png" width=700 />
 
@@ -38,6 +44,7 @@ Thanks to OpenTelemetry's context injection each log can be linked to the reques
 
 The backend features a REST api structure and serves requests under RBAC enforced by using Keycloak jwt tokens. 
 The API is written using the FastAPI framework, SQLAlchemy is used for ORM interaction with the database and Pydantic is used for data schema validation.
+The RBAC auth and authz is implemented achieved by leveraging the `KeycloakOpenID` and FastAPI integration; everytime a request is sent to the backend before serving a response the jwt token is checked for validity and authorization based on user role against Keycloak. 
 
 ### Folder structure explaination
 
@@ -84,7 +91,7 @@ The database table storing data that could identify patients is stored under tra
 ### Tools
 <img src="https://next-auth.js.org/img/logo/logo-sm.png" width=36 height=36 /> NextAuth.js | <img src="https://static-00.iconduck.com/assets.00/nextjs-icon-512x512-y563b8iq.png" width=36 height=36 /> Next.js |
 
-The frontend is in NextJS, NextAuth.js offers interoperability with Keycloak. 
+The frontend is in NextJS, NextAuth.js offers interoperability with Keycloak. NextJS provides serverside loading, where that is possible requests tokens are checked for validity and authorization based on user role against Keycloak.
 
 ## IAM
 ### Tools
