@@ -21,6 +21,7 @@ The actors interacting with the system are: hospital personnell (HOS) inputting 
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiM_X9eBjE6gh829tNc_-Vq5UjdGMtzcvu6eXaRDdg5tQT9UO3uh7awaTOP7h7h4-sv1U&usqp=CAU" width=36 height=36 /> Jaeger | 
 <img src="https://files.readme.io/e5e1b43-grafana-loki.png" width=36 height=36 /> Loki |
 <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg" width=36 height=36 /> Grafana |
+
 The objective is to observe and store accesses by users to portions of the data. We use logs, metrics and traces are employed to this objective.
 Grafana gives general observability over the health of the platform using the Prometheus metrics exposed by the backend and logs stored on Loki.
 
@@ -32,7 +33,7 @@ Thanks to OpenTelemetry's context injection each log can be linked to the reques
 
 ## Backend 
 ### Tools
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width=36 height=36 /> Python | <img src="https://www.jetbrains.com/guide/assets/fastapi-6837327b.svg" width=36 height=36 /> FastAPI | <img src="https://avatars.githubusercontent.com/u/110818415?v=4&s=160" width=36 height=36 /> Pydantic | <img src="https://quintagroup.com/cms/python/images/sqlalchemy-logo.png/@@images/eca35254-a2db-47a8-850b-2678f7f8bc09.png" width=120 height=36 /> SQLAlchemy  
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width=36 height=36 /> Python | <img src="https://www.jetbrains.com/guide/assets/fastapi-6837327b.svg" width=36 height=36 /> FastAPI | <img src="https://avatars.githubusercontent.com/u/110818415?v=4&s=160" width=36 height=36 /> Pydantic | <img src="https://quintagroup.com/cms/python/images/sqlalchemy-logo.png/@@images/eca35254-a2db-47a8-850b-2678f7f8bc09.png" width=120 height=36 /> SQLAlchemy | 
 
 The backend features a REST api structure and serves requests under RBAC enforced by using Keycloak jwt tokens. 
 The API is written using the FastAPI framework, SQLAlchemy is used for ORM interaction with the database and Pydantic is used for data schema validation.
@@ -74,19 +75,19 @@ The API is written using the FastAPI framework, SQLAlchemy is used for ORM inter
 
 ## Database
 ### Tools
-<img src="https://netdata.cloud/img/percona.svg" width=36 height=36 /> Percona postgreSQL
+<img src="https://netdata.cloud/img/percona.svg" width=36 height=36 /> Percona postgreSQL |
 
 The database table storing data that could identify patients is stored under transparent data encryption as additional security measure by using the `pg_tde` functionality offered by this Percona postgreSQL16 distribution.
 
 ## Frontend
 ### Tools
-<img src="https://next-auth.js.org/img/logo/logo-sm.png" width=36 height=36 /> NextAuth.js | <img src="https://static-00.iconduck.com/assets.00/nextjs-icon-512x512-y563b8iq.png" width=36 height=36 /> Next.js
+<img src="https://next-auth.js.org/img/logo/logo-sm.png" width=36 height=36 /> NextAuth.js | <img src="https://static-00.iconduck.com/assets.00/nextjs-icon-512x512-y563b8iq.png" width=36 height=36 /> Next.js |
 
 The frontend is in NextJS, NextAuth.js offers interoperability with Keycloak. 
 
 ## IAM
 ### Tools
-<img src="https://cf.appdrag.com/dashboard-openvm-clo-b2d42c/uploads/Keycloak-VC4L-19JH.png" width=80 height=80 /> KeyCloak
+<img src="https://cf.appdrag.com/dashboard-openvm-clo-b2d42c/uploads/Keycloak-VC4L-19JH.png" width=80 height=80 /> KeyCloak |
 
 Keycloak is an open-source identity and access management solution that provieds IAM capabilities but can also serve as an adapter for external IdPs. It's used to create the RBAC Auth and Authz through the OpenID connect standard.
 
