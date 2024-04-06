@@ -23,8 +23,15 @@ The actors interacting with the system are: hospital personnell (HOS) inputting 
 <img src="https://files.readme.io/e5e1b43-grafana-loki.png" width=36 height=36 /> Loki |
 <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg" width=36 height=36 /> Grafana |
 
-The objective is to observe and store accesses by users to portions of the data. Logs, metrics and traces are employed to this objective.
+The objective is to observe and store accesses by users to portions of the data. Logs, metrics and traces are employed with this aim.
+
 Grafana can give general observability over the health of the platform using the Prometheus metrics exposed by the backend and logs stored on Loki.
+
+<img src="images/grafana_dash_img.png" width=700 />
+
+Thanks to OpenTelemetry's context injection each log can be linked to the request that originated it, which can be then observed on the Jaeger tracing dashboard. Traces allow to observe each request's path as it passes through the microservices.
+
+<img src="images/jaeger_dashboard_img.png" width=700 />
 
 Frontend NextJS tracing is achieved by using [@vercel/otel](https://www.npmjs.com/package/@vercel/otel) an Opentelemetry automatic tracing instrumentation.
 
@@ -35,12 +42,6 @@ Backend Prometheus metrics exposure is achieved using `prometheus-fastapi-instru
 Backend logging is achieved using `opentelemetry-instrumentation-logging` interfacing with the Python native logger to export logs in OpenTelemetry protocol (OTLP).
 
 The OpenTelemetry Collector acts as a single interface to send observability data to and redistributes them to the relative backends.
-
-<img src="images/grafana_dash_img.png" width=700 />
-
-Thanks to OpenTelemetry's context injection each log can be linked to the request that originated it, which can be then observed on the Jaeger tracing dashboard. Traces allow to observe each request's path as it passes through the microservices.
-
-<img src="images/jaeger_dashboard_img.png" width=700 />
 
 ## Backend 
 ### Tools
