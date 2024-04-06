@@ -17,6 +17,10 @@ exporters:
       insecure: true
   prometheus:
     endpoint: 0.0.0.0:9999
+  debug:
+    verbosity: detailed
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
 service:
   pipelines:
     traces:
@@ -25,3 +29,6 @@ service:
     metrics:
       receivers: [prometheus]
       exporters: [prometheus]
+    logs:
+      receivers: [ otlp ]
+      exporters: [ loki ]

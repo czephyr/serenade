@@ -3,7 +3,7 @@ import { registerOTel } from '@vercel/otel'
 export function register() {
     registerOTel(
     {
-    serviceName:'serenade',
+    serviceName:'frontend',
     instrumentationConfig: {
         fetch: {
           propagateContextUrls: [

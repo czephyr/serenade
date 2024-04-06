@@ -4,12 +4,13 @@ from opentelemetry import trace
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.exc import NoResultFound
-
+import logging
 from crud.crud_patient import (create_patient, delete_patient, get_patient,
                                   get_patients, update_patient)
 from schemas.patient import Patient, PatientCreate, ListPatient
 from api.deps import get_db, require_role
 
+logger = logging.getLogger("mannaggia")
 router = APIRouter()
 
 @router.get("/", response_model=List[ListPatient])
@@ -17,7 +18,10 @@ async def list_patients_endpoint(
     current_user: Dict = Depends(require_role(["dottore"])),
     db: Session = Depends(get_db),
 ):
-    
+    current_span = trace.get_current_span()
+    trace_id = str(hex(current_span.get_span_context().trace_id))[2:]
+    username = current_user.get('username', 'unknown')
+    logger.info(f"user: {username} - Called list_patients_endpoint  - trace: {trace_id}")
     # tracer = trace.get_tracer(__name__)
     # with tracer.start_as_current_span("list_patients", attributes={"user.name": current_user.get("username", "unknown")}):
     return get_patients(db=db)

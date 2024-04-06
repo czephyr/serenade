@@ -72,6 +72,10 @@
         - "4000:3000"
       volumes:
         - grafana_data:/var/lib/grafana
+    loki:
+      image: grafana/loki:latest
+      ports:
+        - "3100:3100"
     otel-collector:
       image: otel/opentelemetry-collector-contrib
       volumes:
@@ -85,7 +89,6 @@
       depends_on:
         - prometheus
         - jaeger
-
     jaeger:
       image: jaegertracing/all-in-one:1.55
       environment: 
