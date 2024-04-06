@@ -24,14 +24,14 @@ The actors interacting with the system are: hospital personnell (HOS) inputting 
 
 ### Explaination
 
-The platform has an observability oriented side.
+The objective is to observe and store accesses by users to portions of the data. We use logs, metrics and traces are employed to this objective.
+Grafana gives general observability over the health of the platform using the Prometheus metrics exposed by the backend and logs stored on Loki.
 
+<img src="images/grafana_dash_img.png" width=700 />
 
-The Jaeger dashboard gives observability over the requests served by the platform starting from the frontend using [@vercel/otel](https://www.npmjs.com/package/@vercel/otel) automatic NextJs instrumentation, the python lib `opentelemetry-instrumentation-fastapi` for the backend and the python lib `opentelemetry-instrumentation-sqlalchemy` for the database interactions. 
+Thanks to OpenTelemetry's context injection each log can be linked to the request that originated it, which can be then observed on the Jaeger tracing dashboard. Traces allow to observe each request's path as it passes through the microservices.
 
-![arch](images/traces_jaeger_view.png)
-
-Logs and metrics are currently WIP.
+<img src="images/jaeger_dashboard_img.png" width=700 />
 
 ## Backend 
 The backend of the service is implemented following a REST api structure and serving data under RBAC authorization from the Keycloack IAM module. 
