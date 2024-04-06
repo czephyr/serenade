@@ -7,6 +7,7 @@ Considering the GDPR's classification of medical data as Special Category Data, 
 
 ### Platform Actors
 The actors interacting with the system are: hospital personnell (HOS) inputting data about patients, IIM and IIT which are installation teams for the needed hardware in the patients home and the are the researchers overseeing the study (UniMi). 
+
 <img src="images/actors.png" alt="actors" width="500"/>
 
 ### System Architecture
