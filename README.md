@@ -26,7 +26,7 @@ The actors interacting with the system are: hospital personnell (HOS) inputting 
 The objective is to observe and store accesses by users to portions of the data. Logs, metrics and traces are employed to this objective.
 Grafana can give general observability over the health of the platform using the Prometheus metrics exposed by the backend and logs stored on Loki.
 
-Frontend tracing NextJS tracing is achieved by using [@vercel/otel](https://www.npmjs.com/package/@vercel/otel) an Opentelemetry automatic tracing instrumentation.
+Frontend NextJS tracing is achieved by using [@vercel/otel](https://www.npmjs.com/package/@vercel/otel) an Opentelemetry automatic tracing instrumentation.
 
 Backend tracing is achieved using `opentelemetry-instrumentation-fastapi` and `opentelemetry-instrumentation-sqlalchemy`, automatic OpenTelemetry tracing instrumentation libraries.
 
