@@ -3,11 +3,12 @@ THE PROJECT IS WIP.
 ## Project Overview
 This project is a Pilot study for developing a platform to support the Serenade medical study by Policlinico di Milano in collaboration with Universita' degli studi di Milano. The platform is needed to facilitate the intercollaboration between the Hospital personnel, the hardware installators and the University team of researchers overseeing the study. 
 
-The General Data Protection Regulation (GDPR) recognises data concerning health as a special category of data, reason for which the platform implements to access authorization and system state observability methodologies. The platform tries to make sure the data accesses are correctly served and monitored. For this purpose it employs a RBAC authorization model of access enforced through the OpenID-connect standard and a modern observability stack.
+Considering the GDPR's classification of medical data as Special Category Data, the platform ensures precise management and monitoring of data accesses. To achieve correct data access governance the platform follows RBAC (Role-Based Access Control) authorization using the OpenID Connect standard; the access are monitored and store using a modern observability stack.
 
 ### Platform Actors
-The actors interacting with the system are: hospital personnell (HOS) inputting data about patients, IIM and IIT which are installation teams for the needed hardware in the patients home and UniMi which are the researchers overseeing the study. 
-![actors](images/actors.png)
+The actors interacting with the system are: hospital personnell (HOS) inputting data about patients, IIM and IIT which are installation teams for the needed hardware in the patients home and the are the researchers overseeing the study (UniMi). 
+
+<img src="images/actors.png" alt="actors" width="500"/>
 
 ### System Architecture
 
@@ -22,22 +23,21 @@ The actors interacting with the system are: hospital personnell (HOS) inputting 
 <img src="https://files.readme.io/e5e1b43-grafana-loki.png" width=36 height=36 /> Loki |
 <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Grafana_icon.svg" width=36 height=36 /> Grafana |
 
-### Explaination
+The objective is to observe and store accesses by users to portions of the data. We use logs, metrics and traces are employed to this objective.
+Grafana gives general observability over the health of the platform using the Prometheus metrics exposed by the backend and logs stored on Loki.
 
-The platform has an observability oriented side.
+<img src="images/grafana_dash_img.png" width=700 />
 
+Thanks to OpenTelemetry's context injection each log can be linked to the request that originated it, which can be then observed on the Jaeger tracing dashboard. Traces allow to observe each request's path as it passes through the microservices.
 
-The Jaeger dashboard gives observability over the requests served by the platform starting from the frontend using [@vercel/otel](https://www.npmjs.com/package/@vercel/otel) automatic NextJs instrumentation, the python lib `opentelemetry-instrumentation-fastapi` for the backend and the python lib `opentelemetry-instrumentation-sqlalchemy` for the database interactions. 
-
-![arch](images/traces_jaeger_view.png)
-
-Logs and metrics are currently WIP.
+<img src="images/jaeger_dashboard_img.png" width=700 />
 
 ## Backend 
-The backend of the service is implemented following a REST api structure and serving data under RBAC authorization from the Keycloack IAM module. 
 ### Tools
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width=36 height=36 /> Python | <img src="https://www.jetbrains.com/guide/assets/fastapi-6837327b.svg" width=36 height=36 /> FastAPI | <img src="https://avatars.githubusercontent.com/u/110818415?v=4&s=160" width=36 height=36 /> Pydantic | <img src="https://quintagroup.com/cms/python/images/sqlalchemy-logo.png/@@images/eca35254-a2db-47a8-850b-2678f7f8bc09.png" width=120 height=36 /> SqlAlchemy  
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width=36 height=36 /> Python | <img src="https://www.jetbrains.com/guide/assets/fastapi-6837327b.svg" width=36 height=36 /> FastAPI | <img src="https://avatars.githubusercontent.com/u/110818415?v=4&s=160" width=36 height=36 /> Pydantic | <img src="https://quintagroup.com/cms/python/images/sqlalchemy-logo.png/@@images/eca35254-a2db-47a8-850b-2678f7f8bc09.png" width=120 height=36 /> SQLAlchemy | 
 
+The backend features a REST api structure and serves requests under RBAC enforced by using Keycloak jwt tokens. 
+The API is written using the FastAPI framework, SQLAlchemy is used for ORM interaction with the database and Pydantic is used for data schema validation.
 
 ### Folder structure explaination
 
@@ -76,23 +76,21 @@ The backend of the service is implemented following a REST api structure and ser
 
 ## Database
 ### Tools
-<img src="https://netdata.cloud/img/percona.svg" width=36 height=36 /> Percona postgreSQL
-### Explaination
+<img src="https://netdata.cloud/img/percona.svg" width=36 height=36 /> Percona postgreSQL |
+
 The database table storing data that could identify patients is stored under transparent data encryption as additional security measure by using the `pg_tde` functionality offered by this Percona postgreSQL16 distribution.
 
 ## Frontend
 ### Tools
-<img src="https://next-auth.js.org/img/logo/logo-sm.png" width=36 height=36 /> NextAuth.js | <img src="https://static-00.iconduck.com/assets.00/nextjs-icon-512x512-y563b8iq.png" width=36 height=36 /> Next.js
+<img src="https://next-auth.js.org/img/logo/logo-sm.png" width=36 height=36 /> NextAuth.js | <img src="https://static-00.iconduck.com/assets.00/nextjs-icon-512x512-y563b8iq.png" width=36 height=36 /> Next.js |
 
-### Explaination
-The frontend has been implemented in NextJS which is a widely used frontend framework and offers good interoperability with the Keycloack IAM module through the NextAuth.js library. 
+The frontend is in NextJS, NextAuth.js offers interoperability with Keycloak. 
 
 ## IAM
 ### Tools
-<img src="https://cf.appdrag.com/dashboard-openvm-clo-b2d42c/uploads/Keycloak-VC4L-19JH.png" width=80 height=80 /> KeyCloak
+<img src="https://cf.appdrag.com/dashboard-openvm-clo-b2d42c/uploads/Keycloak-VC4L-19JH.png" width=80 height=80 /> KeyCloak |
 
-### Explaination
-The RBAC Auth and AuthZ model is realized through microservices making requests to the Keycloak component. Keycloak is an open-source identity and access management solution that not only provides comprehensive IAM capabilities on its own but also supports extensions and can serve as an adapter for external IdPs.
+Keycloak is an open-source identity and access management solution that provieds IAM capabilities but can also serve as an adapter for external IdPs. It's used to create the RBAC Auth and Authz through the OpenID connect standard.
 
 ## Logic Model
 
