@@ -1,4 +1,3 @@
-import NextAuth from "next-auth/next";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import {jwtDecode} from 'jwt-decode'
 import { encrypt } from "@/utils/encryption"; 
@@ -25,14 +24,14 @@ async function refreshAccessToken(token) {
       expires_at: Math.floor(Date.now() / 1000) + refreshToken.expires_in,
       refresh_token: refreshToken.refresh_token,
     };
-  }
+}
 
-export const authOptions = {
+const authOptions = {
     providers: [
         KeycloakProvider({
-            clientId: process.env.OIDC_ID as string,
-            clientSecret: process.env.OIDC_SECRET as string,
-            issuer: process.env.OIDC_ISSUER as string,
+            clientId: process.env.OIDC_ID,
+            clientSecret: process.env.OIDC_SECRET,
+            issuer: process.env.OIDC_ISSUER,
         }),
     ],
 
@@ -82,7 +81,4 @@ export const authOptions = {
     }
 };
 
-const handler = NextAuth(authOptions)
-
-export { handler as GET, handler as POST }
-
+export default authOptions;

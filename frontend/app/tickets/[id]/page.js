@@ -1,6 +1,6 @@
 // pages/tickets.js
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import authOptions from "../../api/auth/[...nextauth]/options";
 import { getAccessToken } from "../../../utils/sessionTokenAccessor";
 
 // Assuming these functions are in a utilities file or directly in your page file
