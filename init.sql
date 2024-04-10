@@ -1,14 +1,35 @@
 CREATE TABLE IF NOT EXISTS patients (
     patient_id bigint UNIQUE,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
+    age_range VARCHAR(255), -- 65-74, 75-84, 85+
+    full_name VARCHAR(255),
     cf VARCHAR(255) PRIMARY KEY,
     address TEXT,
+    phone_number VARCHAR(255),
     contact VARCHAR(255),
-    medical_notes VARCHAR(255),
-    install_num bigint UNIQUE,
-    creation_time TIMESTAMP
+    medical_notes TEXT,
 ) USING pg_tde;
+
+CREATE TABLE IF NOT EXISTS patients_non (
+    patient_id bigint UNIQUE,
+    install_num bigint UNIQUE,
+    neurodegen BOOLEAN,
+    apartment_type VARCHAR(255), -- e.g. two-room, three-room
+    wifi BOOLEAN,
+    other_subjects_in_home TEXT,
+    smartphone_model VARCHAR(255),
+    creation_time TIMESTAMP
+)
+
+CREATE TABLE IF NOT EXISTS installation (
+    id SERIAL PRIMARY KEY,
+    home_map bytea, -- Store the PDF as binary data
+    smart_plug_appliances text, -- List of home appliances connected to smart plugs
+    technical_problems_notes text, -- Notes on technical problems
+    subject_specific_habits_notes text, -- Non-identifying notes about the subject
+    cognitive_tests_timing_notes text, -- Notes on preferred times for triggering cognitive tests
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT (CURRENT_TIMESTAMP),
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT (CURRENT_TIMESTAMP) ON UPDATE CURRENT_TIMESTAMP
+);
 
 CREATE TABLE IF NOT EXISTS notes (
     install_num bigint UNIQUE, 
