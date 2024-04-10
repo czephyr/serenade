@@ -51,3 +51,4 @@ class PatientNon(Base):
 
     # Link back to the Patient model for a one-to-one relationship
     patient = relationship("Patient", back_populates="patients_non",uselist=False)
+    installation = relationship("Installation", back_populates="patient_non", uselist=False)
