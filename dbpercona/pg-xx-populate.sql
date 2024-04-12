@@ -9,15 +9,26 @@ VALUES
 (101, 'Patient has been prescribed with medication X for hypertension'),
 (102, 'Patient requires regular insulin injections for diabetes control'),
 (103, 'Patient has been advised to use inhaler for asthma attacks');
+-- Populating the `tickets` table
+INSERT INTO tickets (ts, patient_id, date_closed)
+VALUES 
+    ('2024-04-12 08:00:00', 1, '2024-04-12 10:00:00'),
+    ('2024-04-12 09:00:00', 2, NULL),
+    ('2024-04-12 10:00:00', 3, '2024-04-12 12:00:00'),
+    ('2024-04-12 11:00:00', 4, NULL),
+    ('2024-04-12 12:00:00', 5, NULL);
 
-INSERT INTO tickets (install_num, ticket_open_time, ticket_close_time, status)
-VALUES
-(101, CURRENT_TIMESTAMP, NULL, 'Open'),
-(102, CURRENT_TIMESTAMP, NULL, 'Open'),
-(103, CURRENT_TIMESTAMP, NULL, 'Open');
 
-INSERT INTO ticket_messages (message_time, sender, ticket_id)
-VALUES
-(CURRENT_TIMESTAMP, 'Dr. Smith', 1),
-(CURRENT_TIMESTAMP, 'Nurse Johnson', 2),
-(CURRENT_TIMESTAMP, 'Receptionist', 3);
+-- Populating the `ticket_messages` table
+INSERT INTO ticket_messages (ts, sender, body, ticket_id)
+VALUES 
+    ('2024-04-12 08:00:00', '>Bob', 'Message 1', 1),
+    ('2024-04-12 09:00:00', 'CHARLIE@ME', 'Message 2', 2),
+    ('2024-04-12 10:00:00', '>Bob', 'Message 3', 3),
+    ('2024-04-12 11:00:00', 'CHARLIE@ME', 'Message 4', 4),
+    ('2024-04-12 12:00:00', '>Bob', 'Message 5', 5),
+    ('2024-04-13 08:00:00', 'CHARLIE@ME', 'Message 1', 1),
+    ('2024-04-13 09:00:00', '>Bob', 'Message 2', 2),
+    ('2024-04-13 10:00:00', 'CHARLIE@ME', 'Message 3', 3),
+    ('2024-04-13 11:00:00', '>Bob', 'Message 4', 4),
+    ('2024-04-13 12:00:00', 'Admin', 'Message 5', 5);

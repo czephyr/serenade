@@ -1,30 +1,31 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
-from .ticket_message import TicketMessageBase
+from .ticket_message import TicketMessageCreate
 
 
 class TicketBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    status: str
-    install_num: int
-    ticket_open_time: datetime
+    ts: datetime
     ticket_id: int
-    ticket_close_time: Optional[datetime]
+
+    patient_id: int
+    date_closed: datetime | None
 
 
 class TicketCreate(BaseModel):
-    install_num: int
+    patient_id: int
+    message: TicketMessageCreate
 
 
 class TicketUpdate(BaseModel):
+    date_closed: datetime | None
+
+
+class TicketStatus(BaseModel):
+    ticket_id: int
+    date_delta: str
     status: str
-    ticket_close_time: Optional[datetime]
-
-
-class TicketDetails(TicketBase):
-    messages_list: list[TicketMessageBase]
-    # messages: list[TicketBase] # TODO will it be valdate from ORM to pydantic?
+    last_sender: str | None

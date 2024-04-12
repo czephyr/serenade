@@ -1,6 +1,9 @@
-from sqlalchemy import TIMESTAMP, BigInteger, Column, ForeignKey, Integer, String, Text
+from datetime import datetime
+
+from sqlalchemy import (TIMESTAMP, BigInteger, Column, ForeignKey, Integer,
+                        String, Text)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 Base = declarative_base()
 
@@ -26,24 +29,23 @@ class Patient(Base):
 class Ticket(Base):
     __tablename__ = "tickets"
 
-    ticket_id = Column(Integer, primary_key=True, autoincrement=True)
-    install_num = Column(BigInteger, ForeignKey(Patient.install_num))
-    ticket_open_time = Column(TIMESTAMP)
-    ticket_close_time = Column(TIMESTAMP)
-    status = Column(String(255))
+    ts: Mapped[datetime] = mapped_column(default=datetime.now)
+    ticket_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
-    # Relationship back to the patient (using backref for simplicity)
-    messages = relationship("TicketMessage", back_populates="ticket")
+    patient_id: Mapped[int] = mapped_column(ForeignKey("patients.patient_id"))
+    date_closed: Mapped[datetime | None]
+
+    patient: Mapped[Patient] = relationship()
+    messages: Mapped[list["TicketMessage"]] = relationship(back_populates="ticket")
 
 
 class TicketMessage(Base):
     __tablename__ = "ticket_messages"
 
-    message_id = Column(Integer, primary_key=True, autoincrement=True)
-    message_time = Column(TIMESTAMP)
-    sender = Column(String(255))
-    ticket_id = Column(Integer, ForeignKey("tickets.ticket_id"))
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    ts: Mapped[datetime] = mapped_column(default=datetime.now)
+    sender: Mapped[str]
+    body: Mapped[str]
+    ticket_id: Mapped[int] = mapped_column(ForeignKey("tickets.ticket_id"))
 
-    ticket = relationship("Ticket", back_populates="messages")
-
-
+    ticket: Mapped["Ticket"] = relationship(back_populates="messages")

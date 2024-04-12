@@ -16,19 +16,33 @@ CREATE TABLE IF NOT EXISTS notes (
     FOREIGN KEY (install_num) REFERENCES patients(install_num)
 );
 
+-- Table: tickets
+-- Description: Stores information about support tickets raised by patients.
 CREATE TABLE IF NOT EXISTS tickets (
+    -- Timestamp of ticket creation
+    ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- Unique identifier for the ticket
     ticket_id SERIAL PRIMARY KEY,
-    install_num bigint UNIQUE, -- Added missing column to create a foreign key relationship
-    ticket_open_time TIMESTAMP, -- Changed datetime to timestamp
-    ticket_close_time TIMESTAMP, -- Changed datetime to timestamp
-    status VARCHAR(255),
-    CONSTRAINT tickets_install_num_fkey FOREIGN KEY (install_num) REFERENCES patients(install_num)
+    -- Foreign key referencing patient ID
+    patient_id BIGINT NOT NULL,
+    -- End date of the ticket
+    date_closed TIMESTAMP,
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
 );
 
-CREATE TABLE IF NOT EXISTS ticket_messages ( -- Table name changed to be plural for consistency
-    message_id SERIAL PRIMARY KEY,
-    message_time TIMESTAMP, -- Changed datetime to timestamp
-    sender VARCHAR(255),
-    ticket_id INT,
-    CONSTRAINT ticket_messages_ticket_id_fkey FOREIGN KEY (ticket_id) REFERENCES tickets(ticket_id)
+-- Table: ticket_messages
+-- Description: Stores messages exchanged within support tickets.
+CREATE TABLE IF NOT EXISTS ticket_messages (
+    -- Auto identifier
+    id SERIAL PRIMARY KEY,
+    -- Timestamp of message
+    ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- Sender of the message
+    sender VARCHAR(31) NOT NULL,
+    -- body of the message
+    body TEXT NOT NULL,
+    -- Foreign key referencing ticket ID
+    ticket_id INT NOT NULL,
+
+    FOREIGN KEY (ticket_id) REFERENCES tickets(ticket_id)
 );

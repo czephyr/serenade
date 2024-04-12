@@ -6,13 +6,12 @@ from pydantic import BaseModel, ConfigDict
 class TicketMessageBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    message_id: int
-    ticket_id: int
-    message_time: datetime
+    ts: datetime
     sender: str
+    body: str
+    # ticket_id: int
 
 
 class TicketMessageCreate(BaseModel):
-    message_id: int
-    ticket_id: int
+    body: str
     sender: str
