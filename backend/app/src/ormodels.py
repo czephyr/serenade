@@ -47,10 +47,3 @@ class TicketMessage(Base):
     ticket = relationship("Ticket", back_populates="messages")
 
 
-class Note(Base):
-    __tablename__ = "notes"
-
-    install_num = Column(
-        BigInteger, ForeignKey("patients.install_num"), primary_key=True
-    )
-    install_notes = Column(String(255))
