@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api import api_router
-from src.core.config import settings
-from src.dbsession import engine
+from .src.api import api_router
+from .src.core.config import settings
+from .src.dbsession import engine
 
 # Create all tables in the database.
 # Comment this out if you're using Alembic migrations.
-from src.ormodels import Base
+from .src.ormodels import Base
 
 Base.metadata.create_all(bind=engine)
 

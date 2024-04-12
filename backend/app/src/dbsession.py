@@ -3,7 +3,6 @@ import os
 from sqlalchemy import URL, create_engine
 from sqlalchemy.orm import sessionmaker
 
-# TODO remove default values and raise ImportError
 url_object = URL.create(
     drivername="postgresql+psycopg",
     username=os.environ["PGUSER"],

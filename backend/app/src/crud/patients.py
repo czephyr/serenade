@@ -1,7 +1,7 @@
 import random
 
-import arrow
 from sqlalchemy.orm import Session
+from datetime import datetime
 
 from ..ormodels import Patient
 from ..schemas.patient import PatientBase, PatientCreate, PatientUpdate
@@ -27,7 +27,7 @@ def read_many(db: Session, *, skip: int = 0, limit: int = 100) -> list[PatientBa
 
 
 def create(db: Session, patient: PatientCreate) -> PatientBase:
-    now_time = arrow.utcnow().datetime
+    now_time = datetime.now()
 
     while True:
         patient_id = int.from_bytes(random.randbytes(7), byteorder="little")

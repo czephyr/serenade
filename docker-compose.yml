@@ -33,6 +33,7 @@ services:
       - 8443:8443
     command: -v start-dev --import-realm
   backend:
+    build: backend
     depends_on:
       - dbpercona
     image: python:3.12
@@ -40,8 +41,5 @@ services:
       - .envars/.env.backend
     volumes:
       - ./backend/app:/app
-    working_dir: /app
-    command: >
-      bash -c "pip install --no-cache-dir -r requirements.txt && python main.py"
     ports:
-      - ${APP_BACKEND_PORT}:8000
+      - ${APP_BACKEND_PORT}:80
