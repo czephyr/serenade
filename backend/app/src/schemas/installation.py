@@ -1,30 +1,42 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
-from .ticket import TicketBase
 
-
-class InstallationBase(BaseModel):
+class InstallationDetailBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    creation_time: datetime
-    install_num: int
-
-
-class InstallationIMT(InstallationBase):
+    ts: datetime
     patient_id: int
 
+    apartment_type: str | None
+    internet_type: str | None
+    flatmates: str | None
+    pets: str | None
+    visitors: str | None
+    smartphone_model: str | None
+    house_map: str | None
+    appliances: str | None
+    issues_notes: str | None
+    habits_notes: str | None
+    other_notes: str | None
 
-class InstallationIIT(InstallationBase):
-    first_name: str
-    last_name: str
-    address: Optional[str] = None
-    contact: Optional[str] = None
+
+class InstallationDetailCreate(BaseModel):
+    apartment_type: str | None
+    internet_type: str | None
+    flatmates: str | None
+    pets: str | None
+    visitors: str | None
+    smartphone_model: str | None
+    house_map: str | None
+    appliances: str | None
+    issues_notes: str | None
+    habits_notes: str | None
+    other_notes: str | None
 
 
-class InstallationStatus(InstallationBase):
+class InstallationStatus(BaseModel):
+    patient_id: int
     status: str
-    tickets_list: list[TicketBase]
-    # tickets: list[TicketBase] # TODO will it be validate from ORM to pydantic?
+    date_delta: str

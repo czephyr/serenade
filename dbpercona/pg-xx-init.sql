@@ -1,19 +1,105 @@
+-- Table: patients
+-- Description: Keep tracks of patients who join or leave the project, only for HOS journaling.
 CREATE TABLE IF NOT EXISTS patients (
-    patient_id bigint UNIQUE,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
-    cf VARCHAR(255) PRIMARY KEY,
-    address TEXT,
-    contact VARCHAR(255),
-    medical_notes VARCHAR(255),
-    install_num bigint UNIQUE,
-    creation_time TIMESTAMP
+    -- Timestamp of record creation
+    ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- Unique identifier for the patient
+    patient_id BIGINT PRIMARY KEY,
+    -- Date when patient join the project
+    date_start TIMESTAMP,
+    -- Exit date if patient leave the project
+    date_end TIMESTAMP
 ) USING pg_tde;
 
-CREATE TABLE IF NOT EXISTS notes (
-    install_num bigint UNIQUE, 
-    install_notes VARCHAR(255),
-    FOREIGN KEY (install_num) REFERENCES patients(install_num)
+-- Table: patient_screenings
+-- Description: Records screenings conducted for patients, use for UNIMI analysis.
+CREATE TABLE IF NOT EXISTS patient_screenings (
+    -- Auto identifier
+    id SERIAL PRIMARY KEY,
+    -- Timestamp of screening insertion
+    ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- Foreign key referencing patient ID
+    patient_id BIGINT NOT NULL,
+    -- Neurological diagnosis and degenreation classification
+    neuro_diag VARCHAR(31),
+    -- Age classification of patient
+    age_class VARCHAR(31),
+
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+) USING pg_tde;
+
+
+CREATE TABLE IF NOT EXISTS patient_notes(
+    -- Foreign key referencing patient ID
+    patient_id BIGINT PRIMARY KEY,
+    -- Italian fiscal code / social security number
+    codice_fiscale VARCHAR(16) UNIQUE NOT NULL,
+    -- Notes on medical conditions 
+    medical_notes TEXT,
+
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+);
+
+-- Table: patient_details
+-- Description: Stores additional details useful for HOS and IIT to reach the patients.
+CREATE TABLE IF NOT EXISTS patient_details (
+    -- Foreign key referencing patient ID
+    patient_id BIGINT PRIMARY KEY,
+    -- First name of the patient
+    first_name VARCHAR(127) NOT NULL,
+    -- Last name of the patient
+    last_name VARCHAR(127) NOT NULL,
+    -- Home address of the patient
+    home_address VARCHAR(255),
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+) USING pg_tde;
+
+-- Table: contacts
+-- Description: Stores contact information related to patients.
+CREATE TABLE IF NOT EXISTS contacts (
+    -- Auto identifier
+    id SERIAL PRIMARY KEY,
+    -- Foreign key referencing patient ID
+    patient_id BIGINT NOT NULL,
+    -- Alias or nickname for contact
+    alias VARCHAR(31),
+    -- Phone number of the contact
+    phone_no VARCHAR(15) NOT NULL,
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+) USING pg_tde;
+
+-- Table: installation_details
+-- Description: Records details about the installation setup of patients' residences.
+CREATE TABLE IF NOT EXISTS installation_details (
+    -- Auto identifier
+    id SERIAL PRIMARY KEY,
+    -- Timestamp of installation record
+    ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- Foreign key referencing patient ID
+    patient_id BIGINT NOT NULL,
+    -- Type of apartment (e.g., studio, 1-bedroom)
+    apartment_type TEXT,
+    -- Type of internet connection
+    internet_type TEXT,
+    -- Counts or list of flatmates
+    flatmates TEXT,
+    -- List of pets in the house
+    pets TEXT,
+    -- Notes on visitors frequency
+    visitors TEXT,
+    -- Model of smartphone used by the patient
+    smartphone_model TEXT,
+    -- Map of the house layout
+    house_map TEXT,
+    -- List of appliances in the residence
+    appliances TEXT,
+    -- Notes on installation issues
+    issues_notes TEXT,
+    -- Notes on residents' habits
+    habits_notes TEXT,
+    -- Other relevant notes
+    other_notes TEXT,
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
 );
 
 -- Table: tickets

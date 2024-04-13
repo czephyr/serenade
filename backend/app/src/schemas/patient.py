@@ -1,40 +1,32 @@
-from datetime import datetime
-from typing import Optional
+from datetime import date
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 
-
-class PatientBase(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    first_name: str
-    last_name: str
-    cf: str
-    patient_id: int
-    address: Optional[str] = None
-    contact: Optional[str] = None
-    medical_notes: Optional[str] = None
-    install_num: int
-    creation_time: Optional[datetime] = None
+from .contact import ContactCreate, ContactEntry
 
 
 class PatientCreate(BaseModel):
-    """Schema for creating a patient, without IDs"""
-
     first_name: str
     last_name: str
-    cf: str
-    address: Optional[str] = None
-    contact: Optional[str] = None
-    medical_notes: Optional[str] = None
+    codice_fiscale: str
+
+    neuro_diag: str | None
+    age_class: str | None
+
+    home_address: str | None
+    contacts: list[ContactCreate]
+
+    medical_notes: str | None = None
 
 
 class PatientUpdate(BaseModel):
-    """Schema for updating a patient"""
+    neuro_diag: str | None
+    age_class: str | None
 
-    address: Optional[str] = None
-    contact: Optional[str] = None
-    medical_notes: Optional[str] = None
+    home_address: str | None
+    contacts: list[ContactCreate]
+
+    medical_notes: str | None = None
 
 
 class PatientStatus(BaseModel):
@@ -43,3 +35,26 @@ class PatientStatus(BaseModel):
     age: int
     patient_id: int
     status: str
+
+
+class PatientRead(BaseModel):
+    patient_id: int
+    first_name: str
+    last_name: str
+    codice_fiscale: str
+    gender: str
+    date_of_birth: date
+    place_of_birth: str
+
+    neuro_diag: str | None
+    age_class: str | None
+
+    home_address: str | None
+    contacts: list[ContactEntry]
+
+    medical_notes: str | None = None
+
+
+class PatientScreeningCreate(BaseModel):
+    neuro_diag: str | None
+    age_class: str | None
