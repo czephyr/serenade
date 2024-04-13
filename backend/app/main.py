@@ -1,18 +1,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-import os
 
-from api.api import api_router
-from db.session import engine
-from db.base_class import Base
-from core.config import settings
+from .src.api import api_router
+from .src.core.config import settings
+from .src.dbsession import engine
 
 # Create all tables in the database.
 # Comment this out if you're using Alembic migrations.
+from .src.ormodels import Base
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
+    debug=True,
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
@@ -26,26 +26,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Dependency
-def get_db() -> Session:
-    db = Session(autocommit=False, autoflush=False, bind=engine)
-    try:
-        yield db
-    finally:
-        db.close()
-
 # Include routers
-app.include_router(api_router, prefix=settings.API_V1_STR)
-
+app.include_router(
+    api_router,
+    prefix=settings.API_V1_STR,
+)
 # You might want to add more endpoints or configurations here
 
 if __name__ == "__main__":
-    for route in app.routes:
-        if hasattr(route, "methods"):  # Filter out routes that support HTTP methods
-            methods = ", ".join(route.methods)
-            print(f"Path: {route.path}, Methods: {methods}")
-        else:
-            print(f"Path: {route.path}")
-    print(os.getenv("KEYCLOAK_REALM"))
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+    uvicorn.run(app, host="0.0.0.0", port=80)
