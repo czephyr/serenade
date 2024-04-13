@@ -5,7 +5,7 @@ import { getAccessToken } from "../../utils/sessionTokenAccessor";
 import { SetDynamicRoute } from "@/utils/setDynamicRoute";
 
 async function getAllPatients() {
-  const url = `http://0.0.0.0:8000/patients/`;
+  const url = `${process.env.BACKEND_HOST}/api/v1/patients/`;
 
   let accessToken = await getAccessToken();
 
@@ -31,10 +31,9 @@ export default async function Patients() {
     try {
       const patients = await getAllPatients();
 
-
       return (
         <main>
-          <SetDynamicRoute></SetDynamicRoute>
+          {/* <SetDynamicRoute></SetDynamicRoute> */}
           <main className="text-white">
             <h1 className="text-4xl text-center">Patients List</h1>
             <div className="overflow-x-auto">
@@ -45,22 +44,20 @@ export default async function Patients() {
                       PID
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
-                    first_name
+                      first_name
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
-                    last_name
+                      last_name
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
-                    installation status
+                      installation status
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {patients.map((patient) => (
                     <tr key={patient.id}>
-                      <td className="px-5 py-5 border-b">
-                        {patient.id}
-                      </td>
+                      <td className="px-5 py-5 border-b">{patient.id}</td>
                       <td className="px-5 py-5 border-b">
                         {patient.first_name}
                       </td>
@@ -70,11 +67,25 @@ export default async function Patients() {
                       <td className="px-5 py-5 border-b">
                         {patient.installation_status}
                       </td>
+                      <td className="px-5 py-5 border-b">
+                        <a
+                          href={`/patients/${patient.patient_id}`}
+                          className="text-blue-500 hover:underline"
+                        >
+                          View Details
+                        </a>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+            <a
+              href={`/patient/create`}
+              className="text-blue-500 hover:underline"
+            >
+              Create new patient
+            </a>
           </main>
         </main>
       );

@@ -48,6 +48,14 @@
   "failureFactor" : 30,
   "roles" : {
     "realm" : [ {
+      "id" : "173126d2-d3a8-4a26-ac2a-b612d43c0087",
+      "name" : "imt",
+      "description" : "",
+      "composite" : false,
+      "clientRole" : false,
+      "containerId" : "de490999-ae84-4666-a261-fb182a6d2000",
+      "attributes" : { }
+    }, {
       "id" : "440b175e-7aee-41e5-8268-aea15222a0d1",
       "name" : "offline_access",
       "description" : "${role_offline-access}",
@@ -82,6 +90,14 @@
           "account" : [ "manage-account", "view-profile" ]
         }
       },
+      "clientRole" : false,
+      "containerId" : "de490999-ae84-4666-a261-fb182a6d2000",
+      "attributes" : { }
+    }, {
+      "id" : "e187feb1-c2ed-4a93-a202-717205b2425d",
+      "name" : "iit",
+      "description" : "",
+      "composite" : false,
       "clientRole" : false,
       "containerId" : "de490999-ae84-4666-a261-fb182a6d2000",
       "attributes" : { }
@@ -219,7 +235,7 @@
         "composite" : true,
         "composites" : {
           "client" : {
-            "realm-management" : [ "manage-events", "manage-authorization", "query-users", "view-events", "manage-identity-providers", "query-realms", "manage-realm", "view-identity-providers", "query-groups", "view-authorization", "query-clients", "view-users", "impersonation", "create-client", "view-realm", "manage-users", "manage-clients", "view-clients" ]
+            "realm-management" : [ "manage-events", "manage-authorization", "query-users", "view-events", "manage-identity-providers", "query-realms", "manage-realm", "view-identity-providers", "query-groups", "query-clients", "view-authorization", "view-users", "impersonation", "create-client", "view-realm", "manage-users", "manage-clients", "view-clients" ]
           }
         },
         "clientRole" : true,
@@ -448,6 +464,26 @@
     "realmRoles" : [ "offline_access", "dottore", "default-roles-serenade" ],
     "notBefore" : 0,
     "groups" : [ "/dottori" ]
+  }, {
+    "id" : "69ef9dd7-fa14-4495-b4f4-b7e0ddf31879",
+    "username" : "iit-gennaro",
+    "emailVerified" : true,
+    "createdTimestamp" : 1713034223657,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "e3ee3b11-1b3e-41aa-b3a6-a0497b308aff",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1713034256440,
+      "secretData" : "{\"value\":\"NeXci2CnoMa/m5wEmi5zuOXbKN5K4q/2Ty440NJU9ly43CUMWl+j8E4v/GmsrUIo7gpMBlcYCyS0MXLIdwUAOA==\",\"salt\":\"mtvSi9A+Ps2tYJxJUef3fw==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":210000,\"algorithm\":\"pbkdf2-sha512\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-serenade", "iit" ],
+    "notBefore" : 0,
+    "groups" : [ ]
   } ],
   "scopeMappings" : [ {
     "clientScope" : "offline_access",
@@ -548,7 +584,9 @@
     "publicClient" : true,
     "frontchannelLogout" : false,
     "protocol" : "openid-connect",
-    "attributes" : { },
+    "attributes" : {
+      "post.logout.redirect.uris" : "+"
+    },
     "authenticationFlowBindingOverrides" : { },
     "fullScopeAllowed" : false,
     "nodeReRegistrationTimeout" : 0,
@@ -574,7 +612,9 @@
     "publicClient" : false,
     "frontchannelLogout" : false,
     "protocol" : "openid-connect",
-    "attributes" : { },
+    "attributes" : {
+      "post.logout.redirect.uris" : "+"
+    },
     "authenticationFlowBindingOverrides" : { },
     "fullScopeAllowed" : false,
     "nodeReRegistrationTimeout" : 0,
@@ -592,7 +632,7 @@
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
-    "redirectUris" : [ "http://localhost:8000/*" ],
+    "redirectUris" : [ "*" ],
     "webOrigins" : [ ],
     "notBefore" : 0,
     "bearerOnly" : false,
@@ -608,9 +648,9 @@
       "oidc.ciba.grant.enabled" : "false",
       "client.secret.creation.time" : "1706047092",
       "backchannel.logout.session.required" : "true",
-      "post.logout.redirect.uris" : "http://localhost:8000/*",
-      "oauth2.device.authorization.grant.enabled" : "false",
+      "post.logout.redirect.uris" : "*",
       "display.on.consent.screen" : "false",
+      "oauth2.device.authorization.grant.enabled" : "false",
       "backchannel.logout.revoke.offline.tokens" : "false"
     },
     "authenticationFlowBindingOverrides" : { },
@@ -625,6 +665,7 @@
       "config" : {
         "user.session.note" : "clientHost",
         "introspection.token.claim" : "true",
+        "userinfo.token.claim" : "true",
         "id.token.claim" : "true",
         "access.token.claim" : "true",
         "claim.name" : "clientHost",
@@ -639,6 +680,7 @@
       "config" : {
         "user.session.note" : "client_id",
         "introspection.token.claim" : "true",
+        "userinfo.token.claim" : "true",
         "id.token.claim" : "true",
         "access.token.claim" : "true",
         "claim.name" : "client_id",
@@ -653,6 +695,7 @@
       "config" : {
         "user.session.note" : "clientAddress",
         "introspection.token.claim" : "true",
+        "userinfo.token.claim" : "true",
         "id.token.claim" : "true",
         "access.token.claim" : "true",
         "claim.name" : "clientAddress",
@@ -719,7 +762,9 @@
     "publicClient" : false,
     "frontchannelLogout" : false,
     "protocol" : "openid-connect",
-    "attributes" : { },
+    "attributes" : {
+      "post.logout.redirect.uris" : "+"
+    },
     "authenticationFlowBindingOverrides" : { },
     "fullScopeAllowed" : false,
     "nodeReRegistrationTimeout" : 0,
@@ -798,6 +843,7 @@
     "protocol" : "openid-connect",
     "attributes" : {
       "oidc.ciba.grant.enabled" : "false",
+      "post.logout.redirect.uris" : "+",
       "oauth2.device.authorization.grant.enabled" : "false",
       "backchannel.logout.session.required" : "true",
       "backchannel.logout.revoke.offline.tokens" : "false"
@@ -833,6 +879,7 @@
     "protocol" : "openid-connect",
     "attributes" : {
       "oidc.ciba.grant.enabled" : "false",
+      "post.logout.redirect.uris" : "+",
       "oauth2.device.authorization.grant.enabled" : "false",
       "backchannel.logout.session.required" : "true",
       "backchannel.logout.revoke.offline.tokens" : "false"
@@ -890,6 +937,7 @@
       "config" : {
         "introspection.token.claim" : "true",
         "multivalued" : "true",
+        "userinfo.token.claim" : "true",
         "user.attribute" : "foo",
         "id.token.claim" : "true",
         "access.token.claim" : "true",
@@ -1050,7 +1098,8 @@
       "config" : {
         "id.token.claim" : "true",
         "introspection.token.claim" : "true",
-        "access.token.claim" : "true"
+        "access.token.claim" : "true",
+        "userinfo.token.claim" : "true"
       }
     } ]
   }, {
@@ -1415,7 +1464,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-usermodel-property-mapper", "oidc-sha256-pairwise-sub-mapper", "saml-role-list-mapper", "oidc-address-mapper", "saml-user-property-mapper", "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper", "oidc-full-name-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "saml-user-property-mapper", "oidc-usermodel-property-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "saml-role-list-mapper", "oidc-address-mapper" ]
       }
     }, {
       "id" : "a42fbc91-e7b6-455a-94f4-7f3890b1ef2e",
@@ -1458,7 +1507,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-full-name-mapper", "oidc-usermodel-attribute-mapper", "oidc-sha256-pairwise-sub-mapper", "saml-user-property-mapper", "oidc-usermodel-property-mapper", "oidc-address-mapper", "saml-role-list-mapper", "saml-user-attribute-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-full-name-mapper", "oidc-address-mapper", "oidc-usermodel-property-mapper", "saml-role-list-mapper", "saml-user-property-mapper" ]
       }
     } ],
     "org.keycloak.userprofile.UserProfileProvider" : [ {
@@ -1475,8 +1524,8 @@
       "providerId" : "hmac-generated",
       "subComponents" : { },
       "config" : {
-        "kid" : [ "c8b1b24e-1140-40e6-b847-9feeb59e60ba" ],
-        "secret" : [ "WFfXwafp38oTfeH8TZwTWx-3Iq3FzzhgRoBpW9tnkcMdvEf4noj7WGhoYbnJZpyikBcOH1CGhQ0qwE0JZgjiIQ" ],
+        "kid" : [ "1f246f43-7260-4192-bebe-6a221bac6612" ],
+        "secret" : [ "05NYikMhmu-aSK9vxZPdQtfrFuerq3Ozz0zrlW3xEWmQG8Qx_ScppEzRpRgwIlTqWnh1SNyanWhlbCRnezHi_E92z7GJUs8qEQULQ9-nlwoAJ3vaLHbL_o6T2-9SGhnAD-fIbTnfT9KgeYHNyBXRK5j_aLayT2kScCMP3IIyqJU" ],
         "priority" : [ "100" ],
         "algorithm" : [ "HS256" ]
       }
@@ -2059,8 +2108,8 @@
   "attributes" : {
     "cibaBackchannelTokenDeliveryMode" : "poll",
     "cibaAuthRequestedUserHint" : "login_hint",
-    "oauth2DevicePollingInterval" : "5",
     "clientOfflineSessionMaxLifespan" : "0",
+    "oauth2DevicePollingInterval" : "5",
     "clientSessionIdleTimeout" : "0",
     "clientOfflineSessionIdleTimeout" : "0",
     "cibaInterval" : "5",
@@ -2072,7 +2121,7 @@
     "frontendUrl" : "http://localhost:8080/",
     "acr.loa.map" : "{}"
   },
-  "keycloakVersion" : "24.0.1",
+  "keycloakVersion" : "24.0.2",
   "userManagedAccessAllowed" : false,
   "clientProfiles" : {
     "profiles" : [ {
