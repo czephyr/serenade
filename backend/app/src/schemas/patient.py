@@ -10,11 +10,11 @@ class PatientCreate(BaseModel):
     last_name: str
     codice_fiscale: str
 
-    neuro_diag: str | None
-    age_class: str | None
+    neuro_diag: str | None = None
+    age_class: str | None = None
 
-    home_address: str | None
-    contacts: list[ContactCreate]
+    home_address: str
+    contacts: list[ContactCreate] | None = None
 
     medical_notes: str | None = None
 
@@ -24,9 +24,9 @@ class PatientUpdate(BaseModel):
     age_class: str | None
 
     home_address: str | None
-    contacts: list[ContactCreate]
+    contacts: list[ContactCreate] | None
 
-    medical_notes: str | None = None
+    medical_notes: str | None
 
 
 class PatientStatus(BaseModel):
@@ -56,5 +56,5 @@ class PatientRead(BaseModel):
 
 
 class PatientScreeningCreate(BaseModel):
-    neuro_diag: str | None
-    age_class: str | None
+    neuro_diag: str | None = None
+    age_class: str | None = None

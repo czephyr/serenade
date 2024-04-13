@@ -4,6 +4,7 @@ from codicefiscale import codicefiscale as cf
 from sqlalchemy.orm import Session
 
 from ..core.const import ADMIN_USERNAME, SMS_PATIENT_CREATE
+from ..core.excp import DuplicateCF
 from ..ormodels import (
     Patient,
     PatientDetail,
@@ -22,7 +23,7 @@ from ..schemas.patient import (
 from ..schemas.patient_base import PatientScreeningBase
 from ..schemas.ticket import TicketCreate
 from ..schemas.ticket_message import TicketMessageCreate
-from ..utils import to_age
+from ..utils import to_age, to_city
 from . import contacts, tickets
 
 
@@ -48,13 +49,15 @@ def read_one(db: Session, patient_id: int) -> PatientRead:
         codice_fiscale=result_orm.note.codice_fiscale,
         # PatientNote : codice_fiscale
         gender=cf.decode(codice_fiscale)["gender"],
-        date_of_birth=cf.decode(codice_fiscale)["birthday"],
-        place_of_birth=cf.decode(codice_fiscale)["birthplave"],
+        date_of_birth=cf.decode(codice_fiscale)["birthdate"],
+        place_of_birth=to_city(codice_fiscale),
         # PatientScreening
         neuro_diag=result_orm.screenings[-1].neuro_diag,
         age_class=result_orm.screenings[-1].age_class,
         # Contact
-        contacts=[ContactEntry.model_validate(r) for r in result_orm.contacts],
+        contacts=[
+            ContactEntry.model_validate(contact) for contact in result_orm.contacts
+        ],
     )
     return result
 
@@ -63,7 +66,6 @@ def read_many(db: Session, *, skip: int = 0, limit: int = 100) -> list[PatientSt
     results_orm = db.query(PatientFull).offset(skip).limit(limit).all()
     results = [
         PatientStatus(
-            # PatientDetail
             first_name=result_orm.details.first_name,
             last_name=result_orm.details.last_name,
             age=to_age(result_orm.note.codice_fiscale),
@@ -76,6 +78,13 @@ def read_many(db: Session, *, skip: int = 0, limit: int = 100) -> list[PatientSt
 
 
 def create(db: Session, patient: PatientCreate) -> PatientRead:
+    if (
+        db.query(PatientNote)
+        .filter(PatientNote.codice_fiscale == patient.codice_fiscale)
+        .count()
+    ):
+        raise DuplicateCF
+
     while True:
         patient_id = int.from_bytes(random.randbytes(7), byteorder="little")
         if not db.query(Patient).filter(Patient.patient_id == patient_id).count():
@@ -88,6 +97,7 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
     db.commit()
 
     result_orm = PatientDetail(
+        patient_id=patient_id,
         first_name=patient.first_name,
         last_name=patient.last_name,
         home_address=patient.home_address,
@@ -96,18 +106,21 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
 
     # TODO check AttributeError
     result_orm = PatientScreening(
+        patient_id=patient_id,
         neuro_diag=patient.neuro_diag,
         age_class=patient.age_class,
     )
     db.add(result_orm)
 
     result_orm = PatientNote(
+        patient_id=patient_id,
         codice_fiscale=patient.codice_fiscale,
         medical_notes=patient.medical_notes,
     )
     db.add(result_orm)
 
-    _ = contacts.create_many(db, patient_id, patient.contacts)
+    if patient.contacts is not None:
+        _ = contacts.create_many(db, patient_id, patient.contacts)
 
     ticket = TicketCreate(
         patient_id=patient_id,
@@ -136,8 +149,9 @@ def update(db: Session, patient_id: int, patient: PatientUpdate) -> PatientRead:
     result_orm.details.home_address = patient.home_address
     result_orm.note.medical_notes = patient.medical_notes
 
-    contacts.delete_many(db, patient_id)
-    contacts.create_many(db, patient_id, patient.contacts)
+    if patient.contacts is not None:
+        contacts.delete_many(db, patient_id)
+        contacts.create_many(db, patient_id, patient.contacts)
 
     db.commit()
 
@@ -146,13 +160,16 @@ def update(db: Session, patient_id: int, patient: PatientUpdate) -> PatientRead:
 
 
 def status(db: Session, patient_id: int) -> str:
+    # TODO implement it
     return "OK"
 
 
 def create_screening(
     db: Session, patient_id: int, screening: PatientScreeningCreate
 ) -> PatientScreeningBase:
+
     result_orm = PatientScreening(
+        patient_id=patient_id,
         neuro_diag=screening.neuro_diag,
         age_class=screening.age_class,
     )

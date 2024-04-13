@@ -21,7 +21,7 @@ class TicketCreate(BaseModel):
 
 
 class TicketUpdate(BaseModel):
-    date_closed: datetime | None
+    date_closed: datetime
 
 
 class TicketStatus(BaseModel):

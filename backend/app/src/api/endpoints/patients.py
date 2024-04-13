@@ -6,13 +6,14 @@ from ...crud import patients
 from ...schemas.patient_base import PatientBase
 from ...schemas.patient import PatientCreate, PatientRead, PatientStatus, PatientUpdate
 from ..deps import get_db, require_role
+from ...core.excp import DuplicateCF
 
 router = APIRouter()
 
 
 @router.get("/", response_model=list[PatientStatus])
 async def read_many(
-    current_user: dict = Depends(require_role(["dottore"])),
+    # current_user: dict = Depends(require_role(["dottore"])),
     db: Session = Depends(get_db),
 ) -> list[PatientStatus]:
     result = patients.read_many(db=db)
@@ -22,13 +23,15 @@ async def read_many(
 @router.post("/", response_model=PatientRead)
 async def create(
     patient: PatientCreate,
-    current_user: dict = Depends(require_role(["dottore"])),
+    # current_user: dict = Depends(require_role(["dottore"])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
 
+    # return patients.create(db=db, patient=patient)
+
     try:
         result = patients.create(db=db, patient=patient)
-    except IntegrityError as excp:
+    except DuplicateCF as excp:
         raise HTTPException(
             status_code=409,
             detail=f"Patient {patient.codice_fiscale} already exists in database",
@@ -40,7 +43,7 @@ async def create(
 @router.get("/{patient_id}", response_model=PatientRead)
 async def read_one(
     patient_id: int,
-    current_user: dict = Depends(require_role(["dottore"])),
+    # current_user: dict = Depends(require_role(["dottore"])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
@@ -58,7 +61,7 @@ async def read_one(
 async def update(
     patient_id: int,
     patient: PatientUpdate,
-    current_user: dict = Depends(require_role(["dottore"])),
+    # current_user: dict = Depends(require_role(["dottore"])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
