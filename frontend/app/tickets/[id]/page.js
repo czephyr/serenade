@@ -2,6 +2,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { getAccessToken } from "../../../utils/sessionTokenAccessor";
+import UploadPDF from "../../../components/ticketForm";
 
 // Assuming these functions are in a utilities file or directly in your page file
 
@@ -20,27 +21,24 @@ async function fetchTicketDetails(ticketId) {
   return resp.json();
 }
 
-async function fetchPatientDetails(patientId) {
-  const accessToken = await getAccessToken(); // Ensure this function is implemented to get the access token
-  const url = `http://0.0.0.0:8000/patients/${patientId}`;
-  const resp = await fetch(url, {
-      headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-      },
-  });
-  if (!resp.ok) {
-      throw new Error('Failed to fetch patient details.');
-  }
-  return resp.json();
-}
+// function TicketDetails({ ticket }) {
+//   return (
+//     <div className="ticket-details">
+//       <h2>Ticket Details</h2>
+//       {/* <p>Ticket ID: {ticket.key}</p> */}
+//       {/* <p>Status: {ticket.status}</p> */}
+//       <UploadPDF />
+//     </div>
+//   );
+// }
 
-function TicketDetails({ ticket }) {
+function TicketDetails({ }) {
   return (
     <div className="ticket-details">
       <h2>Ticket Details</h2>
-      <p>Ticket ID: {ticket.key}</p>
-      <p>Status: {ticket.status}</p>
+      {/* <p>Ticket ID: {ticket.key}</p> */}
+      {/* <p>Status: {ticket.status}</p> */}
+      <UploadPDF />
     </div>
   );
 }
@@ -56,6 +54,7 @@ function PatientDetails({ patient, role }) {
         <p>Address: {patient.address}</p>
         <p>Phone number: {patient.phone_number}</p>
       </div>
+
     );
   } else if (role === 'imt') {
     return (
@@ -83,15 +82,16 @@ export default async function TicketPage({ params }) {
     return { redirect: { destination: "/unauthorized", permanent: false } };
   }
 
-  const ticket = await fetchTicketDetails(params.id);
-  const patient = await fetchPatientDetails(params.id);
+  // const ticket = await fetchTicketDetails(params.id);
+  // const patient = await fetchPatientDetails(params.id);
 
   return (
     <main className="text-white p-4">
         <h1 className="text-4xl text-center mb-6">Ticket and Patient Details</h1>
         <div className="details-container">
-            {ticket && <TicketDetails ticket={ticket} />}
-            {patient && <PatientDetails patient={patient} role={roleFound} />}
+            {/* {ticket && <TicketDetails ticket={ticket} />} */}
+            {<TicketDetails/>}
+            {/* {patient && <PatientDetails patient={patient} role={roleFound} />} */}
         </div>
     </main>
   );
