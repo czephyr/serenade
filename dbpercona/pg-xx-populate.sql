@@ -34,12 +34,13 @@ INSERT INTO patient_details (patient_id, first_name, last_name, home_address) VA
 (5, 'Daniel', 'Wilson', '654 Maple Ln, Suburb');
 
 -- Populating contacts table
-INSERT INTO contacts (patient_id, alias, phone_no) VALUES 
-(1, 'Family', '555-1234'),
-(2, 'Friend', '555-5678'),
-(3, 'Caregiver', '555-9012'),
-(4, 'Personal', '555-3456'),
-(5, 'Neighbor', '555-7890');
+INSERT INTO contacts (patient_id, alias, phone_no, email) VALUES 
+(1, 'Family', '555-1234', 'tomare@omo.it'),
+(2, 'Personal', '555-5678', NULL),
+(3, 'Personal', '555-5678', NULL),
+(3, 'Caregiver', NULL, 'qui@la.com'),
+(5, 'Neighbor', '555-7890', NULL);
+(5, 'Neighbor', '555-7890', NULL);
 -- Populating the `tickets` table
 INSERT INTO tickets (ts, patient_id, date_closed)
 VALUES 

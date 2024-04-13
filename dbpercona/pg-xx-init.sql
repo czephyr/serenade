@@ -62,9 +62,11 @@ CREATE TABLE IF NOT EXISTS contacts (
     -- Foreign key referencing patient ID
     patient_id BIGINT NOT NULL,
     -- Alias or nickname for contact
-    alias VARCHAR(31),
+    alias VARCHAR(31) NOT NULL,
     -- Phone number of the contact
-    phone_no VARCHAR(15) NOT NULL,
+    phone_no VARCHAR(15) ,
+    -- Phone number of the contact
+    email VARCHAR(31),
     FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
 ) USING pg_tde;
 

@@ -28,6 +28,7 @@ def create_many(db: Session, patient_id: int, contacts: list[ContactCreate]):
             patient_id=patient_id,
             alias=contact.alias,
             phone_no=contact.phone_no,
+            email=contact.email,
         )
         db.add(result_orm)
 
