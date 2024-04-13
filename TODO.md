@@ -15,3 +15,12 @@
 - [ ] pensare se è una buona idea mettere `OggettoCrete` come classe padre di `OggettoBase`
   - vantaggio: puoi usare `model_dump` nella `create()`
 - [ ] Dockerfile per il backend
+
+- [ ] env file con:
+  - KEYCLOAK_URL
+  - KEYCLOAK_REALM
+  - KEYCLOAK_CLIENT_ID
+  - KEYCLOAK_CLIENT_SECRET
+  - KEYCLOAK_PUBLIC_KEY
+- gitignore js / node / react
+- auto swagger api controlla

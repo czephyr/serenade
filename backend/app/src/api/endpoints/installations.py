@@ -5,12 +5,7 @@ from sqlalchemy.orm import Session
 from ...api.deps import get_db, is_imt_or_iit, require_role
 from ...crud import installations, installation_status
 from ...core.roles import IIT, IMT
-from ...schemas.installation import (
-    InstallationIIT,
-    InstallationIMT,
-    InstallationStatus,
-    InstallationBase,
-)
+from ...schemas.installation import InstallationStatus
 
 router = APIRouter()
 

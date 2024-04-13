@@ -25,5 +25,5 @@ def read_many(
     db: Session, *, skip: int = 0, limit: int = 100
 ) -> list[InstallationBase]:
     results_orm = patients.read_many(db, skip=skip, limit=limit)
-    result = [InstallationBase.model_validate(r) for r in results_orm]
+    result = [InstallationBase.model_validate(result_orm) for result_orm in results_orm]
     return result

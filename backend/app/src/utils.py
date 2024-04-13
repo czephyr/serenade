@@ -1,7 +1,14 @@
+from datetime import date
+
 from codicefiscale import codicefiscale
-from datetime import datetime
 
 
-# https://github.com/fabiocaccamo/python-codicefiscale
-def to_age(cf: str):
-    return (datetime.now() - codicefiscale.decode(cf)["birthdate"]).days
+def to_age(cf: str) -> int:
+    date_birth: date = codicefiscale.decode(cf)["birthdate"]
+    date_today = date.today()
+    age = (
+        date_today.year
+        - date_birth.year
+        - ((date_today.month, date_today.day) < (date_birth.month, date_birth.day))
+    )
+    return age
