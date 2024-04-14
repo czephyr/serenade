@@ -65,6 +65,12 @@ VALUES
     ('2024-04-13 11:00:00', '>Bob', 'Message 4', 4),
     ('2024-04-13 12:00:00', 'Admin', 'Message 5', 5);
 
+INSERT INTO installation_documents (ts, patient_id, file_name, file_type, file_content)
+VALUES
+('2024-04-14 09:00:00', 2, 'mappa_casa', 'PNG', '\x89504E470D0A1A0A0000000D4948445200000008000000080806000000C40FBE8B000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000000970485973000019D6000019D60118D1CAED0000006449444154285363F88F04167B2E81B21080A993518C011F602AFFFF8A01A4089BC2255E4B1950ACE860100563108059C704550C562DEDD90F66239BC602A5C120665B34502184FD747B21506121AA0218002964600061A023C1241480AC8148C200030300578C4B5BB3BD7F370000000049454E44AE426082'::bytea),
+('2024-04-14 09:15:00', 2, 'scheda', 'PNG', '\x89504E470D0A1A0A0000000D4948445200000008000000080806000000C40FBE8B000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000000970485973000019D6000019D60118D1CAED0000006049444154285363FC0F040C40A0BCC9174431DCF5DB0CA64160DB73390626281B0380244100AC00A61B0490D95E928F1898908D86198FAC08EE066400331E6C029885046092B9A7F5C134E3D667B218268074C2AC815B816C2C0C286FF26500000ED62B625A4E97820000000049454E44AE426082'::bytea),
+('2024-04-14 09:30:00', 3, 'mappa_casa', 'PNG', '\x89504E470D0A1A0A0000000D4948445200000008000000080806000000C40FBE8B000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000000970485973000019D6000019D60118D1CAED0000005549444154285363F80F05F61E67A02C040089B130008183E759100506C86C106081091CD86E0CA66100C6670419036601014C10D91446905D2006B220B24226300B08D0AD8001B02391014821412B4000622203030031983D3E39433C800000000049454E44AE426082'::bytea);
+
 
 
 -- Populating the `installation_details` table
@@ -76,14 +82,13 @@ INSERT INTO installation_details (
     pets, 
     visitors, 
     smartphone_model, 
-    house_map, 
     appliances, 
     issues_notes, 
     habits_notes, 
     other_notes
 ) VALUES
-(1, '1-bedroom', 'Fiber optic', 'None', '1 dog', 'Occasional', 'iPhone 12', 'Layout.png', 'Refrigerator, Oven, Washing machine', 'None', 'Early riser, enjoys cooking', 'Patient prefers email communication over phone calls.'),
-(2, 'Studio', 'Cable', '1 roommate', 'No pets', 'Rare', 'Samsung Galaxy S20', 'FloorPlan.jpg', 'Microwave, Coffee maker', 'Occasional connectivity issues reported', 'Frequent night owl, streaming movies', 'Patient has specific dietary requirements, vegetarian.'),
-(3, '2-bedroom', 'DSL', 'Family (2 adults, 2 children)', '1 cat', 'Frequent', 'Google Pixel 5', 'HousePlan.pdf', 'Dishwasher, Toaster, Blender', 'None', 'Family-oriented, busy lifestyle', 'Patient expresses interest in smart home devices.'),
-(4, '1-bedroom', 'Fiber optic', 'None', '2 cats', 'Occasional', 'iPhone 11', 'HouseLayout.png', 'Stove, TV, Iron', 'None', 'Patient enjoys gardening on weekends', 'None'),
-(5, 'Studio', 'Satellite', 'None', '1 dog, 1 cat', 'Frequent', 'OnePlus 9', 'ApartmentMap.png', 'Air conditioner, Heater', 'None', 'Patient prefers quiet environment, early sleeper', 'None');
+(1, '1-bedroom', 'Fiber optic', 'None', '1 dog', 'Occasional', 'iPhone 12', 'Refrigerator, Oven, Washing machine', 'None', 'Early riser, enjoys cooking', 'Patient prefers email communication over phone calls.'),
+(2, 'Studio', 'Cable', '1 roommate', 'No pets', 'Rare', 'Samsung Galaxy S20', 'Microwave, Coffee maker', 'Occasional connectivity issues reported', 'Frequent night owl, streaming movies', 'Patient has specific dietary requirements, vegetarian.'),
+(3, '2-bedroom', 'DSL', 'Family (2 adults, 2 children)', '1 cat', 'Frequent', 'Google Pixel 5', 'Dishwasher, Toaster, Blender', 'None', 'Family-oriented, busy lifestyle', 'Patient expresses interest in smart home devices.'),
+(4, '1-bedroom', 'Fiber optic', 'None', '2 cats', 'Occasional', 'iPhone 11', 'Stove, TV, Iron', 'None', 'Patient enjoys gardening on weekends', 'None'),
+(5, 'Studio', 'Satellite', 'None', '1 dog, 1 cat', 'Frequent', 'OnePlus 9', 'Air conditioner, Heater', 'None', 'Patient prefers quiet environment, early sleeper', 'None');

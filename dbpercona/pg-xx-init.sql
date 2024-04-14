@@ -91,8 +91,6 @@ CREATE TABLE IF NOT EXISTS installation_details (
     visitors TEXT,
     -- Model of smartphone used by the patient
     smartphone_model TEXT,
-    -- Map of the house layout
-    house_map TEXT,
     -- List of appliances in the residence
     appliances TEXT,
     -- Notes on installation issues
@@ -103,6 +101,25 @@ CREATE TABLE IF NOT EXISTS installation_details (
     other_notes TEXT,
     FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
 );
+
+-- Table storing installation documents associated with patients.
+CREATE TABLE IF NOT EXISTS installation_documents(
+    -- Auto-generated unique identifier for each document
+    document_id SERIAL PRIMARY KEY,
+    -- Timestamp indicating when the document was uploaded
+    ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- Unique identifier referencing the patient associated with the document
+    patient_id BIGINT NOT NULL,
+    -- Name of the uploaded file
+    file_name TEXT,
+    -- Type of the uploaded file (e.g., PDF, PNG, JPEG)
+    file_type TEXT,
+    -- Binary content of the uploaded file
+    file_content BYTEA NOT NULL,
+    -- Foreign key constraint referencing the patient ID from the patients table
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+);
+
 
 -- Table: tickets
 -- Description: Stores information about support tickets raised by patients.

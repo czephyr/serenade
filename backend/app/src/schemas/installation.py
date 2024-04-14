@@ -15,7 +15,6 @@ class InstallationDetailBase(BaseModel):
     pets: str | None
     visitors: str | None
     smartphone_model: str | None
-    house_map: str | None
     appliances: str | None
     issues_notes: str | None
     habits_notes: str | None
@@ -29,7 +28,6 @@ class InstallationDetailCreate(BaseModel):
     pets: str | None = None
     visitors: str | None = None
     smartphone_model: str | None = None
-    house_map: str | None = None
     appliances: str | None = None
     issues_notes: str | None = None
     habits_notes: str | None = None

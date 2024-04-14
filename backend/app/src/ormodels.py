@@ -101,13 +101,31 @@ class InstallationDetail(Base):
     pets: Mapped[str | None]
     visitors: Mapped[str | None]
     smartphone_model: Mapped[str | None]
-    house_map: Mapped[str | None]
     appliances: Mapped[str | None]
     issues_notes: Mapped[str | None]
     habits_notes: Mapped[str | None]
     other_notes: Mapped[str | None]
 
     patient: Mapped[Patient] = relationship()
+    documents: Mapped[list["InstallationDocument"]] = relationship(
+        back_populates="installation"
+    )
+
+
+class InstallationDocument(Base):
+    __tablename__ = "installation_documents"
+
+    document_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    ts: Mapped[datetime] = mapped_column(default=datetime.now)
+    patient_id: Mapped[bigint] = mapped_column(
+        ForeignKey("installation_details.patient_id")
+    )
+
+    file_name: Mapped[str | None]
+    file_type: Mapped[str | None]
+    file_content: Mapped[bytes]
+
+    installation: Mapped[InstallationDetail] = relationship()
 
 
 class TicketMessage(Base):
