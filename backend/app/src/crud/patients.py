@@ -3,6 +3,16 @@ import random
 from codicefiscale import codicefiscale as cf
 from sqlalchemy.orm import Session
 
+from ..core.status import (
+    INSTALLATION_CLOSED,
+    INSTALLATION_CLOSING,
+    INSTALLATION_OPEN,
+    INSTALLATION_OPENING,
+    INSTALLATION_PAUSE,
+    TICKET_CLOSED,
+    INSTALLATION_UNKNOW,
+)
+
 from ..core.const import ADMIN_USERNAME, SMS_PATIENT_CREATE
 from ..core.excp import DuplicateCF
 from ..ormodels import (
@@ -160,8 +170,28 @@ def update(db: Session, patient_id: int, patient: PatientUpdate) -> PatientRead:
 
 
 def status(db: Session, patient_id: int) -> str:
-    # TODO implement it
-    return "OK"
+    result_orm = query_one(db, patient_id)
+    ticket_status = all(
+        e.status == TICKET_CLOSED for e in tickets.read_many(db, patient_id=patient_id)
+    )
+    context = (
+        result_orm.date_start is not None,
+        result_orm.date_end is not None,
+        ticket_status,
+    )
+    match context:
+        case (True, False, True):
+            return INSTALLATION_OPEN
+        case (True, False, False):
+            return INSTALLATION_PAUSE
+        case (_, True, True):
+            return INSTALLATION_CLOSED
+        case (False, _, False):
+            return INSTALLATION_OPENING
+        case (True, True, False):
+            return INSTALLATION_CLOSING
+        case _:
+            return INSTALLATION_UNKNOW
 
 
 def create_screening(

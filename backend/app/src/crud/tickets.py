@@ -3,7 +3,7 @@ from datetime import datetime
 import humanize
 from sqlalchemy.orm import Session
 
-from ..core.status import CLOSED, OPEN
+from ..core.status import TICKET_CLOSED, TICKET_OPEN
 from ..ormodels import Ticket, TicketMessage
 from ..schemas.ticket import TicketBase, TicketCreate, TicketStatus
 
@@ -51,7 +51,7 @@ def read_many(
         TicketStatus(
             ticket_id=result_orm.ticket_id,
             date_delta=humanize.naturaltime((datetime.now() - result_orm.ts)),
-            status=CLOSED if result_orm.date_closed else OPEN,
+            status=TICKET_CLOSED if result_orm.date_closed else TICKET_OPEN,
             last_sender=sorted(result_orm.messages, key=lambda x: x.ts)[-1].sender,
         )
         for result_orm in results_orm
