@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
+from .contact import ContactEntry
+
 
 class InstallationDetailBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -21,6 +23,11 @@ class InstallationDetailBase(BaseModel):
     other_notes: str | None
 
 
+class InstallationDetailRead(InstallationDetailBase):
+    date_start: datetime | None
+    date_end: datetime | None
+
+
 class InstallationDetailCreate(BaseModel):
     apartment_type: str | None = None
     internet_type: str | None = None
@@ -34,7 +41,21 @@ class InstallationDetailCreate(BaseModel):
     other_notes: str | None = None
 
 
+class InstallationDetailUpdate(InstallationDetailCreate):
+    pass
+
+
 class InstallationStatus(BaseModel):
     patient_id: int
     status: str
     date_delta: str
+
+
+class InstallationInfo(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    first_name: str
+    last_name: str
+    home_address: str | None
+
+    contacts: list[ContactEntry]
