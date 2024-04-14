@@ -38,9 +38,7 @@ from . import contacts, tickets
 
 
 def query_one(db: Session, patient_id: int) -> PatientFull:
-    result_orm = (
-        db.query(PatientFull).filter(PatientFull.patient_id == patient_id).one()
-    )
+    result_orm = db.query(PatientFull).where(PatientFull.patient_id == patient_id).one()
     return result_orm
 
 
@@ -80,7 +78,7 @@ def read_many(db: Session, *, skip: int = 0, limit: int = 100) -> list[PatientSt
             last_name=result_orm.details.last_name,
             age=to_age(result_orm.note.codice_fiscale),
             patient_id=result_orm.patient_id,
-            status=status(db=db, patient_id=result_orm.patient_id),
+            status=status(db, patient_id=result_orm.patient_id),
         )
         for result_orm in results_orm
     ]
@@ -90,14 +88,14 @@ def read_many(db: Session, *, skip: int = 0, limit: int = 100) -> list[PatientSt
 def create(db: Session, patient: PatientCreate) -> PatientRead:
     if (
         db.query(PatientNote)
-        .filter(PatientNote.codice_fiscale == patient.codice_fiscale)
+        .where(PatientNote.codice_fiscale == patient.codice_fiscale)
         .count()
     ):
         raise DuplicateCF
 
     while True:
         patient_id = int.from_bytes(random.randbytes(7), byteorder="little")
-        if not db.query(Patient).filter(Patient.patient_id == patient_id).count():
+        if not db.query(Patient).where(Patient.patient_id == patient_id).count():
             break
 
     patient_orm = Patient(
@@ -114,7 +112,6 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
     )
     db.add(result_orm)
 
-    # TODO check AttributeError
     result_orm = PatientScreening(
         patient_id=patient_id,
         neuro_diag=patient.neuro_diag,

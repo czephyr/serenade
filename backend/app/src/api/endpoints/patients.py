@@ -1,19 +1,19 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.exc import IntegrityError, NoResultFound
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from ...crud import patients
-from ...schemas.patient_base import PatientBase
 from ...schemas.patient import PatientCreate, PatientRead, PatientStatus, PatientUpdate
 from ..deps import get_db, require_role
 from ...core.excp import DuplicateCF
+from ...core.roles import HOS
 
 router = APIRouter()
 
 
 @router.get("/", response_model=list[PatientStatus])
-async def read_many(
-    # current_user: dict = Depends(require_role(["dottore"])),
+def read_many(
+    current_user: dict = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> list[PatientStatus]:
     result = patients.read_many(db=db)
@@ -21,16 +21,13 @@ async def read_many(
 
 
 @router.post("/", response_model=PatientRead)
-async def create(
+def create(
     patient: PatientCreate,
-    # current_user: dict = Depends(require_role(["dottore"])),
+    current_user: dict = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
-
-    # return patients.create(db=db, patient=patient)
-
     try:
-        result = patients.create(db=db, patient=patient)
+        result = patients.create(db, patient=patient)
     except DuplicateCF as excp:
         raise HTTPException(
             status_code=409,
@@ -41,16 +38,16 @@ async def create(
 
 
 @router.get("/{patient_id}", response_model=PatientRead)
-async def read_one(
+def read_one(
     patient_id: int,
-    # current_user: dict = Depends(require_role(["dottore"])),
+    current_user: dict = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
         result = patients.read_one(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
-            status_code=404,
+            status.HTTP_404_NOT_FOUND,
             detail=f"Patient with id {patient_id} not found",
         ) from excp
     else:
@@ -58,17 +55,17 @@ async def read_one(
 
 
 @router.put("/{patient_id}", response_model=PatientRead)
-async def update(
+def update(
     patient_id: int,
     patient: PatientUpdate,
-    # current_user: dict = Depends(require_role(["dottore"])),
+    current_user: dict = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
-        result = patients.update(db=db, patient_id=patient_id, patient=patient)
+        result = patients.update(db, patient_id=patient_id, patient=patient)
     except NoResultFound as excp:
         raise HTTPException(
-            status_code=404,
+            status.HTTP_404_NOT_FOUND,
             detail=f"Patient with id {patient_id} not found",
         ) from excp
     else:

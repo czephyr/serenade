@@ -13,7 +13,7 @@ class PatientCreate(BaseModel):
     neuro_diag: str | None = None
     age_class: str | None = None
 
-    home_address: str
+    home_address: str | None = None
     contacts: list[ContactCreate] | None = None
 
     medical_notes: str | None = None

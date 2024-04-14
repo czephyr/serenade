@@ -29,7 +29,7 @@ def create(db: Session, ticket: TicketCreate) -> TicketBase:
 
 
 def query_one(db: Session, ticket_id: int) -> Ticket:
-    result_orm = db.query(Ticket).filter(Ticket.ticket_id == ticket_id).one()
+    result_orm = db.query(Ticket).where(Ticket.ticket_id == ticket_id).one()
     return result_orm
 
 
