@@ -1,18 +1,11 @@
-fastapi 
+fastapi
 uvicorn
-python-keycloak
-requests
-pydantic
-python-multipart
 sqlalchemy
-arrow
-psycopg
+psycopg[binary,pool]
+python-keycloak>=3.9
+pydantic>=2.6
 pydantic-settings
 python-codicefiscale
-sqlmodel #not being used currently, but would fix a the TicketList problem
-opentelemetry-distro
-opentelemetry-exporter-otlp-proto-grpc
-opentelemetry-instrumentation-fastapi
-opentelemetry-instrumentation-sqlalchemy
-prometheus-fastapi-instrumentator
-opentelemetry-instrumentation-logging
+python-multipart
+requests
+humanize

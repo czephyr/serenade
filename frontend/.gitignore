@@ -37,3 +37,6 @@ next-env.d.ts
 
 src/.next
 src/node_modules
+
+src/.next
+src/node_modules

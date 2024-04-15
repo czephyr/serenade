@@ -1,1 +1,0 @@
-Invoke-RestMethod -Uri "http://localhost:8000/patients" -Method Get

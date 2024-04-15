@@ -1,0 +1,2 @@
+class DuplicateCF(Exception):
+    pass
