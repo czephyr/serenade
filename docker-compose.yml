@@ -1,4 +1,114 @@
-  version: '3.8'
+services:
+  dbkeycloak:
+    image: postgres:latest
+    env_file:
+      - .envars/.env.dbkeycloak
+    ports:
+      - ${DB_KEYCLOAK_PORT}:5432
+  dbpercona:
+    image: perconalab/postgres-tde-ext:latest
+    env_file:
+      - .envars/.env.dbpercona
+    volumes:
+      # NOTE : execution order is lexographical order
+      # - ./dbpercona/pg-tde-create-ext.sh:/docker-entrypoint-initdb.d/pg-tde-create-ext.sh
+      # - ./dbpercona/pg-tde-streaming-repl.sh:/docker-entrypoint-initdb.d/pg-tde-streaming-repl.sh
+      - ./dbpercona/pg-xx-init.sql:/docker-entrypoint-initdb.d/pg-xx-init.sql
+      - ./dbpercona/pg-xx-populate.sql:/docker-entrypoint-initdb.d/pg-xx-populate.sql
+    ports:
+      - ${DB_PERCONA_PORT}:5432
+  keycloak:
+    depends_on:
+      - dbkeycloak
+    image: quay.io/keycloak/keycloak:24.0.2
+    env_file:
+      - .envars/.env.keycloak
+    volumes:
+      - ./.keys:/opt/keycloak/conf
+      - ./.keycloak_realms:/opt/keycloak/data/import
+    ports:
+      - 8080:8080
+      - 8443:8443
+    command: -v start-dev --import-realm
+  backend:
+    build: backend
+    depends_on:
+      - dbpercona
+    image: python:3.12
+    env_file:
+      - .envars/.env.backend
+    volumes:
+      - ./backend/app:/app
+    ports:
+      - ${APP_BACKEND_PORT}:80
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "4000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib
+    volumes:
+      - ./observability_stack_configs/otel-collector-config.yml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - 4317:4317 # OTLP gRPC receiver
+      - 4318:4318 # OTLP http receiver
+      - 9099:9099
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - prometheus
+      - jaeger
+  jaeger:
+    image: jaegertracing/all-in-one:1.55
+    environment: 
+      COLLECTOR_OTLP_ENABLED: "true"
+      COLLECTOR_OLTP_GRPC_TLS_ENABLED: "false"
+      COLLECTOR_OLTP_HTTP_TLS_ENABLED: "false"
+      COLLECTOR_GRPC_TLS_ENABLED: "false"
+      COLLECTOR_HTTP_TLS_ENABLED: "false"
+      COLLECTOR_ZIPKIN_HOST_PORT: 9411
+    ports:
+      - 16686:16686
+      - 4316:4317
+      - 4319:4318
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./observability_stack_configs/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles" 
+  volumes:
+    grafana_data:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   services:
     postgres:
       image: postgres:latest
@@ -72,47 +182,7 @@
         - "4000:3000"
       volumes:
         - grafana_data:/var/lib/grafana
-    loki:
-      image: grafana/loki:latest
-      ports:
-        - "3100:3100"
-    otel-collector:
-      image: otel/opentelemetry-collector-contrib
-      volumes:
-        - ./otel-collector-config.yml:/etc/otelcol-contrib/config.yaml
-      ports:
-        - 4317:4317 # OTLP gRPC receiver
-        - 4318:4318 # OTLP http receiver
-        - 9099:9099
-      extra_hosts:
-        - "host.docker.internal:host-gateway"
-      depends_on:
-        - prometheus
-        - jaeger
-    jaeger:
-      image: jaegertracing/all-in-one:1.55
-      environment: 
-        COLLECTOR_OTLP_ENABLED: "true"
-        COLLECTOR_OLTP_GRPC_TLS_ENABLED: "false"
-        COLLECTOR_OLTP_HTTP_TLS_ENABLED: "false"
-        COLLECTOR_GRPC_TLS_ENABLED: "false"
-        COLLECTOR_HTTP_TLS_ENABLED: "false"
-        COLLECTOR_ZIPKIN_HOST_PORT: 9411
-      ports:
-        - 16686:16686
-        - 4316:4317
-        - 4319:4318
-    prometheus:
-      image: prom/prometheus:latest
-      volumes:
-        - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      ports:
-        - "9090:9090"
-      command:
-        - "--config.file=/etc/prometheus/prometheus.yml"
-        - "--storage.tsdb.path=/prometheus"
-        - "--web.console.libraries=/usr/share/prometheus/console_libraries"
-        - "--web.console.templates=/usr/share/prometheus/consoles"  
+ 
     ubuntu:
         image: ubuntu:latest
         command: sleep 9999
