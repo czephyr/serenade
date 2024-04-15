@@ -26,6 +26,7 @@ class InstallationDetailBase(BaseModel):
 class InstallationDetailRead(InstallationDetailBase):
     date_start: datetime | None
     date_end: datetime | None
+    hue: str | None
 
 
 class InstallationDetailCreate(BaseModel):
@@ -49,6 +50,7 @@ class InstallationStatus(BaseModel):
     patient_id: int
     status: str
     date_delta: str
+    hue: str | None
 
 
 class InstallationInfo(BaseModel):

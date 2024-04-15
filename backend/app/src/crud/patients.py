@@ -1,20 +1,20 @@
 import random
 
+import arlecchino
 from codicefiscale import codicefiscale as cf
 from sqlalchemy.orm import Session
 
+from ..core.const import ADMIN_USERNAME, SALT_HASH, SMS_PATIENT_CREATE
+from ..core.excp import DuplicateCF
 from ..core.status import (
     INSTALLATION_CLOSED,
     INSTALLATION_CLOSING,
     INSTALLATION_OPEN,
     INSTALLATION_OPENING,
     INSTALLATION_PAUSE,
-    TICKET_CLOSED,
     INSTALLATION_UNKNOW,
+    TICKET_CLOSED,
 )
-
-from ..core.const import ADMIN_USERNAME, SMS_PATIENT_CREATE
-from ..core.excp import DuplicateCF
 from ..ormodels import (
     Patient,
     PatientDetail,
@@ -79,6 +79,7 @@ def read_many(db: Session, *, skip: int = 0, limit: int = 100) -> list[PatientSt
             age=to_age(result_orm.note.codice_fiscale),
             patient_id=result_orm.patient_id,
             status=status(db, patient_id=result_orm.patient_id),
+            hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
         )
         for result_orm in results_orm
     ]

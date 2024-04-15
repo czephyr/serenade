@@ -35,6 +35,7 @@ class PatientStatus(BaseModel):
     age: int
     patient_id: int
     status: str
+    hue: str | None
 
 
 class PatientRead(BaseModel):

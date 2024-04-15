@@ -1,8 +1,10 @@
 from datetime import datetime
 
+import arlecchino
 import humanize
 from sqlalchemy.orm import Session
 
+from ..core.const import SALT_HASH
 from ..core.roles import IIT
 from ..ormodels import InstallationDetail, Patient
 from ..schemas.installation import (
@@ -34,6 +36,7 @@ def read_one(db: Session, patient_id: int) -> InstallationDetailRead:
 
     kw = PatientBase.model_dump(patient)
     kw |= InstallationDetailBase.model_dump(detail)
+    kw["hue"] = arlecchino.draw(patient_id, SALT_HASH)
     result = InstallationDetailRead.model_validate(kw)
     return result
 
@@ -47,6 +50,7 @@ def read_many(
             patient_id=result_orm.patient_id,
             status=patients.status(db, result_orm.patient_id),
             date_delta=last_update(db, result_orm.patient_id),
+            hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
         )
         for result_orm in results_orm
     ]
