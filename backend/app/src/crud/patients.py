@@ -23,18 +23,11 @@ from ..ormodels import (
     PatientScreening,
 )
 from ..schemas.contact import ContactEntry
-from ..schemas.patient import (
-    PatientCreate,
-    PatientRead,
-    PatientScreeningCreate,
-    PatientStatus,
-    PatientUpdate,
-)
-from ..schemas.patient_base import PatientScreeningBase
+from ..schemas.patient import PatientCreate, PatientRead, PatientStatus, PatientUpdate
 from ..schemas.ticket import TicketCreate
 from ..schemas.ticket_message import TicketMessageCreate
 from ..utils import to_age, to_city
-from . import contacts, tickets
+from . import patient_contacts, tickets
 
 
 def query_one(db: Session, patient_id: int) -> PatientFull:
@@ -128,7 +121,7 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
     db.add(result_orm)
 
     if patient.contacts is not None:
-        _ = contacts.create_many(db, patient_id, patient.contacts)
+        _ = patient_contacts.create_many(db, patient_id, patient.contacts)
 
     ticket = TicketCreate(
         patient_id=patient_id,

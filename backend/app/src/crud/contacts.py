@@ -1,38 +1,36 @@
 from sqlalchemy.orm import Session
 
 from ..ormodels import Contact
-from ..schemas.contact import ContactEntry, ContactCreate
+from ..schemas.contact import ContactEntry, ContactUpdate
 
 
-def query_many(db: Session, patient_id: int) -> list[Contact]:
-    results_orm = db.query(Contact).where(Contact.patient_id == patient_id).all()
-    return results_orm
+def query_one(db: Session, contact_id: int) -> Contact:
+    result_orm = db.query(Contact).where(Contact.id == contact_id).one()
+    return result_orm
 
 
-def read_many(db: Session, patient_id: int) -> list[ContactEntry]:
-    results_orm = query_many(db, patient_id)
-    result = [ContactEntry.model_validate(result_orm) for result_orm in results_orm]
+def read_one(db: Session, contact_id: int) -> ContactEntry:
+    result_orm = query_one(db, contact_id)
+    result = ContactEntry.model_validate(result_orm)
     return result
 
 
-def delete_many(db: Session, patient_id: int) -> list[ContactEntry]:
-    results_orm = query_many(db, patient_id)
-    result = [ContactEntry.model_validate(result_orm) for result_orm in results_orm]
-    db.delete(results_orm)
-    return result
-
-
-def create_many(db: Session, patient_id: int, contacts: list[ContactCreate]):
-    for contact in contacts:
-        result_orm = Contact(
-            patient_id=patient_id,
-            alias=contact.alias,
-            phone_no=contact.phone_no,
-            email=contact.email,
-        )
-        db.add(result_orm)
-
+def update_one(db: Session, contact_id: int, contact: ContactUpdate) -> ContactEntry:
+    result_orm = query_one(db, contact_id)
+    kw = contact.model_dump(exclude_unset=True)
+    for k, v in kw.items():
+        setattr(result_orm, k, v)
     db.commit()
 
-    result = read_many(db, patient_id)
+    db.refresh(result_orm)
+
+    result = ContactEntry.model_validate(result_orm)
+    return result
+
+
+def delete_one(db: Session, contact_id: int) -> ContactEntry:
+    result_orm = query_one(db, contact_id)
+    result = ContactEntry.model_validate(result_orm)
+    db.delete(result_orm)
+    db.commit()
     return result

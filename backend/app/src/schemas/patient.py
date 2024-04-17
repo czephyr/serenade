@@ -20,13 +20,12 @@ class PatientCreate(BaseModel):
 
 
 class PatientUpdate(BaseModel):
-    neuro_diag: str | None
-    age_class: str | None
+    neuro_diag: str | None = None
+    age_class: str | None = None
 
-    home_address: str | None
-    contacts: list[ContactCreate] | None
+    home_address: str | None = None
 
-    medical_notes: str | None
+    medical_notes: str | None = None
 
 
 class PatientStatus(BaseModel):

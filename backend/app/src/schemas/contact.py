@@ -26,3 +26,9 @@ class ContactCreate(BaseModel):
     alias: str
     phone_no: str | None = None
     email: str | None = None
+
+
+class ContactUpdate(BaseModel):
+    alias: str | None = None
+    phone_no: str | None = None
+    email: str | None = None
