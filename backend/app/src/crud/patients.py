@@ -53,8 +53,12 @@ def read_one(db: Session, patient_id: int) -> PatientRead:
         date_of_birth=cf.decode(codice_fiscale)["birthdate"],
         place_of_birth=to_city(codice_fiscale),
         # PatientScreening
-        neuro_diag=result_orm.screenings[-1].neuro_diag,
-        age_class=result_orm.screenings[-1].age_class,
+        neuro_diag=(
+            result_orm.screenings[-1].neuro_diag if result_orm.screenings else None
+        ),
+        age_class=(
+            result_orm.screenings[-1].age_class if result_orm.screenings else None
+        ),
         # Contact
         contacts=[
             ContactEntry.model_validate(contact) for contact in result_orm.contacts
