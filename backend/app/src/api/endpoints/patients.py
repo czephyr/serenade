@@ -17,7 +17,7 @@ def read_many(
     current_user: dict = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> list[PatientStatus]:
-    result = patients.read_many(db=db)
+    result = patients.read_many(db)
     return result
 
 

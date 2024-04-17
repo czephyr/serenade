@@ -17,7 +17,7 @@ def read_many(
     current_user: dict = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> list[TicketStatus]:
-    result = tickets.read_many(db=db)
+    result = tickets.read_many(db)
     return result
 
 

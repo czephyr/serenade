@@ -67,8 +67,8 @@ def read_one(db: Session, patient_id: int) -> PatientRead:
     return result
 
 
-def read_many(db: Session, *, skip: int = 0, limit: int = 100) -> list[PatientStatus]:
-    results_orm = db.query(PatientFull).offset(skip).limit(limit).all()
+def read_many(db: Session) -> list[PatientStatus]:
+    results_orm = db.query(PatientFull).all()
     results = [
         PatientStatus(
             first_name=result_orm.details.first_name,
@@ -124,6 +124,8 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
     )
     db.add(result_orm)
 
+    db.commit()
+
     if patient.contacts is not None:
         _ = patient_contacts.create_many(db, patient_id, patient.contacts)
 
@@ -134,6 +136,7 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
             sender=ADMIN_USERNAME,
         ),
     )
+
     tickets.create(db, ticket)
 
     result = read_one(db, patient_id)

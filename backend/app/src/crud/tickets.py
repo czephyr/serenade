@@ -41,14 +41,12 @@ def read_one(db: Session, ticket_id: int) -> TicketBase:
     return result
 
 
-def read_many(
-    db: Session, patient_id: int | None = None, *, skip: int = 0, limit: int = 100
-) -> list[TicketStatus]:
+def read_many(db: Session, patient_id: int | None = None) -> list[TicketStatus]:
     results_orm = db.query(Ticket)
     if patient_id is not None:
         results_orm = results_orm.where(Ticket.patient_id == patient_id)
 
-    results_orm = results_orm.offset(skip).limit(limit).all()
+    results_orm = results_orm.all()
     results = [
         TicketStatus(
             ticket_id=result_orm.ticket_id,
