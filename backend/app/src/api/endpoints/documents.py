@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
 from ...core.roles import IIT, IMT, UNIMI
+from ...core.excp import RESOURCE_NOT_FOUND
 from ...crud import installation_documents
 from ...schemas.installation_document import InstallationDocumentRead
 
@@ -21,7 +22,7 @@ def download(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"No documents available",
+            detail=RESOURCE_NOT_FOUND.format(_id=document_id, resource="documents"),
         ) from excp
     else:
         response = Response(result)
@@ -39,7 +40,7 @@ def delete(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"No documents available",
+            detail=RESOURCE_NOT_FOUND.format(_id=document_id, resource="documents"),
         ) from excp
     else:
         return result

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
 from ...core.roles import HOS, IIT, IMT, UNIMI
-from ...crud import installation_details, installations
+from ...core.excp import RESOURCE_NOT_FOUND
 from ...schemas.installation import (
     InstallationDetailCreate,
     InstallationDetailRead,
@@ -37,7 +37,7 @@ def read_one(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"Installation {patient_id} not found",
+            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
         ) from excp
     return result
 
@@ -53,7 +53,7 @@ def read_info(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"Installation {patient_id} not found",
+            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
         ) from excp
     else:
         return result
@@ -71,7 +71,7 @@ def create(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"Patient {patient_id} not found",
+            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
         ) from excp
     else:
         return result
@@ -89,7 +89,7 @@ def update(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"Patient {patient_id} not found",
+            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
         ) from excp
     else:
         return result
@@ -106,7 +106,7 @@ def close(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"Patient {patient_id} not found",
+            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
         ) from excp
     else:
         return result
@@ -123,7 +123,7 @@ def open(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"Patient {patient_id} not found",
+            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
         ) from excp
     else:
         return result

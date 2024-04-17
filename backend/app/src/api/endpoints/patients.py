@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from ...crud import patients
 from ...schemas.patient import PatientCreate, PatientRead, PatientStatus, PatientUpdate
 from ..deps import get_db, require_role
-from ...core.excp import DuplicateCF
+from ...core.excp import RESOURCE_NOT_FOUND, DuplicateCF
 from ...core.roles import HOS
 
 router = APIRouter()
@@ -48,7 +48,7 @@ def read_one(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"Patient with id {patient_id} not found",
+            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
         ) from excp
     else:
         return result
@@ -66,7 +66,7 @@ def update(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"Patient with id {patient_id} not found",
+            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
         ) from excp
     else:
         return result
