@@ -81,7 +81,7 @@ class Contact(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     patient_id: Mapped[bigint] = mapped_column(ForeignKey("patients.patient_id"))
-    alias: Mapped[str]
+    alias: Mapped[str | None]
     phone_no: Mapped[str | None]
     email: Mapped[str | None]
 

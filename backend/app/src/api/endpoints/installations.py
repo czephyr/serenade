@@ -2,11 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
-from backend.app.src.schemas.ticket_message import TicketMessageCreate
-
 from ...api.deps import get_db, require_role
-from ...core.roles import HOS, IIT, IMT, UNIMI
 from ...core.excp import RESOURCE_NOT_FOUND
+from ...core.roles import HOS, IIT, IMT, UNIMI
 from ...crud import installation_details, installations, tickets
 from ...schemas.installation import (
     InstallationDetailCreate,
@@ -15,8 +13,9 @@ from ...schemas.installation import (
     InstallationInfo,
     InstallationStatus,
 )
-from ...schemas.ticket import TicketStatus, TicketBase, TicketCreate
 from ...schemas.patient_base import PatientBase
+from ...schemas.ticket import TicketBase, TicketCreate, TicketStatus
+from ...schemas.ticket_message import TicketMessageCreate
 
 router = APIRouter()
 
@@ -154,4 +153,3 @@ def create_ticket(
         db, ticket=TicketCreate(patient_id=patient_id, message=message)
     )
     return result
-
