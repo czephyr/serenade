@@ -139,20 +139,25 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
 def update(db: Session, patient_id: int, patient: PatientUpdate) -> PatientRead:
     result_orm = query_one(db, patient_id)
 
-    _ = create_screening(
-        db,
-        patient_id,
-        PatientScreeningCreate(
+    kw = patient.model_dump(exclude_unset=True)
+
+    if any([e in kw for e in ("neuro_diag", "age_class")]):
+        screening_orm = PatientScreening(
+            patient_id=patient_id,
             neuro_diag=patient.neuro_diag,
             age_class=patient.age_class,
-        ),
-    )
-    result_orm.details.home_address = patient.home_address
-    result_orm.note.medical_notes = patient.medical_notes
+        )
+        if result_orm.screenings:
+            if "nuero_diag" not in kw:
+                screening_orm.neuro_diag = result_orm.screenings[-1].neuro_diag
+            if "age_class" not in kw:
+                screening_orm.age_class = result_orm.screenings[-1].age_class
+        db.add(screening_orm)
 
-    if patient.contacts is not None:
-        contacts.delete_many(db, patient_id)
-        contacts.create_many(db, patient_id, patient.contacts)
+    if "home_address" in kw:
+        result_orm.details.home_address = patient.home_address
+    if "medical_notes" in kw:
+        result_orm.note.medical_notes = patient.medical_notes
 
     db.commit()
 
@@ -183,18 +188,3 @@ def status(db: Session, patient_id: int) -> str:
             return INSTALLATION_CLOSING
         case _:
             return INSTALLATION_UNKNOW
-
-
-def create_screening(
-    db: Session, patient_id: int, screening: PatientScreeningCreate
-) -> PatientScreeningBase:
-
-    result_orm = PatientScreening(
-        patient_id=patient_id,
-        neuro_diag=screening.neuro_diag,
-        age_class=screening.age_class,
-    )
-    db.add(result_orm)
-    db.refresh(result_orm)
-    result = PatientScreeningBase.model_validate(result_orm)
-    return result
