@@ -132,7 +132,7 @@ def open(
         return result
 
 
-@router.get("/{patient_id}/tickets", response_model=PatientBase)
+@router.get("/{patient_id}/tickets", response_model=list[TicketStatus])
 def read_tickets(
     patient_id: int,
     current_user: dict = Depends(require_role([IIT, IMT])),
