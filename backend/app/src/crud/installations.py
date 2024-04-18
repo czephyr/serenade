@@ -1,13 +1,11 @@
 from datetime import datetime
 
-import humanize
 from sqlalchemy.orm import Session
 
-from ..core.roles import IIT
 from ..ormodels import Patient, PatientDetail
 from ..schemas.installation import InstallationInfo
 from ..schemas.patient_base import PatientBase
-from . import contacts
+from . import patient_contacts
 
 
 def query_one(db: Session, patient_id: int) -> Patient:
@@ -29,7 +27,7 @@ def info(db: Session, patient_id: int) -> InstallationInfo:
         first_name=result_orm.first_name,
         last_name=result_orm.last_name,
         home_address=result_orm.home_address,
-        contacts=contacts.read_many(db, patient_id),
+        contacts=patient_contacts.read_many(db, patient_id),
     )
     return result
 
