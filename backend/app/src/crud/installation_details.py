@@ -41,10 +41,8 @@ def read_one(db: Session, patient_id: int) -> InstallationDetailRead:
     return result
 
 
-def read_many(
-    db: Session, *, skip: int = 0, limit: int = 100
-) -> list[InstallationStatus]:
-    results_orm = db.query(Patient).offset(skip).limit(limit).all()
+def read_many(db: Session) -> list[InstallationStatus]:
+    results_orm = db.query(Patient).all()
     results = [
         InstallationStatus(
             patient_id=result_orm.patient_id,
@@ -86,7 +84,7 @@ def update(
     return result
 
 
-def last_update(db: Session, patient_id: int):
+def last_update(db: Session, patient_id: int) -> str:
     ts_max = max(
         [
             m.ts

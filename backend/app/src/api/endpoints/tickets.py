@@ -7,6 +7,7 @@ from ...crud import ticket_messages, tickets
 from ...schemas.ticket import TicketBase, TicketCreate, TicketStatus
 from ...schemas.ticket_message import TicketMessageBase, TicketMessageCreate
 from ..deps import get_db, require_role
+from ...core.excp import RESOURCE_NOT_FOUND
 
 router = APIRouter()
 
@@ -16,7 +17,7 @@ def read_many(
     current_user: dict = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> list[TicketStatus]:
-    result = tickets.read_many(db=db)
+    result = tickets.read_many(db)
     return result
 
 
@@ -41,7 +42,7 @@ def read_one(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"Ticket {ticket_id} not found",
+            detail=RESOURCE_NOT_FOUND.format(_id=ticket_id, resource="tickets"),
         ) from excp
     else:
         return result
@@ -79,7 +80,7 @@ def close(
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
-            detail=f"Ticket {ticket_id} not found",
+            detail=RESOURCE_NOT_FOUND.format(_id=ticket_id, resource="tickets"),
         ) from excp
     else:
         return result

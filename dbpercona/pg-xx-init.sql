@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS contacts (
     -- Foreign key referencing patient ID
     patient_id BIGINT NOT NULL,
     -- Alias or nickname for contact
-    alias VARCHAR(31) NOT NULL,
+    alias VARCHAR(31),
     -- Phone number of the contact
     phone_no VARCHAR(15) ,
     -- Phone number of the contact
