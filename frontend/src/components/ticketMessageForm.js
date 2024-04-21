@@ -16,7 +16,10 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
       return;
     }
 
-    if (session && session.roles?.includes("iit")) {
+    if (
+      session &&
+      (session.roles?.includes("iit") || session.roles?.includes("imt"))
+    ) {
       const postBody = {
         ticket_num: ticket_num,
         msg: newMessage,

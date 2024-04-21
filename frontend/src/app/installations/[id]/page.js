@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import authOptions from "../../api/auth/[...nextauth]/options";
 import { getAccessToken } from "../../../utils/sessionTokenAccessor";
 import { DocForm } from "../../../components/ticketComponents";
+import NewTicketForm from "../../../components/newTicketForm";
 
 async function fetchInstallationDetails(installation_id) {
   const accessToken = await getAccessToken();
@@ -71,9 +72,10 @@ async function fetchDocumentsInfo(patient_id) {
 export default async function TicketPage({ params }) {
   const session = await getServerSession(authOptions);
   let roleFound = "";
-
+  let patientDetails;
   if (session?.roles?.includes("iit")) {
     roleFound = "iit";
+    patientDetails = await fetchPatientDetails(params.id);
   } else if (session?.roles?.includes("imt")) {
     roleFound = "imt";
   }
@@ -81,48 +83,47 @@ export default async function TicketPage({ params }) {
   if (!roleFound) {
     return { redirect: { destination: "/unauthorized", permanent: false } };
   }
-  console.log(params.id);
   const installation = await fetchInstallationDetails(params.id);
-  const patientDetails = await fetchPatientDetails(params.id);
   const installationTickets = await fetchInstallationTickets(params.id);
-  const documents = fetchDocumentsInfo(params.id);
+  // const documents = fetchDocumentsInfo(params.id);
 
   return (
     <div>
-      <div>
-        {JSON.stringify(patientDetails)}
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <h3 className="text-lg font-bold leading-tight mb-4">
-            Personal Profile
-          </h3>
-          <ul>
-            <li>
-              <strong>First Name:</strong> {patientDetails.first_name}
-            </li>
-            <li>
-              <strong>Last Name:</strong> {patientDetails.last_name}
-            </li>
-            <li>
-              <strong>Home Address:</strong> {patientDetails.home_address}
-            </li>
-            <li>
-              <strong>Contacts:</strong>
-              <ul>
-                {patientDetails.contacts.map((contact, index) => (
-                  <li key={index}>
-                    <strong>Alias:</strong> {contact.alias}
-                    <br />
-                    <strong>Phone No:</strong> {contact.phone_no}
-                    <br />
-                    <strong>Email:</strong> {contact.email}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          </ul>
+      {patientDetails && (
+        <div>
+          {JSON.stringify(patientDetails)}
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <h3 className="text-lg font-bold leading-tight mb-4">
+              Personal Profile
+            </h3>
+            <ul>
+              <li>
+                <strong>First Name:</strong> {patientDetails.first_name}
+              </li>
+              <li>
+                <strong>Last Name:</strong> {patientDetails.last_name}
+              </li>
+              <li>
+                <strong>Home Address:</strong> {patientDetails.home_address}
+              </li>
+              <li>
+                <strong>Contacts:</strong>
+                <ul>
+                  {patientDetails.contacts.map((contact, index) => (
+                    <li key={index}>
+                      <strong>Alias:</strong> {contact.alias}
+                      <br />
+                      <strong>Phone No:</strong> {contact.phone_no}
+                      <br />
+                      <strong>Email:</strong> {contact.email}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-
+      )}
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h3 className="text-lg font-bold leading-tight mb-4">
           Patient Profile Details
@@ -220,6 +221,10 @@ export default async function TicketPage({ params }) {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="text-white">
+        <NewTicketForm installation_id={params.id} />
       </div>
     </div>
   );

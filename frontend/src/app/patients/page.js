@@ -56,8 +56,10 @@ export default async function Patients() {
                 </thead>
                 <tbody>
                   {patients.map((patient) => (
-                    <tr key={patient.id}>
-                      <td className="px-5 py-5 border-b">{patient.id}</td>
+                    <tr key={patient.patient_id}>
+                      <td className="px-5 py-5 border-b">
+                        {patient.patient_id}
+                      </td>
                       <td className="px-5 py-5 border-b">
                         {patient.first_name}
                       </td>
