@@ -52,6 +52,13 @@ The API is written using the FastAPI framework, SQLAlchemy is used for ORM inter
 
 The RBAC auth and authz is implemented achieved by leveraging the `KeycloakOpenID` and FastAPI integration; everytime a request is sent to the backend before serving a response the jwt token is checked for validity and authorization based on user role against Keycloak. 
 
+Using the OpenAPI specification FastAPI creates automatic API endpoint documentation with a Swagger UI at the ```/docs``` endpoint.
+<img src="images/swagger.png" width=700 />
+
+All the endpoints have their request and response body parameters documented.
+
+<img src="images/api_specifics.png" width=700 />
+
 ### Folder structure explaination
 
 ```
