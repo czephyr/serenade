@@ -8,6 +8,8 @@ import {
   CloseButton,
 } from "../../../components/ticketComponents";
 
+import TicketMessages from "../../../components/ticketMessageForm";
+
 async function fetchTicketDetails(ticket_id) {
   const accessToken = await getAccessToken();
   const url = `${process.env.BACKEND_HOST}/api/v1/tickets/${ticket_id}`;
@@ -42,25 +44,40 @@ async function fetchTicketMessages(ticket_id) {
 
 function TicketDetails({ ticket }) {
   return (
-    <div className="ticket-details">
-      <h2>Ticket Details</h2>
-      {JSON.stringify(ticket)}
-      {/* <p>Ticket ID: {ticket.key}</p> */}
-      {/* <p>Status: {ticket.status}</p> */}
+    <div className="bg-white text-black shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <h3 className="text-lg font-bold leading-tight mb-4">Ticket Details</h3>
+      <ul>
+        <li>
+          <strong>Ticket ID:</strong> {ticket.ticket_id}
+        </li>
+        <li>
+          <strong>Patient ID:</strong> {ticket.patient_id}
+        </li>
+        <li>
+          <strong>Issue Date and Time:</strong>{" "}
+          {new Date(ticket.ts).toLocaleString()}
+        </li>
+        {ticket.date_closed && (
+          <li>
+            <strong>Closure Date and Time:</strong>{" "}
+            {new Date(ticket.date_closed).toLocaleString()}
+          </li>
+        )}
+      </ul>
     </div>
   );
 }
 
-function TicketMessages({ messageList }) {
-  return (
-    <div className="ticket-details">
-      <h2>Message list</h2>
-      {JSON.stringify(messageList)}
-      {/* <p>Ticket ID: {ticket.key}</p> */}
-      {/* <p>Status: {ticket.status}</p> */}
-    </div>
-  );
-}
+// function TicketMessages({ messageList }) {
+//   return (
+//     <div className="ticket-details">
+//       <h2>Message list</h2>
+//       {JSON.stringify(messageList)}
+//       {/* <p>Ticket ID: {ticket.key}</p> */}
+//       {/* <p>Status: {ticket.status}</p> */}
+//     </div>
+//   );
+// }
 
 export default async function TicketPage({ params }) {
   const session = await getServerSession(authOptions);
@@ -81,14 +98,19 @@ export default async function TicketPage({ params }) {
 
   return (
     <main className="text-white p-4">
-      <h1 className="text-4xl text-center mb-6">Ticket and Patient Details</h1>
+      <h1 className="text-4xl text-center mb-6">Ticket</h1>
       <div className="details-container">
-        {/* {ticket && <TicketDetails ticket={ticket} />} */}
+        {JSON.stringify(ticket)}
         <TicketDetails ticket={ticket} />
-        <TicketMessages messageList={ticketMessages} />
+        <TicketMessages
+          ticketMessages={ticketMessages}
+          ticketNum={ticket.ticket_id}
+          isOpen={!ticket.date_closed}
+          installNum={ticket.patient_id}
+        />
+        {/* <TicketMessages messageList={ticketMessages} />
         <SendMsgForm ticket={params.id} />
-        <DocForm ticket={params.id} />
-        <CloseButton ticket={params.id} />
+        <CloseButton ticket={params.id} /> */}
         {/* {patient && <PatientDetails patient={patient} role={roleFound} />} */}
       </div>
     </main>

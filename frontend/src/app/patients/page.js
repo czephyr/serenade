@@ -81,12 +81,13 @@ export default async function Patients() {
               </table>
             </div>
             <a
-              href={`/patient/create`}
+              href={`/patients/create`}
               className="text-blue-500 hover:underline"
             >
               Create new patient
             </a>
           </main>
+          <div className="text-white">{JSON.stringify(patients)}</div>
         </main>
       );
     } catch (err) {

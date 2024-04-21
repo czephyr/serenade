@@ -37,3 +37,8 @@
 - [ ] solleva LOCKED su open/close invalido
 - [ ] allunga nomi endpoint
 
+
+
+
+- Nei dettagli paziente, il tasto per seguire alle dashboards anche nei dettagli
+- Info pazienti [dottori] mettiamo la data
