@@ -1,5 +1,5 @@
 import os
 
 SMS_PATIENT_CREATE = """Nuova installazion da effettuare, buon lavoro!"""
-ADMIN_USERNAME = "~Serenade"
+ADMIN_USERNAME = "~serenade"
 SALT_HASH = bytes.fromhex(os.environ.get("SALT_HASH", ""))

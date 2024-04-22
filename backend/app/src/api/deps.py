@@ -1,8 +1,25 @@
+import os
+
 import keycloak.exceptions
 from fastapi import Depends, HTTPException, Security, status
+from fastapi.security import OAuth2PasswordBearer
+from keycloak import KeycloakOpenID
 
-from ..core.keycloak_config import keycloak_openid, oauth2_scheme
 from ..dbsession import SessionLocal
+
+keycloak_openid = KeycloakOpenID(
+    server_url=os.getenv("KEYCLOAK_SERVER_URL"),
+    client_id=os.getenv("KEYCLOAK_CLIENT_ID"),
+    realm_name=os.getenv("KEYCLOAK_REALM_NAME"),
+    client_secret_key=os.getenv("KEYCLOAK_CLIENT_SECRET_KEY"),
+)
+
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="{server_url}/realms/{realm_name}/protocol/openid-connect/token".format(
+    server_url=os.getenv("KEYCLOAK_SERVER_URL"),
+    realm_name=os.getenv("KEYCLOAK_REALM_NAME"),
+    )
+)
 
 
 def get_db():
