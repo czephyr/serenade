@@ -45,6 +45,7 @@ class PatientRead(BaseModel):
     gender: str
     date_of_birth: date
     place_of_birth: str
+    gender: str
 
     neuro_diag: str | None
     age_class: str | None
