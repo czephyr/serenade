@@ -6,7 +6,6 @@ import toast, { Toaster } from "react-hot-toast";
 
 const PatientDetail = ({ patient }) => {
   const [patientState, setpatientState] = useState({
-    patient_id: patient.patient_id,
     first_name: patient.first_name,
     last_name: patient.last_name,
     codice_fiscale: patient.codice_fiscale,
@@ -74,12 +73,33 @@ const PatientDetail = ({ patient }) => {
   console.log(contacts);
 
   const [showAddContactForm, setShowAddContactForm] = useState(false);
-  const removeContactAtIndex = (indexToRemove) => {
+  const removeContactAtIndex = (idToRemove) => {
     const updatedContacts = contacts.filter(
-      (_, index) => index !== indexToRemove
+      (contact, index) => contact.id !== idToRemove
     );
+    deleteContact(idToRemove);
     setContacts(updatedContacts);
   };
+  async function deleteContact(contact_id) {
+    const postBody = {
+      contact_id: contact_id,
+    };
+
+    try {
+      const response = await fetch("/api/patients/contacts/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postBody),
+      });
+      const result = await response.json();
+      if (response.ok) {
+      } else {
+        console.error("API call failed: ", result.error);
+      }
+    } catch (error) {
+      console.error("Failed to submit patient data: ", error);
+    }
+  }
 
   async function addContact(contact, patient_id) {
     const updatedContacts = [...contacts, contact];
@@ -151,7 +171,7 @@ const PatientDetail = ({ patient }) => {
           {console.log(contacts)}
           {contacts.map((contact, index) => (
             <div
-              key={index}
+              key={contact.id}
               className="flex justify-between items-center bg-gray-100 p-2 rounded-md"
             >
               <span className="text-gray-700">
@@ -160,7 +180,7 @@ const PatientDetail = ({ patient }) => {
                 {JSON.stringify(contact.email)}
               </span>
               <button
-                onClick={() => removeContactAtIndex(index)}
+                onClick={() => removeContactAtIndex(contact.id)}
                 className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center inline-flex items-center"
               >
                 Remove
@@ -189,21 +209,21 @@ const PatientDetail = ({ patient }) => {
                   name="alias"
                   placeholder="Alias"
                   ref={aliasRef}
-                  className="mb-3 px-3 py-2 border border-gray-300 rounded-md w-full"
+                  className="mb-3 px-3 py-2 text-black border border-gray-300 rounded-md w-full"
                 />
                 <input
                   type="text"
                   name="phone_no"
                   placeholder="Phone Number"
                   ref={phoneNoRef}
-                  className="mb-3 px-3 py-2 border border-gray-300 rounded-md w-full"
+                  className="mb-3 px-3 py-2 text-black border border-gray-300 rounded-md w-full"
                 />
                 <input
                   type="email"
                   name="email"
                   placeholder="Email"
                   ref={emailRef}
-                  className="mb-3 px-3 py-2 border border-gray-300 rounded-md w-full"
+                  className="mb-3 px-3 py-2 text-black border border-gray-300 rounded-md w-full"
                 />
               </div>
               <div className="items-center px-4 py-3">
@@ -218,7 +238,7 @@ const PatientDetail = ({ patient }) => {
                       patient.patient_id
                     )
                   }
-                  className="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+                  className="px-4 py-2 bg-green-500 text-base font-medium rounded-md w-full shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300"
                 >
                   Add Contact
                 </button>
