@@ -22,7 +22,7 @@ router = APIRouter()
 
 @router.get("/", response_model=list[InstallationStatus])
 def read_many(
-    current_user: dict = Depends(require_role([IIT, IMT])),
+    current_user: dict = Depends(require_role([IIT, IMT, UNIMI, HOS])),
     db: Session = Depends(get_db),
 ) -> list[InstallationStatus]:
     result = installation_details.read_many(db)

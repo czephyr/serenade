@@ -5,7 +5,6 @@ import humanize
 from sqlalchemy.orm import Session
 
 from ..core.const import SALT_HASH
-from ..core.roles import IIT
 from ..ormodels import InstallationDetail, Patient
 from ..schemas.installation import (
     InstallationDetailBase,
