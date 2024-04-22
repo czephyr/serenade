@@ -40,17 +40,14 @@ export default async function Patients() {
               <table className="min-w-full leading-normal">
                 <thead>
                   <tr>
-                    <th className="px-5 py-3 border-b-2  text-left text-xs font-semibold uppercase tracking-wider">
-                      PID
+                    <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
+                      Nome
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
-                      first_name
+                      Cognome
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
-                      last_name
-                    </th>
-                    <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold  uppercase tracking-wider">
-                      installation status
+                      Status
                     </th>
                   </tr>
                 </thead>
@@ -58,23 +55,26 @@ export default async function Patients() {
                   {patients.map((patient) => (
                     <tr key={patient.patient_id}>
                       <td className="px-5 py-5 border-b">
-                        {patient.patient_id}
-                      </td>
-                      <td className="px-5 py-5 border-b">
                         {patient.first_name}
                       </td>
                       <td className="px-5 py-5 border-b">
                         {patient.last_name}
                       </td>
-                      <td className="px-5 py-5 border-b">
-                        {patient.installation_status}
-                      </td>
+                      <td className="px-5 py-5 border-b">{patient.status}</td>
                       <td className="px-5 py-5 border-b">
                         <a
                           href={`/patients/${patient.patient_id}`}
                           className="text-blue-500 hover:underline"
                         >
                           View Details
+                        </a>
+                      </td>
+                      <td className="px-5 py-5 border-b">
+                        <a
+                          href={`/patients/${patient.patient_id}`}
+                          className="text-blue-500 hover:underline"
+                        >
+                          Data
                         </a>
                       </td>
                     </tr>

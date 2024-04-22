@@ -126,9 +126,9 @@ export default function NewPatientForm() {
                 required
               >
                 <option value="">Select Age</option>
-                <option value="Male">Age1</option>
-                <option value="Female">Age2</option>
-                <option value="Other">Other</option>
+                <option value="65-74">65-74</option>
+                <option value="75-84">75-84</option>
+                <option value="85+">85+</option>
               </select>
             </label>
 
@@ -141,9 +141,8 @@ export default function NewPatientForm() {
                 required
               >
                 <option value="">Select Neuro</option>
-                <option value="Male">Neuro1</option>
-                <option value="Female">Neuro2</option>
-                <option value="Other">Other</option>
+                <option value="neurodegen">neurodegen</option>
+                <option value="no neurodegen">no neurodegen</option>
               </select>
             </label>
             <label htmlFor="gender" className="block">
@@ -254,24 +253,26 @@ export default function NewPatientForm() {
                     />
                   </label>
 
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      addContact({
-                        alias: aliasRef.current.value,
-                        phone_no: phoneNoRef.current.value,
-                        email: emailRef.current.value,
-                      });
-                      // Clear the input fields after adding the contact
-                      aliasRef.current.value = "";
-                      phoneNoRef.current.value = "";
-                      emailRef.current.value = "";
-                    }}
-                    className="mt-3 w-32 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Add Contact
-                  </a>
+                  <span>
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        addContact({
+                          alias: aliasRef.current.value,
+                          phone_no: phoneNoRef.current.value,
+                          email: emailRef.current.value,
+                        });
+                        // Clear the input fields after adding the contact
+                        aliasRef.current.value = "";
+                        phoneNoRef.current.value = "";
+                        emailRef.current.value = "";
+                      }}
+                      className="mt-3 w-32 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white no-underline bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      Add Contact
+                    </a>
+                  </span>
                 </div>
               </div>
             </div>
