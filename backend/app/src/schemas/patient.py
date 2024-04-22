@@ -20,6 +20,9 @@ class PatientCreate(BaseModel):
 
 
 class PatientUpdate(BaseModel):
+    first_name: str | None = None
+    last_name: str | None = None
+
     neuro_diag: str | None = None
     age_class: str | None = None
 
@@ -31,7 +34,7 @@ class PatientUpdate(BaseModel):
 class PatientStatus(BaseModel):
     first_name: str
     last_name: str
-    age: int
+    neuro_diag: str | None
     patient_id: int
     status: str
     hue: str | None
@@ -46,6 +49,7 @@ class PatientRead(BaseModel):
     date_of_birth: date
     place_of_birth: str
     gender: str
+    age: int
 
     neuro_diag: str | None
     age_class: str | None

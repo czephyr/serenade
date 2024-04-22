@@ -5,7 +5,7 @@ from codicefiscale import codicefiscale as cf
 from sqlalchemy.orm import Session
 
 from ..core.const import ADMIN_USERNAME, SALT_HASH, SMS_PATIENT_CREATE
-from ..core.excp import DuplicateCF
+from ..core.excp import BadValues, DuplicateCF
 from ..core.status import (
     INSTALLATION_CLOSED,
     INSTALLATION_CLOSING,
@@ -50,6 +50,7 @@ def read_one(db: Session, patient_id: int) -> PatientRead:
         codice_fiscale=result_orm.note.codice_fiscale,
         # PatientNote : codice_fiscale
         gender=cf.decode(codice_fiscale)["gender"],
+        age=to_age(codice_fiscale),
         date_of_birth=cf.decode(codice_fiscale)["birthdate"],
         place_of_birth=to_city(codice_fiscale),
         # PatientScreening
@@ -73,7 +74,9 @@ def read_many(db: Session) -> list[PatientStatus]:
         PatientStatus(
             first_name=result_orm.details.first_name,
             last_name=result_orm.details.last_name,
-            age=to_age(result_orm.note.codice_fiscale),
+            neuro_diag=(
+                result_orm.screenings[-1].neuro_diag if result_orm.screenings else None
+            ),
             patient_id=result_orm.patient_id,
             status=status(db, patient_id=result_orm.patient_id),
             hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
@@ -165,6 +168,16 @@ def update(db: Session, patient_id: int, patient: PatientUpdate) -> PatientRead:
         result_orm.details.home_address = patient.home_address
     if "medical_notes" in kw:
         result_orm.note.medical_notes = patient.medical_notes
+
+    if "first_name" in kw:
+        if not patient.first_name:
+            raise BadValues("first_name cannot be empty")
+        result_orm.details.first_name = patient.first_name
+
+    if "last_name" in kw:
+        if not patient.last_name:
+            raise BadValues("last_name cannot be empty")
+        result_orm.details.last_name = patient.last_name
 
     db.commit()
 

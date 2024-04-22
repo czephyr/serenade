@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
-from ...core.excp import RESOURCE_NOT_FOUND, DuplicateCF
+from ...core.excp import RESOURCE_NOT_FOUND, BadValues, DuplicateCF
 from ...core.roles import HOS
 from ...crud import patient_contacts, patients
 from ...schemas.contact import ContactCreate, ContactEntry
@@ -68,6 +68,11 @@ def update(
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
             detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
+        ) from excp
+    except BadValues as excp:
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=excp.args,
         ) from excp
     else:
         return result
