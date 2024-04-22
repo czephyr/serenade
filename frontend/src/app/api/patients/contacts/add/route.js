@@ -18,7 +18,7 @@ export async function POST(req) {
         Authorization: "Bearer " + accessToken,
       },
       method: "POST",
-      body: JSON.stringify(postBody),
+      body: JSON.stringify(postBody.contact),
     });
 
     if (resp.ok) {
