@@ -20,7 +20,7 @@ services:
   keycloak:
     depends_on:
       - dbkeycloak
-    image: quay.io/keycloak/keycloak:24.0.2
+    image: quay.io/keycloak/keycloak:latest
     env_file:
       - .envars/.env.keycloak
     volumes:
@@ -34,6 +34,7 @@ services:
     build: backend
     depends_on:
       - dbpercona
+      - keycloak
     image: python:3.12
     env_file:
       - .envars/.env.backend
