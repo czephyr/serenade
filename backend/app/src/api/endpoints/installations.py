@@ -22,7 +22,7 @@ router = APIRouter()
 
 @router.get("/", response_model=list[InstallationStatus])
 def read_many(
-    current_user: dict = Depends(require_role([IIT, IMT])),
+    role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> list[InstallationStatus]:
     result = installation_details.read_many(db)
@@ -32,7 +32,7 @@ def read_many(
 @router.get("/{patient_id}", response_model=InstallationDetailRead)
 def read_one(
     patient_id: int,
-    current_user: dict = Depends(require_role([IIT, IMT, UNIMI, HOS])),
+    role: str = Depends(require_role([IIT, IMT, UNIMI, HOS])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
@@ -48,7 +48,7 @@ def read_one(
 @router.get("/{patient_id}/info", response_model=InstallationInfo)
 def read_info(
     patient_id: int,
-    current_user: dict = Depends(require_role([IIT])),
+    role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> InstallationInfo:
     try:
@@ -66,7 +66,7 @@ def read_info(
 def create(
     patient_id: int,
     installation: InstallationDetailCreate,
-    current_user: dict = Depends(require_role([HOS, IMT])),
+    role: str = Depends(require_role([HOS, IMT])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
@@ -84,7 +84,7 @@ def create(
 def update(
     patient_id: int,
     installation: InstallationDetailUpdate,
-    current_user: dict = Depends(require_role([HOS, IMT])),
+    role: str = Depends(require_role([HOS, IMT])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
@@ -101,7 +101,7 @@ def update(
 @router.post("/{patient_id}/close", response_model=PatientBase)
 def close(
     patient_id: int,
-    current_user: dict = Depends(require_role([HOS, IMT])),
+    role: str = Depends(require_role([HOS, IMT])),
     db: Session = Depends(get_db),
 ) -> PatientBase:
     try:
@@ -118,7 +118,7 @@ def close(
 @router.post("/{patient_id}/open", response_model=PatientBase)
 def open(
     patient_id: int,
-    current_user: dict = Depends(require_role([HOS, IMT])),
+    role: str = Depends(require_role([HOS, IMT])),
     db: Session = Depends(get_db),
 ) -> PatientBase:
     try:
@@ -135,7 +135,7 @@ def open(
 @router.get("/{patient_id}/tickets", response_model=list[TicketStatus])
 def read_tickets(
     patient_id: int,
-    current_user: dict = Depends(require_role([IIT, IMT])),
+    role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> list[TicketStatus]:
     result = tickets.read_many(db, patient_id)
@@ -146,7 +146,7 @@ def read_tickets(
 def create_ticket(
     patient_id: int,
     message: TicketMessageCreate,
-    current_user: dict = Depends(require_role([IIT, IMT])),
+    role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> TicketBase:
     result = tickets.create(

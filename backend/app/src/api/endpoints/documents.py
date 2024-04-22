@@ -14,7 +14,7 @@ router = APIRouter()
 @router.get("/documents/{document_id}")
 def download(
     document_id: int,
-    current_user: dict = Depends(require_role([IIT, IMT, UNIMI])),
+    role: str = Depends(require_role([IIT, IMT, UNIMI])),
     db: Session = Depends(get_db),
 ) -> Response:
     try:
@@ -32,7 +32,7 @@ def download(
 @router.delete("/documents/{document_id}", response_model=InstallationDocumentRead)
 def delete(
     document_id: int,
-    current_user: dict = Depends(require_role([IIT, IMT, UNIMI])),
+    role: str = Depends(require_role([IIT, IMT, UNIMI])),
     db: Session = Depends(get_db),
 ) -> InstallationDocumentRead:
     try:
@@ -54,7 +54,7 @@ async def upload(
     file: UploadFile,
     file_type: str | None = None,
     file_name: str | None = None,
-    current_user: dict = Depends(require_role([IIT])),
+    role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> InstallationDocumentRead:
     contents = await file.read()
@@ -74,7 +74,7 @@ async def upload(
 )
 async def read_many(
     patient_id: int,
-    current_user: dict = Depends(require_role([IIT])),
+    role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> list[InstallationDocumentRead]:
     result = installation_documents.read_many(db, patient_id)
