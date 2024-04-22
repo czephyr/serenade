@@ -12,3 +12,6 @@
 - async / await:
   - <https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html#engine-api-documentation>
   - <https://fastapi.tiangolo.com/async/>
+
+## dbpercona
+- https://www.percona.com/blog/percona-pg_tde-project-keyring-options/
