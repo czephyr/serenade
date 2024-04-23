@@ -3,8 +3,9 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
-from ...core.roles import IIT, IMT, UNIMI
+from ...core.crypto import maskable
 from ...core.excp import RESOURCE_NOT_FOUND
+from ...core.roles import IIT, IMT, UNIMI
 from ...crud import installation_documents
 from ...schemas.installation_document import InstallationDocumentRead
 
@@ -58,7 +59,7 @@ async def upload(
     db: Session = Depends(get_db),
 ) -> InstallationDocumentRead:
     contents = await file.read()
-    result = installation_documents.create(
+    result = maskable(installation_documents.create, role)(
         db,
         patient_id,
         file=contents,
@@ -77,5 +78,5 @@ async def read_many(
     role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> list[InstallationDocumentRead]:
-    result = installation_documents.read_many(db, patient_id)
+    result = maskable(installation_documents.read_many, role)(db, patient_id)
     return result

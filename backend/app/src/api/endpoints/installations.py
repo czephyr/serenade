@@ -3,6 +3,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
+from ...core.crypto import maskable
 from ...core.excp import RESOURCE_NOT_FOUND
 from ...core.roles import HOS, IIT, IMT, UNIMI
 from ...crud import installation_details, installations, tickets
@@ -25,7 +26,7 @@ def read_many(
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> list[InstallationStatus]:
-    result = installation_details.read_many(db)
+    result = maskable(installation_details.read_many, role)(db)
     return result
 
 
@@ -36,7 +37,7 @@ def read_one(
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
-        result = installation_details.read_one(db, patient_id)
+        result = maskable(installation_details.read_one, role)(db, patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -52,7 +53,7 @@ def read_info(
     db: Session = Depends(get_db),
 ) -> InstallationInfo:
     try:
-        result = installations.info(db, patient_id)
+        result = maskable(installations.info, role)(db, patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -70,7 +71,9 @@ def create(
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
-        result = installation_details.create(db, patient_id, installation)
+        result = maskable(installation_details.create, role)(
+            db, patient_id, installation
+        )
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -88,7 +91,9 @@ def update(
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
-        result = installation_details.update(db, patient_id, installation)
+        result = maskable(installation_details.update, role)(
+            db, patient_id, installation
+        )
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -105,7 +110,7 @@ def close(
     db: Session = Depends(get_db),
 ) -> PatientBase:
     try:
-        result = installations.close(db, patient_id=patient_id)
+        result = maskable(installations.close, role)(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -122,7 +127,7 @@ def open(
     db: Session = Depends(get_db),
 ) -> PatientBase:
     try:
-        result = installations.open(db, patient_id=patient_id)
+        result = maskable(installations.open, role)(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -138,7 +143,7 @@ def read_tickets(
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> list[TicketStatus]:
-    result = tickets.read_many(db, patient_id)
+    result = maskable(tickets.read_many, role)(db, patient_id)
     return result
 
 
@@ -149,7 +154,7 @@ def create_ticket(
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> TicketBase:
-    result = tickets.create(
+    result = maskable(tickets.create, role)(
         db, ticket=TicketCreate(patient_id=patient_id, message=message)
     )
     return result

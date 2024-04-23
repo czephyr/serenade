@@ -2,12 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
+from ...core.crypto import maskable
+from ...core.excp import RESOURCE_NOT_FOUND
 from ...core.roles import IIT, IMT
 from ...crud import ticket_messages, tickets
 from ...schemas.ticket import TicketBase, TicketCreate, TicketStatus
 from ...schemas.ticket_message import TicketMessageBase, TicketMessageCreate
 from ..deps import get_db, require_role
-from ...core.excp import RESOURCE_NOT_FOUND
 
 router = APIRouter()
 
@@ -27,7 +28,7 @@ def create(
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> TicketBase:
-    result = tickets.create(db, ticket=ticket)
+    result = maskable(tickets.create, role)(db, ticket=ticket)
     return result
 
 
@@ -38,7 +39,7 @@ def read_one(
     db: Session = Depends(get_db),
 ) -> TicketBase:
     try:
-        result = tickets.read_one(db, ticket_id=ticket_id)
+        result = maskable(tickets.read_one, role)(db, ticket_id=ticket_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -76,7 +77,7 @@ def close(
     db: Session = Depends(get_db),
 ) -> TicketBase:
     try:
-        result = tickets.update(db, ticket_id=ticket_id)
+        result = maskable(tickets.update, role)(db, ticket_id=ticket_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
