@@ -9,8 +9,8 @@ class PatientBase(BaseModel):
     ts: datetime | None
     patient_id: int
 
-    date_start: datetime | None
-    date_end: datetime | None
+    date_join: datetime | None
+    date_exit: datetime | None
 
 
 class PatientDetailBase(BaseModel):
