@@ -24,11 +24,16 @@ def read_many(
 
 @router.post("/", response_model=TicketBase)
 def create(
+    patient_id: int,
     ticket: TicketCreate,
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> TicketBase:
-    result = maskable(tickets.create, role)(db, ticket=ticket)
+    result = maskable(tickets.create, role)(
+        db,
+        patient_id=patient_id,
+        ticket=ticket,
+    )
     return result
 
 

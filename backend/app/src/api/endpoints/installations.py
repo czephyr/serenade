@@ -16,7 +16,6 @@ from ...schemas.installation import (
 )
 from ...schemas.patient_base import PatientBase
 from ...schemas.ticket import TicketBase, TicketCreate, TicketStatus
-from ...schemas.ticket_message import TicketMessageCreate
 
 router = APIRouter()
 
@@ -37,7 +36,9 @@ def read_one(
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
-        result = maskable(installation_details.read_one, role)(db, patient_id)
+        result = maskable(installation_details.read_one, role)(
+            db, patient_id=patient_id
+        )
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -53,7 +54,7 @@ def read_info(
     db: Session = Depends(get_db),
 ) -> InstallationInfo:
     try:
-        result = maskable(installations.info, role)(db, patient_id)
+        result = maskable(installations.info, role)(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -72,7 +73,9 @@ def create(
 ) -> InstallationDetailRead:
     try:
         result = maskable(installation_details.create, role)(
-            db, patient_id, installation
+            db,
+            patient_id=patient_id,
+            installation=installation,
         )
     except NoResultFound as excp:
         raise HTTPException(
@@ -92,7 +95,9 @@ def update(
 ) -> InstallationDetailRead:
     try:
         result = maskable(installation_details.update, role)(
-            db, patient_id, installation
+            db,
+            patient_id=patient_id,
+            installation=installation,
         )
     except NoResultFound as excp:
         raise HTTPException(
@@ -143,18 +148,20 @@ def read_tickets(
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> list[TicketStatus]:
-    result = maskable(tickets.read_many, role)(db, patient_id)
+    result = maskable(tickets.read_many, role)(db, patient_id=patient_id)
     return result
 
 
 @router.post("/{patient_id}/tickets", response_model=TicketBase)
 def create_ticket(
     patient_id: int,
-    message: TicketMessageCreate,
+    message: TicketCreate,
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> TicketBase:
     result = maskable(tickets.create, role)(
-        db, ticket=TicketCreate(patient_id=patient_id, message=message)
+        db,
+        patient_id=patient_id,
+        ticket=message,
     )
     return result

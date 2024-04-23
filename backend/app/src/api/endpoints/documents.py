@@ -61,7 +61,7 @@ async def upload(
     contents = await file.read()
     result = maskable(installation_documents.create, role)(
         db,
-        patient_id,
+        patient_id=patient_id,
         file=contents,
         file_type=file_type,
         file_name=file_name,
@@ -78,5 +78,5 @@ async def read_many(
     role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> list[InstallationDocumentRead]:
-    result = maskable(installation_documents.read_many, role)(db, patient_id)
+    result = maskable(installation_documents.read_many, role)(db, patient_id=patient_id)
     return result

@@ -24,21 +24,6 @@ __BASE_KEY = int(os.environ.get("EULER_BASE_KEY", 2**64))
 __SECRET_KEY = int(os.environ.get("EULER_SECRET_KEY", 1))
 __CYPHER = Euler(__BASE_KEY, __SECRET_KEY)
 
-# TODO meglio se rifatta con i `Protocol`
-
-import inspect
-
-
-def find_arg(func, arg_name):
-    signature = inspect.signature(func)
-    parameters = signature.parameters
-    for i, (name, param) in enumerate(parameters.items()):
-        if name == arg_name:
-            return i
-    return None
-
-
-from functools import wraps
 from functools import wraps
 from typing import Callable, TypeVar, ParamSpec
 
@@ -48,22 +33,22 @@ T = TypeVar("T")
 from .roles import IIT
 
 
+# TODO molto meglio se rifatta con i `Protocol`
 def maskable(func: Callable[P, T], role: str) -> Callable[P, T]:
     arg_name: str = "patient_id"
     role_name: str = IIT
-    arg_idx = find_arg(func, arg_name)
 
     @wraps(func)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
         if role != role_name:
             return func(*args, **kwargs)
 
-        if arg_idx is not None:
-            _id = kwargs.get(arg_name, args[arg_idx])
+        if arg_name in kwargs:
+            _id = kwargs[arg_name]
             if not isinstance(_id, int):
                 raise TypeError(f"Expected {arg_name} to be an integer")
-
-            kwargs[arg_name] = __CYPHER.decrypt(_id)
+            _id = __CYPHER.decrypt(_id)
+            kwargs[arg_name] = _id
 
         result = func(*args, **kwargs)
 
