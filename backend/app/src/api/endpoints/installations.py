@@ -5,15 +5,14 @@ from sqlalchemy.orm import Session
 from ...api.deps import get_db, require_role
 from ...core.excp import RESOURCE_NOT_FOUND
 from ...core.roles import HOS, IIT, IMT, UNIMI
-from ...crud import installation_details, installations, tickets
+from ...crud import installation_details, tickets, patients
 from ...schemas.installation import (
     InstallationDetailCreate,
     InstallationDetailRead,
     InstallationDetailUpdate,
-    InstallationInfo,
     InstallationStatus,
 )
-from ...schemas.patient_base import PatientBase
+from ...schemas.patient import PatientInfo
 from ...schemas.ticket import TicketBase, TicketCreate, TicketStatus
 from ...schemas.ticket_message import TicketMessageCreate
 
@@ -45,14 +44,14 @@ def read_one(
     return result
 
 
-@router.get("/{patient_id}/info", response_model=InstallationInfo)
+@router.get("/{patient_id}/info", response_model=PatientInfo)
 def read_info(
     patient_id: int,
     current_user: dict = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
-) -> InstallationInfo:
+) -> PatientInfo:
     try:
-        result = installations.info(db, patient_id)
+        result = patients.info(db, patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -98,14 +97,14 @@ def update(
         return result
 
 
-@router.post("/{patient_id}/close", response_model=PatientBase)
+@router.post("/{patient_id}/close", response_model=InstallationDetailRead)
 def close(
     patient_id: int,
-    current_user: dict = Depends(require_role([HOS, IMT])),
+    current_user: dict = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
-) -> PatientBase:
+) -> InstallationDetailRead:
     try:
-        result = installations.close(db, patient_id=patient_id)
+        result = installation_details.close(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -115,14 +114,14 @@ def close(
         return result
 
 
-@router.post("/{patient_id}/open", response_model=PatientBase)
+@router.post("/{patient_id}/open", response_model=InstallationDetailRead)
 def open(
     patient_id: int,
-    current_user: dict = Depends(require_role([HOS, IMT])),
+    current_user: dict = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
-) -> PatientBase:
+) -> InstallationDetailRead:
     try:
-        result = installations.open(db, patient_id=patient_id)
+        result = installation_details.open(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
