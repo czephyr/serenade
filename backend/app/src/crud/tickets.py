@@ -57,6 +57,7 @@ def read_many(db: Session, patient_id: int | None = None) -> list[TicketStatus]:
             status=TICKET_CLOSED if result_orm.date_closed else TICKET_OPEN,
             last_sender=sorted(result_orm.messages, key=lambda x: x.ts)[-1].sender,
             hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
+            category=result_orm.category,
         )
         for result_orm in results_orm
     ]

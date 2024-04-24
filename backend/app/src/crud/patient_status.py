@@ -1,11 +1,8 @@
 from datetime import datetime
-
 from sqlalchemy.orm import Session
 
-from ..ormodels import Patient, PatientDetail
-from ..schemas.installation import InstallationInfo
+from ..ormodels import Patient
 from ..schemas.patient_base import PatientBase
-from . import patient_contacts
 
 
 def query_one(db: Session, patient_id: int) -> Patient:
@@ -19,23 +16,10 @@ def read_one(db: Session, patient_id: int) -> PatientBase:
     return result
 
 
-def info(db: Session, patient_id: int) -> InstallationInfo:
-    result_orm = (
-        db.query(PatientDetail).where(PatientDetail.patient_id == patient_id).one()
-    )
-    result = InstallationInfo(
-        first_name=result_orm.first_name,
-        last_name=result_orm.last_name,
-        home_address=result_orm.home_address,
-        contacts=patient_contacts.read_many(db, patient_id),
-    )
-    return result
-
-
 def open(db: Session, patient_id: int) -> PatientBase:
     result_orm = query_one(db, patient_id)
-    result_orm.date_start = datetime.now()
-    result_orm.date_end = None
+    result_orm.date_join = datetime.now()
+    result_orm.date_exit = None
 
     db.commit()
     db.refresh(result_orm)
@@ -46,7 +30,7 @@ def open(db: Session, patient_id: int) -> PatientBase:
 
 def close(db: Session, patient_id: int) -> PatientBase:
     result_orm = query_one(db, patient_id)
-    result_orm.date_end = datetime.now()
+    result_orm.date_exit = datetime.now()
 
     db.commit()
     db.refresh(result_orm)

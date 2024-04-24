@@ -9,7 +9,7 @@ export async function POST(req) {
   if (session) {
     const postBody = await req.json();
     console.log(postBody);
-    const url = `${process.env.BACKEND_HOST}/api/v1/patients/${postBody.patient_id}/contacts`;
+    const url = `${process.env.BACKEND_HOST}/api/v1/contacts/${postBody.contact_id}`;
     let accessToken = await getAccessToken();
 
     const resp = await fetch(url, {
@@ -17,8 +17,7 @@ export async function POST(req) {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
       },
-      method: "POST",
-      body: JSON.stringify(postBody.contact),
+      method: "DELETE",
     });
 
     if (resp.ok) {

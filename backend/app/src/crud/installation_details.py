@@ -5,7 +5,6 @@ import humanize
 from sqlalchemy.orm import Session
 
 from ..core.const import SALT_HASH
-from ..core.roles import IIT
 from ..ormodels import InstallationDetail, Patient
 from ..schemas.installation import (
     InstallationDetailBase,
@@ -15,7 +14,16 @@ from ..schemas.installation import (
     InstallationStatus,
 )
 from ..schemas.patient_base import PatientBase
-from . import installations, patients, tickets
+from . import patient_status, tickets
+from ..core.status import (
+    INSTALLATION_CLOSED,
+    INSTALLATION_CLOSING,
+    INSTALLATION_OPEN,
+    INSTALLATION_OPENING,
+    INSTALLATION_PAUSE,
+    INSTALLATION_UNKNOW,
+    TICKET_CLOSED,
+)
 
 
 def query_one(db: Session, patient_id: int) -> InstallationDetail:
@@ -31,7 +39,7 @@ def read_one(db: Session, patient_id: int) -> InstallationDetailRead:
     detail_orm = query_one(db, patient_id)
     detail = InstallationDetailBase.model_validate(detail_orm)
 
-    patient_orm = installations.query_one(db, patient_id)
+    patient_orm = patient_status.query_one(db, patient_id)
     patient = PatientBase.model_validate(patient_orm)
 
     kw = PatientBase.model_dump(patient)
@@ -46,7 +54,7 @@ def read_many(db: Session) -> list[InstallationStatus]:
     results = [
         InstallationStatus(
             patient_id=result_orm.patient_id,
-            status=patients.status(db, result_orm.patient_id),
+            status=status(db, result_orm.patient_id),
             date_delta=last_update(db, result_orm.patient_id),
             hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
         )
@@ -94,3 +102,51 @@ def last_update(db: Session, patient_id: int) -> str:
     )
     date_delta = humanize.naturaltime((datetime.now() - ts_max))
     return date_delta
+
+
+def status(db: Session, patient_id: int) -> str:
+    result_orm = query_one(db, patient_id)
+    ticket_status = all(
+        e.status == TICKET_CLOSED for e in tickets.read_many(db, patient_id=patient_id)
+    )
+    context = (
+        result_orm.date_start is not None,
+        result_orm.date_end is not None,
+        ticket_status,
+    )
+    match context:
+        case (True, False, True):
+            return INSTALLATION_OPEN
+        case (True, False, False):
+            return INSTALLATION_PAUSE
+        case (_, True, True):
+            return INSTALLATION_CLOSED
+        case (False, _, False):
+            return INSTALLATION_OPENING
+        case (True, True, False):
+            return INSTALLATION_CLOSING
+        case _:
+            return INSTALLATION_UNKNOW
+
+
+def open(db: Session, patient_id: int) -> InstallationDetailRead:
+    result_orm = query_one(db, patient_id)
+    result_orm.date_start = datetime.now()
+    result_orm.date_end = None
+
+    db.commit()
+    db.refresh(result_orm)
+
+    result = read_one(db, patient_id)
+    return result
+
+
+def close(db: Session, patient_id: int) -> InstallationDetailRead:
+    result_orm = query_one(db, patient_id)
+    result_orm.date_end = datetime.now()
+
+    db.commit()
+    db.refresh(result_orm)
+
+    result = read_one(db, patient_id)
+    return result

@@ -6,15 +6,14 @@ from ...api.deps import get_db, require_role
 from ...core.crypto import maskable
 from ...core.excp import RESOURCE_NOT_FOUND
 from ...core.roles import HOS, IIT, IMT, UNIMI
-from ...crud import installation_details, installations, tickets
+from ...crud import installation_details, tickets, patients
 from ...schemas.installation import (
     InstallationDetailCreate,
     InstallationDetailRead,
     InstallationDetailUpdate,
-    InstallationInfo,
     InstallationStatus,
 )
-from ...schemas.patient_base import PatientBase
+from ...schemas.patient import PatientInfo
 from ...schemas.ticket import TicketBase, TicketCreate, TicketStatus
 
 router = APIRouter()
@@ -22,7 +21,7 @@ router = APIRouter()
 
 @router.get("/", response_model=list[InstallationStatus])
 def read_many(
-    role: str = Depends(require_role([IIT, IMT])),
+    role: str = Depends(require_role([IIT, IMT, UNIMI, HOS])),
     db: Session = Depends(get_db),
 ) -> list[InstallationStatus]:
     result = maskable(installation_details.read_many, role)(db)
@@ -47,14 +46,14 @@ def read_one(
     return result
 
 
-@router.get("/{patient_id}/info", response_model=InstallationInfo)
+@router.get("/{patient_id}/info", response_model=PatientInfo)
 def read_info(
     patient_id: int,
     role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
-) -> InstallationInfo:
+) -> PatientInfo:
     try:
-        result = maskable(installations.info, role)(db, patient_id=patient_id)
+        result = maskable(patients.info, role)(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -108,14 +107,14 @@ def update(
         return result
 
 
-@router.post("/{patient_id}/close", response_model=PatientBase)
+@router.post("/{patient_id}/close", response_model=InstallationDetailRead)
 def close(
     patient_id: int,
-    role: str = Depends(require_role([HOS, IMT])),
+    role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
-) -> PatientBase:
+) -> InstallationDetailRead:
     try:
-        result = maskable(installations.close, role)(db, patient_id=patient_id)
+        result = maskable(installation_details.close, role)(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -125,14 +124,14 @@ def close(
         return result
 
 
-@router.post("/{patient_id}/open", response_model=PatientBase)
+@router.post("/{patient_id}/open", response_model=InstallationDetailRead)
 def open(
     patient_id: int,
-    role: str = Depends(require_role([HOS, IMT])),
+    role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
-) -> PatientBase:
+) -> InstallationDetailRead:
     try:
-        result = maskable(installations.open, role)(db, patient_id=patient_id)
+        result = maskable(installation_details.open, role)(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,

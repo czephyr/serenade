@@ -2,11 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
-from ...core.excp import RESOURCE_NOT_FOUND, DuplicateCF
-from ...core.roles import HOS
-from ...crud import patient_contacts, patients
+from ...core.excp import RESOURCE_NOT_FOUND, BadValues, DuplicateCF
+from ...core.roles import HOS, IMT
+from ...crud import patient_contacts, patients, patient_status
 from ...schemas.contact import ContactCreate, ContactEntry
 from ...schemas.patient import PatientCreate, PatientRead, PatientStatus, PatientUpdate
+from ...schemas.patient_base import PatientBase
 from ..deps import get_db, require_role
 
 router = APIRouter()
@@ -69,6 +70,11 @@ def update(
             status.HTTP_404_NOT_FOUND,
             detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
         ) from excp
+    except BadValues as excp:
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=excp.args,
+        ) from excp
     else:
         return result
 
@@ -126,4 +132,38 @@ def update_contact(
         result = patient_contacts.create_many(
             db, patient_id=patient_id, contacts=contacts
         )
+        return result
+
+
+@router.post("/{patient_id}/exit", response_model=PatientBase)
+def close(
+    patient_id: int,
+    current_user: dict = Depends(require_role([HOS])),
+    db: Session = Depends(get_db),
+) -> PatientBase:
+    try:
+        result = patient_status.close(db, patient_id=patient_id)
+    except NoResultFound as excp:
+        raise HTTPException(
+            status.HTTP_404_NOT_FOUND,
+            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
+        ) from excp
+    else:
+        return result
+
+
+@router.post("/{patient_id}/join", response_model=PatientBase)
+def open(
+    patient_id: int,
+    current_user: dict = Depends(require_role([HOS, IMT])),
+    db: Session = Depends(get_db),
+) -> PatientBase:
+    try:
+        result = patient_status.open(db, patient_id=patient_id)
+    except NoResultFound as excp:
+        raise HTTPException(
+            status.HTTP_404_NOT_FOUND,
+            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
+        ) from excp
+    else:
         return result

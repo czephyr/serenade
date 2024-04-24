@@ -1,5 +1,5 @@
 -- Populating patients table
-INSERT INTO patients (ts, patient_id, date_start, date_end)
+INSERT INTO patients (ts, patient_id, date_join, date_exit)
 VALUES 
     ('2024-04-12 08:00:00', 1, '2024-04-12 08:00:00', '2024-04-12 10:00:00'),
     ('2024-04-12 09:00:00', 2, '2024-04-12 09:00:00', NULL),

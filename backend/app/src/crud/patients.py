@@ -5,16 +5,7 @@ from codicefiscale import codicefiscale as cf
 from sqlalchemy.orm import Session
 
 from ..core.const import ADMIN_USERNAME, SALT_HASH, SMS_PATIENT_CREATE
-from ..core.excp import DuplicateCF
-from ..core.status import (
-    INSTALLATION_CLOSED,
-    INSTALLATION_CLOSING,
-    INSTALLATION_OPEN,
-    INSTALLATION_OPENING,
-    INSTALLATION_PAUSE,
-    INSTALLATION_UNKNOW,
-    TICKET_CLOSED,
-)
+from ..core.excp import BadValues, DuplicateCF
 from ..ormodels import (
     Patient,
     PatientDetail,
@@ -23,11 +14,17 @@ from ..ormodels import (
     PatientScreening,
 )
 from ..schemas.contact import ContactEntry
-from ..schemas.patient import PatientCreate, PatientRead, PatientStatus, PatientUpdate
+from ..schemas.patient import (
+    PatientCreate,
+    PatientRead,
+    PatientStatus,
+    PatientUpdate,
+    PatientInfo,
+)
 from ..schemas.ticket import TicketCreate
 from ..schemas.ticket_message import TicketMessageCreate
 from ..utils import to_age, to_city
-from . import patient_contacts, tickets
+from . import patient_contacts, tickets, installation_details
 
 
 def query_one(db: Session, patient_id: int) -> PatientFull:
@@ -50,6 +47,7 @@ def read_one(db: Session, patient_id: int) -> PatientRead:
         codice_fiscale=result_orm.note.codice_fiscale,
         # PatientNote : codice_fiscale
         gender=cf.decode(codice_fiscale)["gender"],
+        age=to_age(codice_fiscale),
         date_of_birth=cf.decode(codice_fiscale)["birthdate"],
         place_of_birth=to_city(codice_fiscale),
         # PatientScreening
@@ -73,9 +71,11 @@ def read_many(db: Session) -> list[PatientStatus]:
         PatientStatus(
             first_name=result_orm.details.first_name,
             last_name=result_orm.details.last_name,
-            age=to_age(result_orm.note.codice_fiscale),
+            neuro_diag=(
+                result_orm.screenings[-1].neuro_diag if result_orm.screenings else None
+            ),
             patient_id=result_orm.patient_id,
-            status=status(db, patient_id=result_orm.patient_id),
+            status=installation_details.status(db, patient_id=result_orm.patient_id),
             hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
         )
         for result_orm in results_orm
@@ -169,32 +169,30 @@ def update(db: Session, patient_id: int, patient: PatientUpdate) -> PatientRead:
     if "medical_notes" in kw:
         result_orm.note.medical_notes = patient.medical_notes
 
+    if "first_name" in kw:
+        if not patient.first_name:
+            raise BadValues("first_name cannot be empty")
+        result_orm.details.first_name = patient.first_name
+
+    if "last_name" in kw:
+        if not patient.last_name:
+            raise BadValues("last_name cannot be empty")
+        result_orm.details.last_name = patient.last_name
+
     db.commit()
 
     result = read_one(db, patient_id)
     return result
 
 
-def status(db: Session, patient_id: int) -> str:
-    result_orm = query_one(db, patient_id)
-    ticket_status = all(
-        e.status == TICKET_CLOSED for e in tickets.read_many(db, patient_id=patient_id)
+def info(db: Session, patient_id: int) -> PatientInfo:
+    result_orm = (
+        db.query(PatientDetail).where(PatientDetail.patient_id == patient_id).one()
     )
-    context = (
-        result_orm.date_start is not None,
-        result_orm.date_end is not None,
-        ticket_status,
+    result = PatientInfo(
+        first_name=result_orm.first_name,
+        last_name=result_orm.last_name,
+        home_address=result_orm.home_address,
+        contacts=patient_contacts.read_many(db, patient_id),
     )
-    match context:
-        case (True, False, True):
-            return INSTALLATION_OPEN
-        case (True, False, False):
-            return INSTALLATION_PAUSE
-        case (_, True, True):
-            return INSTALLATION_CLOSED
-        case (False, _, False):
-            return INSTALLATION_OPENING
-        case (True, True, False):
-            return INSTALLATION_CLOSING
-        case _:
-            return INSTALLATION_UNKNOW
+    return result

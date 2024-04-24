@@ -21,8 +21,8 @@ class Patient(Base):
 
     ts: Mapped[datetime] = mapped_column(default=datetime.now)
     patient_id: Mapped[bigint] = mapped_column(primary_key=True)
-    date_start: Mapped[datetime | None]
-    date_end: Mapped[datetime | None]
+    date_join: Mapped[datetime | None]
+    date_exit: Mapped[datetime | None]
 
 
 class PatientFull(Patient):
@@ -105,6 +105,8 @@ class InstallationDetail(Base):
     issues_notes: Mapped[str | None]
     habits_notes: Mapped[str | None]
     other_notes: Mapped[str | None]
+    date_start: Mapped[datetime | None]
+    date_end: Mapped[datetime | None]
 
     patient: Mapped[Patient] = relationship()
     documents: Mapped[list["InstallationDocument"]] = relationship(
@@ -148,6 +150,7 @@ class Ticket(Base):
 
     patient_id: Mapped[bigint] = mapped_column(ForeignKey("patients.patient_id"))
     date_closed: Mapped[datetime | None]
+    category: Mapped[str | None]
 
     patient: Mapped[Patient] = relationship()
     messages: Mapped[list[TicketMessage]] = relationship(back_populates="ticket")

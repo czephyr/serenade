@@ -6,9 +6,9 @@ CREATE TABLE IF NOT EXISTS patients (
     -- Unique identifier for the patient
     patient_id BIGINT PRIMARY KEY,
     -- Date when patient join the project
-    date_start TIMESTAMP,
+    date_join TIMESTAMP,
     -- Exit date if patient leave the project
-    date_end TIMESTAMP
+    date_exit TIMESTAMP
 ) USING pg_tde;
 
 -- Table: patient_screenings
@@ -77,6 +77,10 @@ CREATE TABLE IF NOT EXISTS installation_details (
     id SERIAL PRIMARY KEY,
     -- Timestamp of installation record
     ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- Date when installation has been opened
+    date_start TIMESTAMP,
+    -- Date when installation has been closed
+    date_end TIMESTAMP,
     -- Foreign key referencing patient ID
     patient_id BIGINT NOT NULL,
     -- Type of apartment (e.g., studio, 1-bedroom)
@@ -130,6 +134,8 @@ CREATE TABLE IF NOT EXISTS tickets (
     ticket_id SERIAL PRIMARY KEY,
     -- Foreign key referencing patient ID
     patient_id BIGINT NOT NULL,
+    -- category of the ticket
+    category VARCHAR(31),
     -- End date of the ticket
     date_closed TIMESTAMP,
     FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
