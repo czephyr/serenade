@@ -20,7 +20,7 @@ services:
   keycloak:
     depends_on:
       - dbkeycloak
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:24.0.2
     env_file:
       - .envars/.env.keycloak
     volumes:

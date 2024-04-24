@@ -26,6 +26,7 @@ export async function POST(req) {
       body: JSON.stringify({
         patient_id: postBody.patient_id,
         message: { body: postBody.message.body, sender: session.user.name },
+        category: postBody.category,
       }),
     });
 

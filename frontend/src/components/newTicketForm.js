@@ -8,10 +8,11 @@ const NewTicketForm = ({ installation_id }) => {
   const router = useRouter();
 
   const msgRef = useRef(null);
+  const categoryRef = useRef(null);
 
   const [showAddTicket, setShowAddTicket] = useState(false);
 
-  async function addContact(msg, patient_id) {
+  async function addTicket(msg, category, patient_id) {
     // const updatedContacts = [...contacts, contact];
     // console.log(updatedContacts);
     // console.log(contacts);
@@ -21,6 +22,7 @@ const NewTicketForm = ({ installation_id }) => {
       message: {
         body: msg,
       },
+      category: category,
     };
     console.log(postBody);
     try {
@@ -32,6 +34,9 @@ const NewTicketForm = ({ installation_id }) => {
       const result = await response.json();
       if (response.ok) {
         setShowAddTicket(false);
+        toast.success("Ticket creato!", {
+          position: "bottom-left",
+        });
         router.refresh();
       } else {
         console.error("API call failed: ", result.error);
@@ -42,36 +47,58 @@ const NewTicketForm = ({ installation_id }) => {
   }
 
   return (
-    <div className="bg-gray-100 p-8">
+    <div className="mt-4">
       <Toaster />
-      <div className="bg-white shadow rounded-lg p-6 mt-6">
+      <a
+        onClick={() => setShowAddTicket(true)}
+        className="text-blue-500 hover:underline"
+      >
+        Create new ticket
+      </a>
+      <Toaster />
+      {/* <div className="bg-white shadow rounded-lg p-6 mt-6">
         <button
           onClick={() => setShowAddTicket(true)}
           className="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Add New Ticket
         </button>
-      </div>
+      </div> */}
       {showAddTicket && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div className="fixed inset-0 bg-opacity-50 overflow-y-auto h-full w-full">
           <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div className="mt-3 text-center">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Add New Ticket
-              </h3>
+              <h3 className="text-lg leading-6 font-medium">Add New Ticket</h3>
               <div className="mt-2 px-7 py-3">
                 <input
-                  type="text"
+                  type="text-area"
                   name="msg"
                   placeholder="Message"
                   ref={msgRef}
-                  className="mb-3 px-3 py-2 border border-gray-300 rounded-md w-full"
+                  className="mb-3 px-3 py-2 border border-gray-300 text-gray-900 rounded-md w-full"
+                  required
                 />
+              </div>
+              <div className="mt-2 px-7 py-3">
+                <select
+                  id="category"
+                  ref={categoryRef}
+                  className="mb-3 px-3 py-2 rounded-md w-full"
+                  required
+                >
+                  <option value="">Select Category</option>
+                  <option value="disinstallazione">disinstallazione</option>
+                  <option value="manutenzione">manutenzione</option>
+                </select>
               </div>
               <div className="items-center px-4 py-3">
                 <button
                   onClick={() =>
-                    addContact(msgRef.current.value, installation_id)
+                    addTicket(
+                      msgRef.current.value,
+                      categoryRef.current.value,
+                      installation_id
+                    )
                   }
                   className="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300"
                 >
