@@ -13,11 +13,13 @@ class TicketBase(BaseModel):
 
     patient_id: int
     date_closed: datetime | None
+    category: str | None
 
 
 class TicketCreate(BaseModel):
     patient_id: int
     message: TicketMessageCreate
+    category: str | None = None
 
 
 class TicketUpdate(BaseModel):
@@ -30,3 +32,4 @@ class TicketStatus(BaseModel):
     status: str
     last_sender: str | None
     hue: str | None
+    category: str | None

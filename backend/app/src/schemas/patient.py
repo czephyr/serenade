@@ -63,3 +63,11 @@ class PatientRead(BaseModel):
 class PatientScreeningCreate(BaseModel):
     neuro_diag: str | None = None
     age_class: str | None = None
+
+
+class PatientInfo(BaseModel):
+    first_name: str
+    last_name: str
+    home_address: str | None
+
+    contacts: list[ContactEntry]
