@@ -117,7 +117,7 @@ export default function NewPatientForm() {
                 required
               />
             </label>
-            <label htmlFor="age" className="block">
+            {/* <label htmlFor="age" className="block">
               <span className="text-gray-700">Age:</span>
               <select
                 id="age"
@@ -130,7 +130,7 @@ export default function NewPatientForm() {
                 <option value="75-84">75-84</option>
                 <option value="85+">85+</option>
               </select>
-            </label>
+            </label> */}
 
             <label htmlFor="neuro" className="block">
               <span className="text-gray-700">Neuro:</span>
@@ -145,7 +145,7 @@ export default function NewPatientForm() {
                 <option value="no neurodegen">no neurodegen</option>
               </select>
             </label>
-            <label htmlFor="gender" className="block">
+            {/* <label htmlFor="gender" className="block">
               <span className="text-gray-700">Gender:</span>
               <select
                 id="gender"
@@ -158,7 +158,7 @@ export default function NewPatientForm() {
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
-            </label>
+            </label> */}
             <label htmlFor="cf" className="block">
               <span className="text-gray-700">Codice Fiscale:</span>
 
