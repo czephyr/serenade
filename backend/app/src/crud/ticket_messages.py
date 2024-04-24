@@ -5,7 +5,7 @@ from ..ormodels import TicketMessage
 from ..schemas.ticket_message import TicketMessageBase, TicketMessageCreate
 
 
-def read_many(db: Session, ticket_id: int) -> list[TicketMessageBase]:
+def read_many(db: Session, *, ticket_id: int) -> list[TicketMessageBase]:
     results_orm = db.query(TicketMessage).where(TicketMessage.ticket_id == ticket_id)
     results = [
         TicketMessageBase.model_validate(result_orm) for result_orm in results_orm
@@ -14,7 +14,7 @@ def read_many(db: Session, ticket_id: int) -> list[TicketMessageBase]:
 
 
 def create(
-    db: Session, ticket_id: int, message: TicketMessageCreate
+    db: Session, *, ticket_id: int, message: TicketMessageCreate
 ) -> TicketMessageBase:
     result_orm = TicketMessage(
         sender=message.sender if message.sender else "<senza-firma>",

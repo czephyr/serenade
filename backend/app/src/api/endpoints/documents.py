@@ -18,7 +18,7 @@ def download(
     db: Session = Depends(get_db),
 ) -> Response:
     try:
-        result = installation_documents.download(db, document_id)
+        result = installation_documents.download(db, document_id=document_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -36,7 +36,7 @@ def delete(
     db: Session = Depends(get_db),
 ) -> InstallationDocumentRead:
     try:
-        result = installation_documents.delete(db, document_id)
+        result = installation_documents.delete(db, document_id=document_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -60,7 +60,7 @@ async def upload(
     contents = await file.read()
     result = installation_documents.create(
         db,
-        patient_id,
+        patient_id=patient_id,
         file=contents,
         file_type=file_type,
         file_name=file_name,
@@ -77,5 +77,5 @@ async def read_many(
     current_user: dict = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> list[InstallationDocumentRead]:
-    result = installation_documents.read_many(db, patient_id)
+    result = installation_documents.read_many(db, patient_id=patient_id)
     return result

@@ -2,12 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
-from ...schemas.contact import ContactUpdate, ContactEntry
-
 from ...api.deps import get_db, require_role
-from ...core.roles import IIT, HOS
-from ...crud import contacts
 from ...core.excp import RESOURCE_NOT_FOUND
+from ...core.roles import HOS, IIT
+from ...crud import contacts
+from ...schemas.contact import ContactEntry, ContactUpdate
 
 router = APIRouter()
 
@@ -19,7 +18,7 @@ def read_one(
     db: Session = Depends(get_db),
 ) -> ContactEntry:
     try:
-        result = contacts.read_one(db, contact_id)
+        result = contacts.read_one(db, contact_id=contact_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -37,7 +36,7 @@ def update(
     db: Session = Depends(get_db),
 ) -> ContactEntry:
     try:
-        result = contacts.update_one(db, contact_id, contact)
+        result = contacts.update_one(db, contact_id=contact_id, contact=contact)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -54,7 +53,7 @@ def delete(
     db: Session = Depends(get_db),
 ) -> ContactEntry:
     try:
-        result = contacts.delete_one(db, contact_id)
+        result = contacts.delete_one(db, contact_id=contact_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,

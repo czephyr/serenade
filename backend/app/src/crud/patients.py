@@ -27,13 +27,13 @@ from ..utils import to_age, to_city
 from . import patient_contacts, tickets, installation_details
 
 
-def query_one(db: Session, patient_id: int) -> PatientFull:
+def query_one(db: Session, *, patient_id: int) -> PatientFull:
     result_orm = db.query(PatientFull).where(PatientFull.patient_id == patient_id).one()
     return result_orm
 
 
-def read_one(db: Session, patient_id: int) -> PatientRead:
-    result_orm = query_one(db, patient_id)
+def read_one(db: Session, *, patient_id: int) -> PatientRead:
+    result_orm = query_one(db, patient_id=patient_id)
     codice_fiscale = result_orm.note.codice_fiscale
     result = PatientRead(
         # Patient
@@ -83,7 +83,7 @@ def read_many(db: Session) -> list[PatientStatus]:
     return results
 
 
-def create(db: Session, patient: PatientCreate) -> PatientRead:
+def create(db: Session, *, patient: PatientCreate) -> PatientRead:
     if (
         db.query(PatientNote)
         .where(PatientNote.codice_fiscale == patient.codice_fiscale)
@@ -127,7 +127,11 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
     db.commit()
 
     if patient.contacts is not None:
-        _ = patient_contacts.create_many(db, patient_id, patient.contacts)
+        _ = patient_contacts.create_many(
+            db,
+            patient_id=patient_id,
+            contacts=patient.contacts,
+        )
 
     ticket = TicketCreate(
         patient_id=patient_id,
@@ -138,14 +142,14 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
         category="PRIMA INSTALLAZIONE",
     )
 
-    tickets.create(db, ticket)
+    tickets.create(db, ticket=ticket)
 
-    result = read_one(db, patient_id)
+    result = read_one(db, patient_id=patient_id)
     return result
 
 
-def update(db: Session, patient_id: int, patient: PatientUpdate) -> PatientRead:
-    result_orm = query_one(db, patient_id)
+def update(db: Session, *, patient_id: int, patient: PatientUpdate) -> PatientRead:
+    result_orm = query_one(db, patient_id=patient_id)
 
     kw = patient.model_dump(exclude_unset=True)
 
@@ -179,11 +183,11 @@ def update(db: Session, patient_id: int, patient: PatientUpdate) -> PatientRead:
 
     db.commit()
 
-    result = read_one(db, patient_id)
+    result = read_one(db, patient_id=patient_id)
     return result
 
 
-def info(db: Session, patient_id: int) -> PatientInfo:
+def info(db: Session, *, patient_id: int) -> PatientInfo:
     result_orm = (
         db.query(PatientDetail).where(PatientDetail.patient_id == patient_id).one()
     )
@@ -191,6 +195,6 @@ def info(db: Session, patient_id: int) -> PatientInfo:
         first_name=result_orm.first_name,
         last_name=result_orm.last_name,
         home_address=result_orm.home_address,
-        contacts=patient_contacts.read_many(db, patient_id),
+        contacts=patient_contacts.read_many(db, patient_id=patient_id),
     )
     return result

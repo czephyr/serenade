@@ -10,7 +10,7 @@ from ..ormodels import Ticket, TicketMessage
 from ..schemas.ticket import TicketBase, TicketCreate, TicketStatus
 
 
-def create(db: Session, ticket: TicketCreate) -> TicketBase:
+def create(db: Session, *, ticket: TicketCreate) -> TicketBase:
     result_orm = Ticket(patient_id=ticket.patient_id)
     db.add(result_orm)
 
@@ -30,18 +30,18 @@ def create(db: Session, ticket: TicketCreate) -> TicketBase:
     return result
 
 
-def query_one(db: Session, ticket_id: int) -> Ticket:
+def query_one(db: Session, *, ticket_id: int) -> Ticket:
     result_orm = db.query(Ticket).where(Ticket.ticket_id == ticket_id).one()
     return result_orm
 
 
-def read_one(db: Session, ticket_id: int) -> TicketBase:
-    result_orm = query_one(db, ticket_id)
+def read_one(db: Session, *, ticket_id: int) -> TicketBase:
+    result_orm = query_one(db, ticket_id=ticket_id)
     result = TicketBase.model_validate(result_orm)
     return result
 
 
-def read_many(db: Session, patient_id: int | None = None) -> list[TicketStatus]:
+def read_many(db: Session, *, patient_id: int | None = None) -> list[TicketStatus]:
     results_orm = db.query(Ticket)
     if patient_id is not None:
         results_orm = results_orm.where(Ticket.patient_id == patient_id)
@@ -61,8 +61,8 @@ def read_many(db: Session, patient_id: int | None = None) -> list[TicketStatus]:
     return results
 
 
-def update(db: Session, ticket_id: int) -> TicketBase:
-    result_orm = query_one(db, ticket_id)
+def update(db: Session, *, ticket_id: int) -> TicketBase:
+    result_orm = query_one(db, ticket_id=ticket_id)
     result_orm.date_closed = datetime.now()
 
     db.commit()

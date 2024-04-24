@@ -35,7 +35,7 @@ def read_one(
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
-        result = installation_details.read_one(db, patient_id)
+        result = installation_details.read_one(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -51,7 +51,7 @@ def read_info(
     db: Session = Depends(get_db),
 ) -> PatientInfo:
     try:
-        result = patients.info(db, patient_id)
+        result = patients.info(db, patient_id=patient_id)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -69,7 +69,9 @@ def create(
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
-        result = installation_details.create(db, patient_id, installation)
+        result = installation_details.create(
+            db, patient_id=patient_id, installation=installation
+        )
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -87,7 +89,9 @@ def update(
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
-        result = installation_details.update(db, patient_id, installation)
+        result = installation_details.update(
+            db, patient_id=patient_id, installation=installation
+        )
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
@@ -137,7 +141,7 @@ def read_tickets(
     current_user: dict = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> list[TicketStatus]:
-    result = tickets.read_many(db, patient_id)
+    result = tickets.read_many(db, patient_id=patient_id)
     return result
 
 
