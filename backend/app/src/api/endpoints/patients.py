@@ -138,7 +138,7 @@ def update_contact(
 @router.post("/{patient_id}/exit", response_model=PatientBase)
 def close(
     patient_id: int,
-    current_user: dict = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientBase:
     try:
@@ -155,7 +155,7 @@ def close(
 @router.post("/{patient_id}/join", response_model=PatientBase)
 def open(
     patient_id: int,
-    current_user: dict = Depends(require_role([HOS, IMT])),
+    role: str = Depends(require_role([HOS, IMT])),
     db: Session = Depends(get_db),
 ) -> PatientBase:
     try:
