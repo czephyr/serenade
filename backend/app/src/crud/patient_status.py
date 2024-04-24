@@ -1,6 +1,8 @@
 from datetime import datetime
+
 from sqlalchemy.orm import Session
 
+from ..core.excp import BadValues
 from ..ormodels import Patient
 from ..schemas.patient_base import PatientBase
 
@@ -16,8 +18,10 @@ def read_one(db: Session, *, patient_id: int) -> PatientBase:
     return result
 
 
-def open(db: Session, *, patient_id: int) -> PatientBase:
+def open(db: Session, *, patient_id: int, force: bool = False) -> PatientBase:
     result_orm = query_one(db, patient_id=patient_id)
+    if not force and result_orm.date_join is not None:
+        raise BadValues("Patient already join the programme.")
     result_orm.date_join = datetime.now()
     result_orm.date_exit = None
 
@@ -28,8 +32,10 @@ def open(db: Session, *, patient_id: int) -> PatientBase:
     return result
 
 
-def close(db: Session, *, patient_id: int) -> PatientBase:
+def close(db: Session, *, patient_id: int, force: bool = False) -> PatientBase:
     result_orm = query_one(db, patient_id=patient_id)
+    if not force and result_orm.date_exit is not None:
+        raise BadValues("Patient already exit the programme.")
     result_orm.date_exit = datetime.now()
 
     db.commit()

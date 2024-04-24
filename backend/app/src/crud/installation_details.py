@@ -5,6 +5,16 @@ import humanize
 from sqlalchemy.orm import Session
 
 from ..core.const import SALT_HASH
+from ..core.excp import BadValues
+from ..core.status import (
+    INSTALLATION_CLOSED,
+    INSTALLATION_CLOSING,
+    INSTALLATION_OPEN,
+    INSTALLATION_OPENING,
+    INSTALLATION_PAUSE,
+    INSTALLATION_UNKNOW,
+    TICKET_CLOSED,
+)
 from ..ormodels import InstallationDetail, Patient
 from ..schemas.installation import (
     InstallationDetailBase,
@@ -15,15 +25,6 @@ from ..schemas.installation import (
 )
 from ..schemas.patient_base import PatientBase
 from . import patient_status, tickets
-from ..core.status import (
-    INSTALLATION_CLOSED,
-    INSTALLATION_CLOSING,
-    INSTALLATION_OPEN,
-    INSTALLATION_OPENING,
-    INSTALLATION_PAUSE,
-    INSTALLATION_UNKNOW,
-    TICKET_CLOSED,
-)
 
 
 def query_one(db: Session, *, patient_id: int) -> InstallationDetail:
@@ -129,8 +130,12 @@ def status(db: Session, *, patient_id: int) -> str:
             return INSTALLATION_UNKNOW
 
 
-def open(db: Session, *, patient_id: int) -> InstallationDetailRead:
+def open(
+    db: Session, *, patient_id: int, force: bool = False
+) -> InstallationDetailRead:
     result_orm = query_one(db, patient_id=patient_id)
+    if not force and result_orm.date_start is not None:
+        raise BadValues("Installation is already marked as active.")
     result_orm.date_start = datetime.now()
     result_orm.date_end = None
 
@@ -141,8 +146,12 @@ def open(db: Session, *, patient_id: int) -> InstallationDetailRead:
     return result
 
 
-def close(db: Session, *, patient_id: int) -> InstallationDetailRead:
+def close(
+    db: Session, *, patient_id: int, force: bool = False
+) -> InstallationDetailRead:
     result_orm = query_one(db, patient_id=patient_id)
+    if not force and result_orm.date_end is not None:
+        raise BadValues("Installation is already marked as inactive.")
     result_orm.date_end = datetime.now()
 
     db.commit()

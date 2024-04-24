@@ -3,7 +3,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
-from ...core.excp import RESOURCE_NOT_FOUND
+from ...core.excp import RESOURCE_NOT_FOUND, BadValues
 from ...core.roles import HOS, IIT, IMT, UNIMI
 from ...crud import installation_details, tickets, patients
 from ...schemas.installation import (
@@ -104,15 +104,21 @@ def update(
 @router.post("/{patient_id}/close", response_model=InstallationDetailRead)
 def close(
     patient_id: int,
+    force: bool = False,
     current_user: dict = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
-        result = installation_details.close(db, patient_id=patient_id)
+        result = installation_details.close(db, patient_id=patient_id, force=force)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
             detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
+        ) from excp
+    except BadValues as excp:
+        raise HTTPException(
+            status.HTTP_423_LOCKED,
+            detail=excp.args,
         ) from excp
     else:
         return result
@@ -121,15 +127,21 @@ def close(
 @router.post("/{patient_id}/open", response_model=InstallationDetailRead)
 def open(
     patient_id: int,
+    force: bool = False,
     current_user: dict = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
-        result = installation_details.open(db, patient_id=patient_id)
+        result = installation_details.open(db, patient_id=patient_id, force=force)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
             detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
+        ) from excp
+    except BadValues as excp:
+        raise HTTPException(
+            status.HTTP_423_LOCKED,
+            detail=excp.args,
         ) from excp
     else:
         return result

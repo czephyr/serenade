@@ -138,15 +138,21 @@ def update_contact(
 @router.post("/{patient_id}/exit", response_model=PatientBase)
 def close(
     patient_id: int,
+    force: bool = False,
     current_user: dict = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientBase:
     try:
-        result = patient_status.close(db, patient_id=patient_id)
+        result = patient_status.close(db, patient_id=patient_id, force=force)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
             detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
+        ) from excp
+    except BadValues as excp:
+        raise HTTPException(
+            status.HTTP_423_LOCKED,
+            detail=excp.args,
         ) from excp
     else:
         return result
@@ -155,15 +161,21 @@ def close(
 @router.post("/{patient_id}/join", response_model=PatientBase)
 def open(
     patient_id: int,
+    force: bool = False,
     current_user: dict = Depends(require_role([HOS, IMT])),
     db: Session = Depends(get_db),
 ) -> PatientBase:
     try:
-        result = patient_status.open(db, patient_id=patient_id)
+        result = patient_status.open(db, patient_id=patient_id, force=force)
     except NoResultFound as excp:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND,
             detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
+        ) from excp
+    except BadValues as excp:
+        raise HTTPException(
+            status.HTTP_423_LOCKED,
+            detail=excp.args,
         ) from excp
     else:
         return result
