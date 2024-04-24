@@ -33,13 +33,13 @@ export default async function TicketPage({ params }) {
   }
   console.log(params.id);
   const patient = await fetchPatient(params.id);
-
+  console.log(JSON.stringify(patient));
   return (
     <main className="text-white p-4">
       <h1 className="text-4xl text-center mb-6">Patient Details</h1>
       <div className="details-container">
         {/* {ticket && <TicketDetails ticket={ticket} />} */}
-        <PatientDetail patient={patient} />
+        <PatientDetail initialData={patient} />
         {/* {patient && <PatientDetails patient={patient} role={roleFound} />} */}
       </div>
     </main>
