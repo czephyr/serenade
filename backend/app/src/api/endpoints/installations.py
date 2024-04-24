@@ -65,7 +65,7 @@ def read_info(
 def create(
     patient_id: int,
     installation: InstallationDetailCreate,
-    current_user: dict = Depends(require_role([HOS, IMT])),
+    current_user: dict = Depends(require_role([HOS, IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
@@ -83,7 +83,7 @@ def create(
 def update(
     patient_id: int,
     installation: InstallationDetailUpdate,
-    current_user: dict = Depends(require_role([HOS, IMT])),
+    current_user: dict = Depends(require_role([HOS, IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
     try:
