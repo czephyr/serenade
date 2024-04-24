@@ -84,6 +84,9 @@ def read_many(db: Session) -> list[PatientStatus]:
 
 
 def create(db: Session, *, patient: PatientCreate) -> PatientRead:
+    if not cf.is_valid(patient.codice_fiscale):
+        raise BadValues("Invalid codice_fiscale")
+
     if (
         db.query(PatientNote)
         .where(PatientNote.codice_fiscale == patient.codice_fiscale)
