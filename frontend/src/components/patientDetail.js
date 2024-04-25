@@ -144,7 +144,7 @@ const PatientDetail = ({ initialData, roleFound }) => {
       return (
         <label htmlFor={field} className="block">
           <span className="text-gray-700">
-            Classe eta':
+            Classe età:
             <input
               type="text"
               id={field}
