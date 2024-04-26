@@ -24,10 +24,9 @@ export default async function TicketPage({ params }) {
   const session = await getServerSession(authOptions);
   let roleFound = "";
 
-  if (session && session.roles?.includes("dottore")) {
-    roleFound = true;
+  if (session?.roles?.includes("dottore")) {
+    roleFound = "dottore";
   }
-
   if (!roleFound) {
     return { redirect: { destination: "/unauthorized", permanent: false } };
   }
@@ -39,7 +38,8 @@ export default async function TicketPage({ params }) {
       <h1 className="text-4xl text-center mb-6">Patient Details</h1>
       <div className="details-container">
         {/* {ticket && <TicketDetails ticket={ticket} />} */}
-        <PatientDetail initialData={patient} />
+        {JSON.stringify(roleFound)}
+        <PatientDetail initialData={patient} role={roleFound} />
         {/* {patient && <PatientDetails patient={patient} role={roleFound} />} */}
       </div>
     </main>
