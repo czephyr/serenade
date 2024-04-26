@@ -13,7 +13,7 @@ from ..deps import get_db, require_role
 router = APIRouter()
 
 
-@router.get("/", response_model=list[TicketStatus])
+@router.get("", response_model=list[TicketStatus])
 def read_many(
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
@@ -22,7 +22,7 @@ def read_many(
     return result
 
 
-@router.post("/", response_model=TicketBase)
+@router.post("", response_model=TicketBase)
 def create(
     patient_id: int,
     ticket: TicketCreate,
