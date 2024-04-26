@@ -63,7 +63,7 @@ def read_info(
         return result
 
 
-@router.post("", response_model=InstallationDetailRead)
+@router.post("/{patient_id}", response_model=InstallationDetailRead)
 def create(
     patient_id: int,
     installation: InstallationDetailCreate,
