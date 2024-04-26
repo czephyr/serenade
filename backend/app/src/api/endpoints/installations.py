@@ -19,7 +19,7 @@ from ...schemas.ticket import TicketBase, TicketCreate, TicketStatus
 router = APIRouter()
 
 
-@router.get("/", response_model=list[InstallationStatus])
+@router.get("", response_model=list[InstallationStatus])
 def read_many(
     role: str = Depends(require_role([IIT, IMT, UNIMI, HOS])),
     db: Session = Depends(get_db),
@@ -63,7 +63,7 @@ def read_info(
         return result
 
 
-@router.post("/", response_model=InstallationDetailRead)
+@router.post("", response_model=InstallationDetailRead)
 def create(
     patient_id: int,
     installation: InstallationDetailCreate,

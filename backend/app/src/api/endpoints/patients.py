@@ -13,7 +13,7 @@ from ..deps import get_db, require_role
 router = APIRouter()
 
 
-@router.get("/", response_model=list[PatientStatus])
+@router.get("", response_model=list[PatientStatus])
 def read_many(
     role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
@@ -22,7 +22,7 @@ def read_many(
     return result
 
 
-@router.post("/", response_model=PatientRead)
+@router.post("", response_model=PatientRead)
 def create(
     patient: PatientCreate,
     role: str = Depends(require_role([HOS])),
