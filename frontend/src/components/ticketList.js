@@ -1,4 +1,5 @@
 import NewTicketForm from "./newTicketForm";
+import StatusBadge from "./statusBadge";
 
 const TicketList = ({ installation_id, installationTickets }) => {
   return (
@@ -30,7 +31,9 @@ const TicketList = ({ installation_id, installationTickets }) => {
               <tr key={ticket.ticket_id}>
                 <td className="px-5 py-5 border-b">{ticket.category}</td>
                 <td className="px-5 py-5 border-b">{ticket.date_delta}</td>
-                <td className="px-5 py-5 border-b">{ticket.status}</td>
+                <td className="px-5 py-5 border-b">
+                  <StatusBadge status={ticket.status} />
+                </td>
                 <td className="px-5 py-5 border-b">{ticket.last_sender}</td>
                 <td className="px-5 py-5 border-b">
                   <a
