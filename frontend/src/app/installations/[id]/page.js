@@ -78,6 +78,7 @@ export default async function TicketPage({ params }) {
   if (session?.roles?.includes("iit")) {
     roleFound = "iit";
     patientDetails = await fetchPatientDetails(params.id);
+    patientDetails.patient_id = params.id;
   } else if (session?.roles?.includes("imt")) {
     roleFound = "imt";
   }
@@ -92,6 +93,7 @@ export default async function TicketPage({ params }) {
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+        {JSON.stringify(patientDetails)}
         <PatientDetail initialData={patientDetails} role={roleFound} />
         <InstallationDetail initialData={installation} />
         {/* <DocForm documents={documents} /> */}
