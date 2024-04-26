@@ -130,7 +130,6 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
         _ = patient_contacts.create_many(db, patient_id, patient.contacts)
 
     ticket = TicketCreate(
-        patient_id=patient_id,
         message=TicketMessageCreate(
             body=SMS_PATIENT_CREATE,
             sender=ADMIN_USERNAME,
@@ -138,7 +137,11 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
         category="PRIMA INSTALLAZIONE",
     )
 
-    tickets.create(db, ticket)
+    tickets.create(
+        db,
+        patient_id=patient_id,
+        ticket=ticket,
+    )
 
     result = read_one(db, patient_id)
     return result
