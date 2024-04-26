@@ -17,7 +17,6 @@ class TicketBase(BaseModel):
 
 
 class TicketCreate(BaseModel):
-    patient_id: int
     message: TicketMessageCreate
     category: str | None = None
 

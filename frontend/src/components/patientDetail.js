@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 
-const PatientDetail = ({ initialData, roleFound }) => {
+const PatientDetail = ({ initialData, role }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [showAddContactForm, setShowAddContactForm] = useState(false);
@@ -137,10 +137,7 @@ const PatientDetail = ({ initialData, roleFound }) => {
           </span>
         </label>
       );
-    } else if (
-      (field === "age_class") &
-      ((role === "dottore") | (role === "imt"))
-    ) {
+    } else if ((field === "age_class") & (role === "dottore")) {
       return (
         <label htmlFor={field} className="block">
           <span className="text-gray-700">
@@ -211,9 +208,11 @@ const PatientDetail = ({ initialData, roleFound }) => {
       );
     } else if (field === "first_name" || field === "last_name") {
       return (
-        <span className="text-gray-700 flex w-full">
-          <label htmlFor={field}>
+        <span className="text-gray-700 flex w-full items-center">
+          <label htmlFor={field} className="flex-1">
             {field === "first_name" ? "Nome:" : "Cognome:"}
+          </label>
+          <div className="flex flex-grow items-center">
             <input
               type="text"
               id={field}
@@ -222,34 +221,8 @@ const PatientDetail = ({ initialData, roleFound }) => {
               readOnly={!isEditing[field]}
               className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
-          </label>
-          <button
-            className={`text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
-            onClick={() =>
-              isEditing[field]
-                ? handleSend(patient.patient_id, field, patient[field])
-                : handleEdit(field)
-            }
-          >
-            {isEditing[field] ? "Send" : "Edit"}
-          </button>{" "}
-        </span>
-      );
-    } else if (field == "home_address") {
-      return (
-        <label htmlFor={field} className="block">
-          <span className="text-gray-700">
-            Address:
-            <input
-              type="text"
-              id={field}
-              value={patient[field]}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              onChange={(e) => handleChange(e, field)}
-              readOnly={!isEditing[field]}
-            />
             <button
-              className={`text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+              className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
               onClick={() =>
                 isEditing[field]
                   ? handleSend(patient.patient_id, field, patient[field])
@@ -258,8 +231,80 @@ const PatientDetail = ({ initialData, roleFound }) => {
             >
               {isEditing[field] ? "Send" : "Edit"}
             </button>
-          </span>
+          </div>
+        </span>
+        // <span className="text-gray-700 flex w-full">
+        //   <label htmlFor={field}>
+        //     {field === "first_name" ? "Nome:" : "Cognome:"}
+        //     <input
+        //       type="text"
+        //       id={field}
+        //       value={patient[field]}
+        //       onChange={(e) => handleChange(e, field)}
+        //       readOnly={!isEditing[field]}
+        //       className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        //     />
+        //   </label>
+        //   <button
+        //     className={`text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+        //     onClick={() =>
+        //       isEditing[field]
+        //         ? handleSend(patient.patient_id, field, patient[field])
+        //         : handleEdit(field)
+        //     }
+        //   >
+        //     {isEditing[field] ? "Send" : "Edit"}
+        //   </button>{" "}
+        // </span>
+      );
+    } else if (field == "home_address") {
+      return (
+        <label htmlFor={field} className="block">
+          <span className="text-gray-700">Address:</span>
+          <div className="flex items-center mt-1">
+            <input
+              type="text"
+              id={field}
+              value={patient[field]}
+              className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              onChange={(e) => handleChange(e, field)}
+              readOnly={!isEditing[field]}
+            />
+            <button
+              className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+              onClick={() =>
+                isEditing[field]
+                  ? handleSend(patient.patient_id, field, patient[field])
+                  : handleEdit(field)
+              }
+            >
+              {isEditing[field] ? "Send" : "Edit"}
+            </button>
+          </div>
         </label>
+        // <label htmlFor={field} className="block">
+        //   <span className="text-gray-700">
+        //     Address:
+        //     <input
+        //       type="text"
+        //       id={field}
+        //       value={patient[field]}
+        //       className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        //       onChange={(e) => handleChange(e, field)}
+        //       readOnly={!isEditing[field]}
+        //     />
+        //     <button
+        //       className={`text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+        //       onClick={() =>
+        //         isEditing[field]
+        //           ? handleSend(patient.patient_id, field, patient[field])
+        //           : handleEdit(field)
+        //       }
+        //     >
+        //       {isEditing[field] ? "Send" : "Edit"}
+        //     </button>
+        //   </span>
+        // </label>
       );
     } else if ((field == "codice_fiscale") & (role === "dottore")) {
       return (
@@ -325,7 +370,7 @@ const PatientDetail = ({ initialData, roleFound }) => {
   };
 
   return (
-    <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
+    <main>
       <Toaster />
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <h1 className="text-2xl font-bold text-center text-black mb-2">
@@ -333,7 +378,7 @@ const PatientDetail = ({ initialData, roleFound }) => {
         </h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
-            {fields.map((field) => renderField(field, roleFound))}
+            {fields.map((field) => renderField(field, role))}
             <div className="bg-white shadow rounded-lg p-6 mt-6">
               <h3 className="text-lg font-semibold leading-tight text-gray-900 mb-4">
                 Contacts
@@ -368,7 +413,6 @@ const PatientDetail = ({ initialData, roleFound }) => {
                 Add New Contact
               </button>
             </div>
-
             {showAddContactForm && (
               <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
                 <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
