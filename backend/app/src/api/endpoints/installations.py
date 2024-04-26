@@ -85,7 +85,7 @@ def create(
         return result
 
 
-@router.put("/{patient_id}/", response_model=InstallationDetailRead)
+@router.put("/{patient_id}", response_model=InstallationDetailRead)
 def update(
     patient_id: int,
     installation: InstallationDetailUpdate,
