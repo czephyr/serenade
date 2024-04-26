@@ -2,8 +2,10 @@ from sqlalchemy.orm import Session
 
 from ..ormodels import Contact
 from ..schemas.contact import ContactEntry, ContactUpdate
+from ..utils import unfoundable
 
 
+@unfoundable("contact")
 def query_one(db: Session, *, contact_id: int) -> Contact:
     result_orm = db.query(Contact).where(Contact.id == contact_id).one()
     return result_orm
