@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
 from ...core.crypto import maskable
-from ...core.excp import RESOURCE_NOT_FOUND, BadValues
+from ...core.excp import BadValues
 from ...core.roles import HOS, IIT, IMT, UNIMI
 from ...crud import installation_details, tickets, patients
 from ...schemas.installation import (
@@ -34,15 +33,7 @@ def read_one(
     role: str = Depends(require_role([IIT, IMT, UNIMI, HOS])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
-    try:
-        result = maskable(installation_details.read_one, role)(
-            db, patient_id=patient_id
-        )
-    except NoResultFound as excp:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
-        ) from excp
+    result = maskable(installation_details.read_one, role)(db, patient_id=patient_id)
     return result
 
 
@@ -52,15 +43,8 @@ def read_info(
     role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> PatientInfo:
-    try:
-        result = maskable(patients.info, role)(db, patient_id=patient_id)
-    except NoResultFound as excp:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
-        ) from excp
-    else:
-        return result
+    result = maskable(patients.info, role)(db, patient_id=patient_id)
+    return result
 
 
 @router.post("/", response_model=InstallationDetailRead)
@@ -70,19 +54,12 @@ def create(
     role: str = Depends(require_role([HOS, IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
-    try:
-        result = maskable(installation_details.create, role)(
-            db,
-            patient_id=patient_id,
-            installation=installation,
-        )
-    except NoResultFound as excp:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
-        ) from excp
-    else:
-        return result
+    result = maskable(installation_details.create, role)(
+        db,
+        patient_id=patient_id,
+        installation=installation,
+    )
+    return result
 
 
 @router.put("/{patient_id}/", response_model=InstallationDetailRead)
@@ -92,19 +69,12 @@ def update(
     role: str = Depends(require_role([HOS, IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
-    try:
-        result = maskable(installation_details.update, role)(
-            db,
-            patient_id=patient_id,
-            installation=installation,
-        )
-    except NoResultFound as excp:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
-        ) from excp
-    else:
-        return result
+    result = maskable(installation_details.update, role)(
+        db,
+        patient_id=patient_id,
+        installation=installation,
+    )
+    return result
 
 
 @router.post("/{patient_id}/close", response_model=InstallationDetailRead)
@@ -116,13 +86,10 @@ def close(
 ) -> InstallationDetailRead:
     try:
         result = maskable(installation_details.close, role)(
-            db, patient_id=patient_id, force=force
+            db,
+            patient_id=patient_id,
+            force=force,
         )
-    except NoResultFound as excp:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
-        ) from excp
     except BadValues as excp:
         raise HTTPException(
             status.HTTP_423_LOCKED,
@@ -141,13 +108,10 @@ def open(
 ) -> InstallationDetailRead:
     try:
         result = maskable(installation_details.open, role)(
-            db, patient_id=patient_id, force=force
+            db,
+            patient_id=patient_id,
+            force=force,
         )
-    except NoResultFound as excp:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=RESOURCE_NOT_FOUND.format(_id=patient_id, resource="patients"),
-        ) from excp
     except BadValues as excp:
         raise HTTPException(
             status.HTTP_423_LOCKED,
