@@ -134,6 +134,7 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
             body=SMS_PATIENT_CREATE,
             sender=ADMIN_USERNAME,
         ),
+        category="PRIMA INSTALLAZIONE",
     )
 
     tickets.create(

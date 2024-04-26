@@ -39,7 +39,7 @@ export default async function Installations() {
         <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
           <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
             <h1 className="text-2xl font-bold text-center mb-2">
-              Installation List
+              Installazioni
             </h1>
             <div className="overflow-x-auto">
               <table className="min-w-full leading-normal">
@@ -55,7 +55,7 @@ export default async function Installations() {
                       Ultimo Update
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
-                      Action
+                      Dettagli
                     </th>
                   </tr>
                 </thead>

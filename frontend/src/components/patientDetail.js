@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 
-const PatientDetail = ({ initialData }) => {
+const PatientDetail = ({ initialData, roleFound }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [showAddContactForm, setShowAddContactForm] = useState(false);
@@ -16,13 +16,13 @@ const PatientDetail = ({ initialData }) => {
   const phoneNoRef = useRef(null);
   const emailRef = useRef(null);
   useEffect(() => {
-    if (
-      status === "unauthenticated" ||
-      (status === "authenticated" && !session.roles?.includes("dottore"))
-    ) {
-      router.push("/unauthorized");
-      router.refresh();
-    }
+    // if (
+    //   status === "unauthenticated" ||
+    //   (status === "authenticated" && !session.roles?.includes("dottore"))
+    // ) {
+    //   router.push("/unauthorized");
+    //   router.refresh();
+    // }
   }, [session, status, router]);
 
   const [isEditing, setIsEditing] = useState({
@@ -91,8 +91,8 @@ const PatientDetail = ({ initialData }) => {
     "medical_notes",
   ];
 
-  const renderField = (field) => {
-    if (field === "gender") {
+  const renderField = (field, role) => {
+    if ((field === "gender") & ((role === "imt") | (role === "dottore"))) {
       return (
         <label htmlFor={field} className="block">
           <span className="text-gray-700">
@@ -107,7 +107,7 @@ const PatientDetail = ({ initialData }) => {
           </span>
         </label>
       );
-    } else if (field === "date_of_birth") {
+    } else if ((field === "date_of_birth") & (role === "dottore")) {
       return (
         <label htmlFor={field} className="block">
           <span className="text-gray-700">
@@ -122,7 +122,7 @@ const PatientDetail = ({ initialData }) => {
           </span>
         </label>
       );
-    } else if (field === "place_of_birth") {
+    } else if ((field === "place_of_birth") & (role === "dottore")) {
       return (
         <label htmlFor={field} className="block">
           <span className="text-gray-700">
@@ -137,7 +137,10 @@ const PatientDetail = ({ initialData }) => {
           </span>
         </label>
       );
-    } else if (field === "age_class") {
+    } else if (
+      (field === "age_class") &
+      ((role === "dottore") | (role === "imt"))
+    ) {
       return (
         <label htmlFor={field} className="block">
           <span className="text-gray-700">
@@ -152,7 +155,7 @@ const PatientDetail = ({ initialData }) => {
           </span>
         </label>
       );
-    } else if (field === "neuro_diag") {
+    } else if ((field === "neuro_diag") & (role === "dottore")) {
       return (
         <label htmlFor={field} className="block">
           <span className="text-gray-700">
@@ -181,7 +184,7 @@ const PatientDetail = ({ initialData }) => {
           </span>
         </label>
       );
-    } else if (field === "medical_notes") {
+    } else if ((field === "medical_notes") & (role === "dottore")) {
       return (
         <label htmlFor={field} className="block">
           <span className="text-gray-700">
@@ -258,7 +261,7 @@ const PatientDetail = ({ initialData }) => {
           </span>
         </label>
       );
-    } else if (field == "codice_fiscale") {
+    } else if ((field == "codice_fiscale") & (role === "dottore")) {
       return (
         <label htmlFor={field} className="block">
           <span className="text-gray-700">
@@ -284,6 +287,8 @@ const PatientDetail = ({ initialData }) => {
           </span>
         </label>
       );
+    } else {
+      return "";
     }
   };
 
@@ -328,7 +333,7 @@ const PatientDetail = ({ initialData }) => {
         </h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
-            {fields.map((field) => renderField(field))}
+            {fields.map((field) => renderField(field, roleFound))}
             <div className="bg-white shadow rounded-lg p-6 mt-6">
               <h3 className="text-lg font-semibold leading-tight text-gray-900 mb-4">
                 Contacts
