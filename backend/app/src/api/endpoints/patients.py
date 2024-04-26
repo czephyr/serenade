@@ -3,7 +3,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from ...core.excp import RESOURCE_NOT_FOUND, BadValues, DuplicateCF
-from ...core.roles import HOS, IMT
+from ...core.roles import HOS, IMT, IIT
 from ...crud import patient_contacts, patients, patient_status
 from ...schemas.contact import ContactCreate, ContactEntry
 from ...schemas.patient import PatientCreate, PatientRead, PatientStatus, PatientUpdate
@@ -60,7 +60,7 @@ def read_one(
 def update(
     patient_id: int,
     patient: PatientUpdate,
-    role: str = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS,IIT])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
@@ -83,7 +83,7 @@ def update(
 def create_contact(
     patient_id: int,
     contact: ContactCreate,
-    role: str = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS,IIT])),
     db: Session = Depends(get_db),
 ) -> ContactEntry:
     try:

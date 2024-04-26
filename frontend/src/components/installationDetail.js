@@ -33,7 +33,7 @@ const InstallationDetail = ({ initialData, role }) => {
     visitors: false,
     smartphone_model: false,
     appliances: false, // Only true when editing
-    issue_notes: false,
+    issues_notes: false,
     habits_notes: false,
     other_notes: false,
     date_start: false,
@@ -90,7 +90,7 @@ const InstallationDetail = ({ initialData, role }) => {
     "visitors",
     "smartphone_model",
     "appliances", // Only true when editing
-    "issue_notes",
+    "issues_notes",
     "habits_notes",
     "other_notes",
     "date_start",
@@ -100,30 +100,32 @@ const InstallationDetail = ({ initialData, role }) => {
   ];
 
   const renderField = (field) => {
-    // Define labels for specific fields if needed
-    const fieldLabels = {
-      apartment_type: "Type of Apartment:",
-      internet_type: "Type of Internet:",
-      flatmates: "Number of Flatmates:",
-      pets: "Pets:",
-      visitors: "Allowed Visitors:",
-      smartphone_model: "Smartphone Model:",
-      appliances: "Appliances:",
-      issue_notes: "Issue Notes:",
-      habits_notes: "Habits Notes:",
-      other_notes: "Other Notes:",
-      date_start: "Start Date:",
-      date_end: "End Date:",
-      date_join: "Joining Date:",
-      date_exit: "Exit Date:",
+    // Define labels and editable status for specific fields
+    const fieldDetails = {
+      apartment_type: { label: "Type of Apartment:", editable: true },
+      internet_type: { label: "Type of Internet:", editable: true },
+      flatmates: { label: "Number of Flatmates:", editable: true },
+      pets: { label: "Pets:", editable: true },
+      visitors: { label: "Allowed Visitors:", editable: true },
+      smartphone_model: { label: "Smartphone Model:", editable: true },
+      appliances: { label: "Appliances:", editable: true },
+      issues_notes: { label: "Issue Notes:", editable: true },
+      habits_notes: { label: "Habits Notes:", editable: true },
+      other_notes: { label: "Other Notes:", editable: true },
+      date_start: { label: "Start Date:", editable: false },
+      date_end: { label: "End Date:", editable: false },
+      date_join: { label: "Joining Date:", editable: false },
+      date_exit: { label: "Exit Date:", editable: false },
     };
 
     // Special handling for notes which might use textarea
-    const textAreaFields = ["issue_notes", "habits_notes", "other_notes"];
+    const textAreaFields = ["issues_notes", "habits_notes", "other_notes"];
+
+    const fieldInfo = fieldDetails[field] || { label: field, editable: false };
 
     return (
       <label htmlFor={field} className="block mt-3">
-        <span className="text-gray-700">{fieldLabels[field] || field}</span>
+        <span className="text-gray-700">{fieldInfo.label}</span>
         <div className="flex items-center mt-1">
           {textAreaFields.includes(field) ? (
             <textarea
@@ -143,16 +145,18 @@ const InstallationDetail = ({ initialData, role }) => {
               className="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           )}
-          <button
-            className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
-            onClick={() =>
-              isEditing[field]
-                ? handleSend(patient.patient_id, field, patient[field])
-                : handleEdit(field)
-            }
-          >
-            {isEditing[field] ? "Send" : "Edit"}
-          </button>
+          {fieldInfo.editable && (
+            <button
+              className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+              onClick={() =>
+                isEditing[field]
+                  ? handleSend(patient.patient_id, field, patient[field])
+                  : handleEdit(field)
+              }
+            >
+              {isEditing[field] ? "Send" : "Edit"}
+            </button>
+          )}
         </div>
       </label>
     );

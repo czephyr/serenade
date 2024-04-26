@@ -45,7 +45,24 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
     }
   }
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   async function closeTicket(ticket_num) {
+    // Confirm dialog to ensure the user wants to close the ticket
+    const confirmClose = confirm("Are you sure you want to close this ticket?");
+    if (!confirmClose) {
+      return; // If the user cancels, exit the function
+    }
+
     if (session && session.roles?.includes("iit")) {
       const postBody = {
         ticket_num: ticket_num,
@@ -56,9 +73,7 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
         resp = await fetch("/api/tickets/close", {
           method: "POST",
           headers: {
-            headers: {
-              "Content-Type": "application/json",
-            },
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(postBody),
         });
@@ -78,48 +93,53 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
 
   return (
     <div className="text-black">
-      <div className="bg-white  shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h3 className="text-lg font-bold leading-tight mb-4">
           Ticket Messages
         </h3>
-        <ul>
+        <ul className="list-disc pl-5 mb-4">
           {messages.map((msg, index) => (
-            <li key={index}>
-              <strong>{new Date(msg.ts).toLocaleString()}</strong> {msg.sender}:{" "}
-              {msg.body}
+            <li key={index} className="mb-1">
+              <strong>{formatDate(msg.ts)}</strong>{" "}
+              <span className="text-indigo-600">{msg.sender}:</span> {msg.body}
             </li>
           ))}
         </ul>
 
         {isOpen && (
-          <>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                sendMsg(e.target.elements.new_message.value, ticketNum);
-                e.target.reset();
-              }}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendMsg(e.target.elements.new_message.value, ticketNum);
+              e.target.reset();
+            }}
+            className="flex items-end gap-2"
+          >
+            <textarea
+              name="new_message"
+              placeholder="Type your message here"
+              required
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out"
+              rows="3"
+            ></textarea>
+            <button
+              type="submit"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              <input
-                type="text"
-                name="new_message"
-                placeholder="Type your message here"
-                required
-              />
-              <button type="submit">Send Message</button>
-            </form>
-          </>
+              Send Message
+            </button>
+          </form>
         )}
       </div>
       {isOpen && (
-        <>
+        <div className="flex justify-center mt-4">
           <button
-            className="text-white"
             onClick={() => closeTicket(installNum)}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Close Ticket
           </button>
-        </>
+        </div>
       )}
     </div>
   );

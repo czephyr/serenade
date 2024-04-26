@@ -94,7 +94,7 @@ const PatientDetail = ({ initialData, role }) => {
   const renderField = (field, role) => {
     if ((field === "gender") & ((role === "imt") | (role === "dottore"))) {
       return (
-        <label htmlFor={field} className="block">
+        <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
             Sesso:
             <input
@@ -109,7 +109,7 @@ const PatientDetail = ({ initialData, role }) => {
       );
     } else if ((field === "date_of_birth") & (role === "dottore")) {
       return (
-        <label htmlFor={field} className="block">
+        <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
             Data di nascita:
             <input
@@ -124,7 +124,7 @@ const PatientDetail = ({ initialData, role }) => {
       );
     } else if ((field === "place_of_birth") & (role === "dottore")) {
       return (
-        <label htmlFor={field} className="block">
+        <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
             Nato a:
             <input
@@ -139,7 +139,7 @@ const PatientDetail = ({ initialData, role }) => {
       );
     } else if ((field === "age_class") & (role === "dottore")) {
       return (
-        <label htmlFor={field} className="block">
+        <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
             Classe età:
             <input
@@ -154,22 +154,24 @@ const PatientDetail = ({ initialData, role }) => {
       );
     } else if ((field === "neuro_diag") & (role === "dottore")) {
       return (
-        <label htmlFor={field} className="block">
-          <span className="text-gray-700">
+        <span className="text-gray-700 flex w-full items-center">
+          <label htmlFor={field} className="flex-1">
             Neuro:
+          </label>
+          <div className="flex flex-grow items-center">
             <select
               id={field}
               value={patient[field]}
               onChange={(e) => handleChange(e, field)}
               disabled={!isEditing[field]}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             >
               <option value={patient[field]}>{patient[field]}</option>
               <option value="neurodegen">neurodegen</option>
               <option value="no neurodegen">no neurodegen</option>
             </select>
             <button
-              className={`text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+              className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
               onClick={() =>
                 isEditing[field]
                   ? handleSend(patient.patient_id, field, patient[field])
@@ -178,23 +180,23 @@ const PatientDetail = ({ initialData, role }) => {
             >
               {isEditing[field] ? "Send" : "Edit"}
             </button>
-          </span>
-        </label>
+          </div>
+        </span>
       );
     } else if ((field === "medical_notes") & (role === "dottore")) {
       return (
-        <label htmlFor={field} className="block">
-          <span className="text-gray-700">
-            Medical notes:
+        <label htmlFor={field} className="block mt-3">
+          <span className="text-gray-700">Medical notes:</span>
+          <div className="flex items-center mt-1">
             <textarea
               id={field}
               value={patient[field]}
               onChange={(e) => handleChange(e, field)}
               readOnly={!isEditing[field]}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
             <button
-              className={`text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+              className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
               onClick={() =>
                 isEditing[field]
                   ? handleSend(patient.patient_id, field, patient[field])
@@ -203,7 +205,7 @@ const PatientDetail = ({ initialData, role }) => {
             >
               {isEditing[field] ? "Send" : "Edit"}
             </button>
-          </span>
+          </div>
         </label>
       );
     } else if (field === "first_name" || field === "last_name") {
@@ -308,19 +310,21 @@ const PatientDetail = ({ initialData, role }) => {
       );
     } else if ((field == "codice_fiscale") & (role === "dottore")) {
       return (
-        <label htmlFor={field} className="block">
-          <span className="text-gray-700">
+        <span className="text-gray-700 flex w-full items-center">
+          <label htmlFor={field} className="flex-1">
             Codice fiscale:
+          </label>
+          <div className="flex flex-grow items-center">
             <input
               type="text"
               id={field}
               value={patient[field]}
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               onChange={(e) => handleChange(e, field)}
               readOnly={!isEditing[field]}
+              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
             <button
-              className={`text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+              className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
               onClick={() =>
                 isEditing[field]
                   ? handleSend(patient.patient_id, field, patient[field])
@@ -329,8 +333,8 @@ const PatientDetail = ({ initialData, role }) => {
             >
               {isEditing[field] ? "Send" : "Edit"}
             </button>
-          </span>
-        </label>
+          </div>
+        </span>
       );
     } else {
       return "";
@@ -365,9 +369,34 @@ const PatientDetail = ({ initialData, role }) => {
     }
   }
 
-  const removeContactAtIndex = (index) => {
-    setContacts(contacts.filter((_, idx) => idx !== index));
+  const removeContactAtIndex = (idToRemove) => {
+    const updatedContacts = contacts.filter(
+      (contact, index) => contact.id !== idToRemove
+    );
+    deleteContact(idToRemove);
+    setContacts(updatedContacts);
   };
+
+  async function deleteContact(contact_id) {
+    const postBody = {
+      contact_id: contact_id,
+    };
+
+    try {
+      const response = await fetch("/api/patients/contacts/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postBody),
+      });
+      const result = await response.json();
+      if (response.ok) {
+      } else {
+        console.error("API call failed: ", result.error);
+      }
+    } catch (error) {
+      console.error("Failed to submit patient data: ", error);
+    }
+  }
 
   return (
     <main>
