@@ -42,28 +42,51 @@ async function fetchTicketMessages(ticket_id) {
   return resp.json();
 }
 
-function TicketDetails({ ticket }) {
+const renderField = (field, data) => {
+  if (!data[field.key] && field.key === "date_closed") return null; // Do not render if no closure date
+
   return (
-    <div className="bg-white text-black shadow-md rounded px-8 pt-6 pb-8 mb-4">
-      <h3 className="text-lg font-bold leading-tight mb-4">Ticket Details</h3>
-      <ul>
-        <li>
-          <strong>Ticket ID:</strong> {ticket.ticket_id}
-        </li>
-        <li>
-          <strong>Patient ID:</strong> {ticket.patient_id}
-        </li>
-        <li>
-          <strong>Issue Date and Time:</strong>{" "}
-          {new Date(ticket.ts).toLocaleString()}
-        </li>
-        {ticket.date_closed && (
-          <li>
-            <strong>Closure Date and Time:</strong>{" "}
-            {new Date(ticket.date_closed).toLocaleString()}
-          </li>
-        )}
-      </ul>
+    <div className="block mb-4">
+      <label htmlFor={field.key} className="text-gray-700 font-semibold">
+        {field.label}:
+      </label>
+      <div className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm">
+        {field.formatter ? field.formatter(data[field.key]) : data[field.key]}
+      </div>
+    </div>
+  );
+};
+
+function TicketDetails({ ticket }) {
+  const ticketFields = [
+    { key: "ticket_id", label: "Ticket ID" },
+    { key: "patient_id", label: "Patient ID" },
+    {
+      key: "ts",
+      label: "Issue Date and Time",
+      formatter: (value) => new Date(value).toLocaleString(),
+    },
+    {
+      key: "date_closed",
+      label: "Closure Date and Time",
+      formatter: (value) => value && new Date(value).toLocaleString(),
+    },
+    {
+      key: "category",
+      label: "Category",
+    },
+  ];
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+      <h1 className="text-2xl font-bold text-center text-black mb-4">
+        Ticket Details
+      </h1>
+      <div className="space-y-6 text-black">
+        <div className="grid grid-cols-1 gap-1">
+          {ticketFields.map((field) => renderField(field, ticket))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -97,10 +120,8 @@ export default async function TicketPage({ params }) {
   const ticketMessages = await fetchTicketMessages(params.id);
 
   return (
-    <main className="text-white p-4">
-      <h1 className="text-4xl text-center mb-6">Ticket</h1>
-      <div className="details-container">
-        {JSON.stringify(ticket)}
+    <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
+      <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <TicketDetails ticket={ticket} />
         <TicketMessages
           ticketMessages={ticketMessages}

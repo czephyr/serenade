@@ -82,7 +82,6 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
         <h3 className="text-lg font-bold leading-tight mb-4">
           Ticket Messages
         </h3>
-        {JSON.stringify({ ticketMessages, ticketNum, isOpen })}
         <ul>
           {messages.map((msg, index) => (
             <li key={index}>
