@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.get("/", response_model=list[PatientStatus])
 def read_many(
-    current_user: dict = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> list[PatientStatus]:
     result = patients.read_many(db)
@@ -25,7 +25,7 @@ def read_many(
 @router.post("/", response_model=PatientRead)
 def create(
     patient: PatientCreate,
-    current_user: dict = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
@@ -42,7 +42,7 @@ def create(
 @router.get("/{patient_id}", response_model=PatientRead)
 def read_one(
     patient_id: int,
-    current_user: dict = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
@@ -60,7 +60,7 @@ def read_one(
 def update(
     patient_id: int,
     patient: PatientUpdate,
-    current_user: dict = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
@@ -83,7 +83,7 @@ def update(
 def create_contact(
     patient_id: int,
     contact: ContactCreate,
-    current_user: dict = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> ContactEntry:
     try:
@@ -100,7 +100,7 @@ def create_contact(
 @router.get("/{patient_id}/contacts", response_model=list[ContactEntry])
 def read_contacts(
     patient_id: int,
-    current_user: dict = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> list[ContactEntry]:
     try:
@@ -118,7 +118,7 @@ def read_contacts(
 def update_contact(
     patient_id: int,
     contacts: list[ContactCreate],
-    current_user: dict = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> list[ContactEntry]:
     try:
@@ -138,7 +138,7 @@ def update_contact(
 @router.post("/{patient_id}/exit", response_model=PatientBase)
 def close(
     patient_id: int,
-    current_user: dict = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientBase:
     try:
@@ -155,7 +155,7 @@ def close(
 @router.post("/{patient_id}/join", response_model=PatientBase)
 def open(
     patient_id: int,
-    current_user: dict = Depends(require_role([HOS, IMT])),
+    role: str = Depends(require_role([HOS, IMT])),
     db: Session = Depends(get_db),
 ) -> PatientBase:
     try:

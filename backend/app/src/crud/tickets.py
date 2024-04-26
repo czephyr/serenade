@@ -10,8 +10,11 @@ from ..ormodels import Ticket, TicketMessage
 from ..schemas.ticket import TicketBase, TicketCreate, TicketStatus
 
 
-def create(db: Session, ticket: TicketCreate) -> TicketBase:
-    result_orm = Ticket(patient_id=ticket.patient_id)
+def create(db: Session, patient_id: int, ticket: TicketCreate) -> TicketBase:
+    result_orm = Ticket(
+        patient_id=patient_id,
+        category=ticket.category,
+    )
     db.add(result_orm)
 
     db.commit()

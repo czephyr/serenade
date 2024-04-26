@@ -15,7 +15,7 @@ router = APIRouter()
 @router.get("/{contact_id}", response_model=ContactEntry)
 def read_one(
     contact_id: int,
-    current_user: dict = Depends(require_role([IIT, HOS])),
+    role: str = Depends(require_role([IIT, HOS])),
     db: Session = Depends(get_db),
 ) -> ContactEntry:
     try:
@@ -33,7 +33,7 @@ def read_one(
 def update(
     contact_id: int,
     contact: ContactUpdate,
-    current_user: dict = Depends(require_role([IIT, HOS])),
+    role: str = Depends(require_role([IIT, HOS])),
     db: Session = Depends(get_db),
 ) -> ContactEntry:
     try:
@@ -50,7 +50,7 @@ def update(
 @router.delete("/{contact_id}", response_model=ContactEntry)
 def delete(
     contact_id: int,
-    current_user: dict = Depends(require_role([IIT, HOS])),
+    role: str = Depends(require_role([IIT, HOS])),
     db: Session = Depends(get_db),
 ) -> ContactEntry:
     try:

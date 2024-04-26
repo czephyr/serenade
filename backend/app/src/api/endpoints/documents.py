@@ -3,8 +3,9 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
-from ...core.roles import IIT, IMT, UNIMI
+from ...core.crypto import maskable
 from ...core.excp import RESOURCE_NOT_FOUND
+from ...core.roles import IIT, IMT, UNIMI
 from ...crud import installation_documents
 from ...schemas.installation_document import InstallationDocumentRead
 
@@ -14,7 +15,7 @@ router = APIRouter()
 @router.get("/documents/{document_id}")
 def download(
     document_id: int,
-    current_user: dict = Depends(require_role([IIT, IMT, UNIMI])),
+    role: str = Depends(require_role([IIT, IMT, UNIMI])),
     db: Session = Depends(get_db),
 ) -> Response:
     try:
@@ -32,7 +33,7 @@ def download(
 @router.delete("/documents/{document_id}", response_model=InstallationDocumentRead)
 def delete(
     document_id: int,
-    current_user: dict = Depends(require_role([IIT, IMT, UNIMI])),
+    role: str = Depends(require_role([IIT, IMT, UNIMI])),
     db: Session = Depends(get_db),
 ) -> InstallationDocumentRead:
     try:
@@ -54,13 +55,13 @@ async def upload(
     file: UploadFile,
     file_type: str | None = None,
     file_name: str | None = None,
-    current_user: dict = Depends(require_role([IIT])),
+    role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> InstallationDocumentRead:
     contents = await file.read()
-    result = installation_documents.create(
+    result = maskable(installation_documents.create, role)(
         db,
-        patient_id,
+        patient_id=patient_id,
         file=contents,
         file_type=file_type,
         file_name=file_name,
@@ -74,8 +75,8 @@ async def upload(
 )
 async def read_many(
     patient_id: int,
-    current_user: dict = Depends(require_role([IIT])),
+    role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> list[InstallationDocumentRead]:
-    result = installation_documents.read_many(db, patient_id)
+    result = maskable(installation_documents.read_many, role)(db, patient_id=patient_id)
     return result
