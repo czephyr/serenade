@@ -625,9 +625,7 @@
     "clientId" : "dottori-fe",
     "name" : "Front end per i dottori",
     "description" : "",
-    "rootUrl" : "http://localhost:8000",
     "adminUrl" : "",
-    "baseUrl" : "http://localhost:8000",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
@@ -2127,7 +2125,6 @@
     "oauth2DeviceCodeLifespan" : "600",
     "parRequestUriLifespan" : "60",
     "clientSessionMaxLifespan" : "0",
-    "frontendUrl" : "http://localhost:8080/",
     "acr.loa.map" : "{}"
   },
   "keycloakVersion" : "24.0.3",
