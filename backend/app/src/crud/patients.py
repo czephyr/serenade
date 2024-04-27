@@ -95,7 +95,7 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
         raise DuplicateCF
 
     while True:
-        patient_id = int.from_bytes(random.randbytes(7), byteorder="little")
+        patient_id = random.randrange(2**1, 2**52)
         if not db.query(Patient).where(Patient.patient_id == patient_id).count():
             break
 
