@@ -3,8 +3,10 @@ from sqlalchemy.orm import Session
 
 from ..ormodels import TicketMessage
 from ..schemas.ticket_message import TicketMessageBase, TicketMessageCreate
+from ..utils import unfoundable
 
 
+@unfoundable("ticket")
 def read_many(db: Session, *, ticket_id: int) -> list[TicketMessageBase]:
     results_orm = db.query(TicketMessage).where(TicketMessage.ticket_id == ticket_id)
     results = [

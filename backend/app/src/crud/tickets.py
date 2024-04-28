@@ -8,6 +8,7 @@ from ..core.const import SALT_HASH
 from ..core.status import TICKET_CLOSED, TICKET_OPEN
 from ..ormodels import Ticket, TicketMessage
 from ..schemas.ticket import TicketBase, TicketCreate, TicketStatus
+from ..utils import unfoundable
 
 
 def create(db: Session, *, patient_id: int, ticket: TicketCreate) -> TicketBase:
@@ -33,6 +34,7 @@ def create(db: Session, *, patient_id: int, ticket: TicketCreate) -> TicketBase:
     return result
 
 
+@unfoundable("ticket")
 def query_one(db: Session, *, ticket_id: int) -> Ticket:
     result_orm = db.query(Ticket).where(Ticket.ticket_id == ticket_id).one()
     return result_orm

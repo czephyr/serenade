@@ -25,9 +25,11 @@ from ..schemas.installation import (
     InstallationStatus,
 )
 from ..schemas.patient_base import PatientBase
+from ..utils import unfoundable
 from . import patient_status, tickets
 
 
+@unfoundable("patient")
 def query_one(db: Session, *, patient_id: int) -> InstallationDetail:
     result_orm = (
         db.query(InstallationDetail)

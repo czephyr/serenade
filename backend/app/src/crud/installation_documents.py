@@ -2,8 +2,10 @@ from sqlalchemy.orm import Session
 
 from ..ormodels import InstallationDocument
 from ..schemas.installation_document import InstallationDocumentRead
+from ..utils import unfoundable
 
 
+@unfoundable("document")
 def query_one(db: Session, *, document_id: int) -> InstallationDocument:
     result_orm = (
         db.query(InstallationDocument)
@@ -42,6 +44,7 @@ def create(
     return result
 
 
+@unfoundable("patient")
 def read_many(db: Session, *, patient_id: int) -> list[InstallationDocumentRead]:
     results_orm = (
         db.query(InstallationDocument)

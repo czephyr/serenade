@@ -1,9 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.exc import NoResultFound
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from ...core.crypto import maskable
-from ...core.excp import RESOURCE_NOT_FOUND
 from ...core.roles import IIT, IMT
 from ...crud import ticket_messages, tickets
 from ...schemas.ticket import TicketBase, TicketCreate, TicketStatus
@@ -43,15 +41,8 @@ def read_one(
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> TicketBase:
-    try:
-        result = maskable(tickets.read_one, role)(db, ticket_id=ticket_id)
-    except NoResultFound as excp:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=RESOURCE_NOT_FOUND.format(_id=ticket_id, resource="tickets"),
-        ) from excp
-    else:
-        return result
+    result = maskable(tickets.read_one, role)(db, ticket_id=ticket_id)
+    return result
 
 
 @router.get("/{ticket_id}/messages", response_model=list[TicketMessageBase])
@@ -81,12 +72,5 @@ def close(
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> TicketBase:
-    try:
-        result = maskable(tickets.update, role)(db, ticket_id=ticket_id)
-    except NoResultFound as excp:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=RESOURCE_NOT_FOUND.format(_id=ticket_id, resource="tickets"),
-        ) from excp
-    else:
-        return result
+    result = maskable(tickets.update, role)(db, ticket_id=ticket_id)
+    return result

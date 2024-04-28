@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, UploadFile, status
-from sqlalchemy.exc import NoResultFound
+from fastapi import APIRouter, Depends, Response, UploadFile
 from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
@@ -18,16 +17,9 @@ def download(
     role: str = Depends(require_role([IIT, IMT, UNIMI])),
     db: Session = Depends(get_db),
 ) -> Response:
-    try:
-        result = installation_documents.download(db, document_id=document_id)
-    except NoResultFound as excp:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=RESOURCE_NOT_FOUND.format(_id=document_id, resource="documents"),
-        ) from excp
-    else:
-        response = Response(result)
-        return response
+    result = installation_documents.download(db, document_id=document_id)
+    response = Response(result)
+    return response
 
 
 @router.delete("/documents/{document_id}", response_model=InstallationDocumentRead)
@@ -36,15 +28,8 @@ def delete(
     role: str = Depends(require_role([IIT, IMT, UNIMI])),
     db: Session = Depends(get_db),
 ) -> InstallationDocumentRead:
-    try:
-        result = installation_documents.delete(db, document_id=document_id)
-    except NoResultFound as excp:
-        raise HTTPException(
-            status.HTTP_404_NOT_FOUND,
-            detail=RESOURCE_NOT_FOUND.format(_id=document_id, resource="documents"),
-        ) from excp
-    else:
-        return result
+    result = installation_documents.delete(db, document_id=document_id)
+    return result
 
 
 @router.post(
