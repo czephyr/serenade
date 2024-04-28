@@ -2,7 +2,7 @@
 import { getServerSession } from "next-auth";
 import authOptions from "../../api/auth/[...nextauth]/options";
 import { getAccessToken } from "../../../utils/sessionTokenAccessor";
-import { DocForm } from "../../../components/ticketComponents";
+import DocumentManager from "../../../components/documentManager";
 import TicketList from "../../../components/ticketList";
 import PatientDetail from "@/components/patientDetail";
 import InstallationDetail from "@/components/installationDetail";
@@ -88,7 +88,7 @@ export default async function TicketPage({ params }) {
   }
   const installation = await fetchInstallationDetails(params.id);
   const installationTickets = await fetchInstallationTickets(params.id);
-  // const documents = fetchDocumentsInfo(params.id);
+  const documents = await fetchDocumentsInfo(params.id);
 
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
@@ -96,7 +96,10 @@ export default async function TicketPage({ params }) {
         {JSON.stringify(patientDetails)}
         <PatientDetail initialData={patientDetails} role={roleFound} />
         <InstallationDetail initialData={installation} />
-        {/* <DocForm documents={documents} /> */}
+        <DocumentManager
+          initialDocuments={documents}
+          installation_id={params.id}
+        />
         <br></br>
         <TicketList
           installation_id={params.id}

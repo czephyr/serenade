@@ -1,5 +1,7 @@
 "use client";
 
+import React, { useState, useRef, useEffect } from "react";
+
 async function closeTicket(ticket_id) {
   const accessToken = await getAccessToken();
   const url = `${process.env.BACKEND_HOST}/api/v1/tickets/${ticket_id}/close`;
@@ -70,7 +72,7 @@ function DocForm({ documents }) {
   return (
     <div>
       <div className="text-white">
-        {JSON.stringify(patient_id)}
+        {/* {JSON.stringify(patient_id)} */}
         <form onSubmit={handleUpload} enctype="multipart/form-data">
           <input
             type="file"
