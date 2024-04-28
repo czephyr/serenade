@@ -2,8 +2,8 @@ from datetime import datetime
 
 import arlecchino
 import humanize
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import NoResultFound
 
 from ..core.const import SALT_HASH
 from ..core.excp import BadValues
@@ -25,9 +25,11 @@ from ..schemas.installation import (
     InstallationStatus,
 )
 from ..schemas.patient_base import PatientBase
+from ..utils import unfoundable
 from . import patient_status, tickets
 
 
+@unfoundable("patient")
 def query_one(db: Session, *, patient_id: int) -> InstallationDetail:
     result_orm = (
         db.query(InstallationDetail)
@@ -109,8 +111,11 @@ def last_update(db: Session, *, patient_id: int) -> str:
 def status(db: Session, *, patient_id: int) -> str:
     try:
         result_orm = query_one(db, patient_id=patient_id)
-    except NoResultFound:
-        return INSTALLATION_UNKNOW
+    except HTTPException as excp:
+        if excp.status_code == 404:
+            return INSTALLATION_UNKNOW
+        else:
+            raise excp
 
     ticket_status = all(
         e.status == TICKET_CLOSED for e in tickets.read_many(db, patient_id=patient_id)

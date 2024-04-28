@@ -134,7 +134,7 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
       {isOpen && (
         <div className="flex justify-center mt-4">
           <button
-            onClick={() => closeTicket(installNum)}
+            onClick={() => closeTicket(ticketNum)}
             className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Close Ticket

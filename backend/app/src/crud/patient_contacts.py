@@ -4,8 +4,10 @@ from ..ormodels import Contact
 from ..schemas.contact import ContactEntry, ContactCreate
 
 from .contacts import read_one
+from ..utils import unfoundable
 
 
+@unfoundable("patient")
 def query_many(db: Session, *, patient_id: int) -> list[Contact]:
     results_orm = db.query(Contact).where(Contact.patient_id == patient_id).all()
     return results_orm
