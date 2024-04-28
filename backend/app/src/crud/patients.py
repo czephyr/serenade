@@ -23,10 +23,11 @@ from ..schemas.patient import (
 )
 from ..schemas.ticket import TicketCreate
 from ..schemas.ticket_message import TicketMessageCreate
-from ..utils import to_age, to_city
+from ..utils import to_age, to_city, unfoundable
 from . import patient_contacts, tickets, installation_details
 
 
+@unfoundable("patient")
 def query_one(db: Session, *, patient_id: int) -> PatientFull:
     result_orm = db.query(PatientFull).where(PatientFull.patient_id == patient_id).one()
     return result_orm
@@ -95,7 +96,7 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
         raise DuplicateCF
 
     while True:
-        patient_id = int.from_bytes(random.randbytes(7), byteorder="little")
+        patient_id = random.randrange(2**1, 2**52)
         if not db.query(Patient).where(Patient.patient_id == patient_id).count():
             break
 
@@ -193,6 +194,7 @@ def update(db: Session, *, patient_id: int, patient: PatientUpdate) -> PatientRe
     return result
 
 
+@unfoundable("patient")
 def info(db: Session, *, patient_id: int) -> PatientInfo:
     result_orm = (
         db.query(PatientDetail).where(PatientDetail.patient_id == patient_id).one()

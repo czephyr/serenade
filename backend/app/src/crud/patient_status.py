@@ -5,8 +5,10 @@ from sqlalchemy.orm import Session
 from ..core.excp import BadValues
 from ..ormodels import Patient
 from ..schemas.patient_base import PatientBase
+from ..utils import unfoundable
 
 
+@unfoundable("patient")
 def query_one(db: Session, *, patient_id: int) -> Patient:
     result_orm = db.query(Patient).where(Patient.patient_id == patient_id).one()
     return result_orm

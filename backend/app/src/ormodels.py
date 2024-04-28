@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, ForeignKey, MetaData, String
+from sqlalchemy import BigInteger, ForeignKey, MetaData
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from typing_extensions import Annotated
 
@@ -11,7 +11,6 @@ _metadata = MetaData()
 class Base(DeclarativeBase):
     metadata = _metadata
     type_annotation_map = {
-        str: String().with_variant(String(255), "mysql", "mariadb"),
         bigint: BigInteger(),
     }
 
