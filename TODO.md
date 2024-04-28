@@ -7,21 +7,17 @@
   - [ ] bannare `ON UPDATE` su tutti gli `unique`
 
 ## backend
-- [ ] aggiungere `category` alla entità ticket
-- [X] `?as_role={role}` chiedere esplicitamente nell'API con che tipo di ruolo si vuole accedere ai dati (ruolo misto IIT IMT UNIMI)
-  - nessun ruolo multiplo
-- [ ] distinguere date installazione da date arruolamento
-- [ ] `PUT` su name di patient
 - [ ] 484 su `keycloak_openid.introspect`
-- [ ] wrapper crypto per mascherare `patient_id`
-- [ ] wrapper 404
-- [ ] solleva `LOCKED` su open/close invalido
 - [ ] allunga nomi funzioni endpoint (così si specchiano)
 - [ ] dataset diverso da arlecchino
+- [ ] BIGINT sqlachemy
+- [X] check CF before CREATE
+- [ ] Remove duplicate CF constraint
+- [ ] crud create: controlla che _id esista ForeingConstraint
 
 ## keycloak
 - [ ] SSL
-- [ ] attivare sign up
+- [ ] gruppo admin
 
 ## frontend
 - [ ] Nei dettagli paziente, il tasto per seguire alle dashboards anche nei dettagli `{DASHBOARD_SERVER_URL}?pid={patient_id}`
