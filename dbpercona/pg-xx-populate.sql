@@ -42,13 +42,13 @@ INSERT INTO contacts (patient_id, alias, phone_no, email) VALUES
 (5, 'Neighbor', '555-7890', NULL),
 (5, 'Neighbor', '555-7890', NULL);
 -- Populating the `tickets` table
-INSERT INTO tickets (ts, patient_id, date_closed)
+INSERT INTO tickets (ts, category,patient_id, date_closed)
 VALUES 
-    ('2024-04-12 08:00:00', 1, '2024-04-12 10:00:00'),
-    ('2024-04-12 09:00:00', 2, NULL),
-    ('2024-04-12 10:00:00', 3, '2024-04-12 12:00:00'),
-    ('2024-04-12 11:00:00', 4, NULL),
-    ('2024-04-12 12:00:00', 5, NULL);
+    ('2024-04-12 08:00:00', 'installazione',1, '2024-04-12 10:00:00'),
+    ('2024-04-12 09:00:00', 'disinstallazione',2, NULL),
+    ('2024-04-12 10:00:00', 'manutenzione',3, '2024-04-12 12:00:00'),
+    ('2024-04-12 11:00:00', 'manutenzione',4, NULL),
+    ('2024-04-12 12:00:00', 'manutenzione',5, NULL);
 
 
 -- Populating the `ticket_messages` table

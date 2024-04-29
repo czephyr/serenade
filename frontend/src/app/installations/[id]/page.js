@@ -2,7 +2,7 @@
 import { getServerSession } from "next-auth";
 import authOptions from "../../api/auth/[...nextauth]/options";
 import { getAccessToken } from "../../../utils/sessionTokenAccessor";
-import { DocForm } from "../../../components/ticketComponents";
+import DocumentManager from "../../../components/documentManager";
 import TicketList from "../../../components/ticketList";
 import PatientDetail from "@/components/patientDetail";
 import InstallationDetail from "@/components/installationDetail";
@@ -18,7 +18,7 @@ async function fetchInstallationDetails(installation_id) {
     },
   });
   if (!resp.ok) {
-    throw new Error("Failed to fetch ticket details.");
+    throw new Error("Failed to fetch installation details.");
   }
   return resp.json();
 }
@@ -88,20 +88,26 @@ export default async function TicketPage({ params }) {
   }
   const installation = await fetchInstallationDetails(params.id);
   const installationTickets = await fetchInstallationTickets(params.id);
-  // const documents = fetchDocumentsInfo(params.id);
+  const documents = await fetchDocumentsInfo(params.id);
 
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
-        {JSON.stringify(patientDetails)}
-        <PatientDetail initialData={patientDetails} role={roleFound} />
-        <InstallationDetail initialData={installation} />
-        {/* <DocForm documents={documents} /> */}
-        <br></br>
-        <TicketList
-          installation_id={params.id}
-          installationTickets={installationTickets}
-        />
+        <h1 className="text-2xl font-bold text-center text-black mb-2">
+          Installazione {installation.hue}
+        </h1>
+        <div className="space-y-1">
+          <TicketList
+            installation_id={params.id}
+            installationTickets={installationTickets}
+          />
+          <PatientDetail initialData={patientDetails} role={roleFound} />
+          <InstallationDetail initialData={installation} />
+          <DocumentManager
+            initialDocuments={documents}
+            installation_id={params.id}
+          />
+        </div>
       </div>
     </main>
   );

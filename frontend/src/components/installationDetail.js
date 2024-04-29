@@ -95,8 +95,6 @@ const InstallationDetail = ({ initialData, role }) => {
     "other_notes",
     "date_start",
     "date_end",
-    "date_join",
-    "date_exit",
   ];
 
   const renderField = (field) => {
@@ -114,8 +112,6 @@ const InstallationDetail = ({ initialData, role }) => {
       other_notes: { label: "Other Notes:", editable: true },
       date_start: { label: "Start Date:", editable: false },
       date_end: { label: "End Date:", editable: false },
-      date_join: { label: "Joining Date:", editable: false },
-      date_exit: { label: "Exit Date:", editable: false },
     };
 
     // Special handling for notes which might use textarea
@@ -198,9 +194,7 @@ const InstallationDetail = ({ initialData, role }) => {
     <main>
       <Toaster />
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-center text-black mb-2">
-          Dettagli installazione
-        </h1>
+        <h1 className="text-lg font-bold leading-tight mb-4">Installazione</h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
             {fields.map((field) => renderField(field, role))}

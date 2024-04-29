@@ -54,30 +54,23 @@ const NewTicketForm = ({ installation_id }) => {
           onClick={() => setShowAddTicket(true)}
           className="text-blue-500 hover:underline"
         >
-          Create new ticket
+          Nuovo ticket
         </a>
         <Toaster />
-        {/* <div className="bg-white shadow rounded-lg p-6 mt-6">
-        <button
-          onClick={() => setShowAddTicket(true)}
-          className="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Add New Ticket
-        </button>
-      </div> */}
       </div>
       {showAddTicket && (
         <div className="fixed inset-0 bg-opacity-50 overflow-y-auto h-full w-full text-black">
-          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+          <div className="relative top-20 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white">
             <div className="mt-3 text-center">
-              <h3 className="text-lg leading-6 font-medium">Add New Ticket</h3>
+              <h3 className="text-lg leading-6 font-medium">
+                Aggiungi un nuovo ticket
+              </h3>
               <div className="mt-2 px-7 py-3">
                 <textarea
                   name="msg"
                   placeholder="Message"
                   ref={msgRef}
-                  // className="mb-3 px-3 py-2 border border-gray-300 text-gray-900 rounded-md w-full"
-                  className="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="flex-grow px-3 py-2 w-full bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
                 />
               </div>
@@ -89,8 +82,9 @@ const NewTicketForm = ({ installation_id }) => {
                   required
                 >
                   <option value="">Select Category</option>
-                  <option value="disinstallazione">disinstallazione</option>
+                  <option value="installazione">installazione</option>
                   <option value="manutenzione">manutenzione</option>
+                  <option value="disinstallazione">disinstallazione</option>
                 </select>
               </div>
               <div className="items-center px-4 py-3">

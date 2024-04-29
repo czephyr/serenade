@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="flex flex-row">
-          <div className="w-4/5 p-3 h-screen">{children}</div>
+          <div className="w-4/5 h-screen">{children}</div>
           <div className="w-1/5 p-3 h-screen">
             <h2 className="text-3xl">frontend</h2>
               <AuthStatus />

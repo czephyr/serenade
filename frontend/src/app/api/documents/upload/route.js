@@ -7,31 +7,26 @@ export async function POST(req) {
   const session = await getServerSession(authOptions);
   console.log("reached internal post");
   if (session) {
-    const postBody = await req.json();
-    const url = `${process.env.BACKEND_HOST}/api/v1/tickets/?patient_id=${postBody.patient_id}`;
+    const formData = await req.formData();
+
+    const url = `${process.env.BACKEND_HOST}/api/v1/installations/${formData.get("installation_id")}/documents?file_type=${encodeURIComponent(formData.get("file_type"))}&file_name=${encodeURIComponent(formData.get("file_name"))}`;
     let accessToken = await getAccessToken();
-    console.log(
-      "POST" +
-        JSON.stringify({
-          patient_id: postBody.patient_id,
-          message: { body: postBody.message.body, sender: session.user.name },
-          category: postBody.category,
-        })
-    );
+
+    const outgoingFormData = new FormData();
+    outgoingFormData.append("file", formData.get("file"));
+
     const resp = await fetch(url, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
+        // Do not set 'Content-Type': 'multipart/form-data', let fetch do it
       },
       method: "POST",
-      body: JSON.stringify({
-        message: { body: postBody.message.body, sender: session.user.name },
-        category: postBody.category,
-      }),
+      body: outgoingFormData,
     });
-
+    console.log(resp);
     if (resp.ok) {
       const data = await resp.json();
+      console.log("we");
       console.log(data);
       return NextResponse.json({ data }, { status: resp.status });
     }
