@@ -24,7 +24,12 @@
 - redirects
   - [ ] sign up `{KEYCLOAK_SERVER_URL}/realms/{KEYCLOAK_REALM_NAME}/login-actions/registration`
   - [ ] account details `{KEYCLOAK_SERVER_URL}/realms/{KEYCLOAK_REALM_NAME}/account/`
+- [ ] When user is not logged, it needs to be redirected to home, not go in error
 
+## frontend - UI
+- [ ] In installation detail, a button to open and to close the installation, so that start and end get populated. Also they need to be moved up on the installation detail component and put on the same line
+- [ ] Nella creazione del paziente serve una tickbox che se tickata imposta la join date a "adessp", se no la si inserisce (endpoint join)
+- [ ] Nella pagina del paziente si puo' editare la join date e la closing date (enpoint exit)
 ## altro
 - [X] bug autobuild docker
 - [ ] dockerfile frontend
