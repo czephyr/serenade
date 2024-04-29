@@ -62,9 +62,7 @@ export default async function Installations() {
                 <tbody>
                   {installations.map((installation) => (
                     <tr key={installation.patient_id}>
-                      <td className="px-5 py-5 border-b">
-                        {installation.patient_id}
-                      </td>
+                      <td className="px-5 py-5 border-b">{installation.hue}</td>
                       <td className="px-5 py-5 border-b">
                         <StatusBadge status={installation.status} />
                       </td>

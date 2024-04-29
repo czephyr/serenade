@@ -3,9 +3,9 @@ import StatusBadge from "./statusBadge";
 
 const TicketList = ({ installation_id, installationTickets }) => {
   return (
-    <div>
+    <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+      <h1 className="text-lg font-bold leading-tight mb-4">Tickets</h1>
       <div className="overflow-x-auto">
-        <h3 className="text-lg font-bold leading-tight mb-4">Tickets</h3>
         <table className="min-w-full leading-normal">
           <thead>
             <tr>
