@@ -20,6 +20,13 @@ export default function NewPatientForm() {
   const medicalNotesRef = useRef();
   const neuroRef = useRef();
   const formRef = useRef();
+
+  const apartmentTypeRef = useRef();
+  const internetTypeRef = useRef();
+  const flatmatesRef = useRef();
+  const petsRef = useRef();
+  const smartphoneModelRef = useRef();
+
   useEffect(() => {
     if (
       status === "unauthenticated" ||
@@ -49,6 +56,7 @@ export default function NewPatientForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    let result;
     const patientData = {
       first_name: firstNameRef.current.value,
       last_name: lastNameRef.current.value,
@@ -65,8 +73,46 @@ export default function NewPatientForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(patientData),
       });
-      const result = await response.json();
+      result = await response.json();
       if (response.ok) {
+        console.log("tutto ok");
+        // formRef.current.reset();
+        // setContacts([]);
+        // router.refresh(); // Refresh the page to show new data
+        // toast.success("Successfully created!", {
+        //   position: "bottom-left",
+        // });
+      } else {
+        console.error("API call failed: ", result.error);
+      }
+    } catch (error) {
+      console.error("Failed to submit patient data: ", error);
+    }
+
+    const installationData = {
+      apartment_type: firstNameRef.current.value,
+      internet_type: lastNameRef.current.value,
+      flatmates: cfRef.current.value,
+      pets: neuroRef.current.value,
+      smartphone_model: addressRef.current.value,
+      appliances: "",
+      issues_notes: "",
+      habits_notes: "",
+      other_notes: "",
+    };
+    try {
+      console.log("seconda post a " + result.data.patient_id);
+      const response = await fetch(
+        `/api/installations/create?installation_id=${result.data.patient_id}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(installationData),
+        }
+      );
+      const second_result = await response.json();
+      if (response.ok) {
+        console.log("seconda post ok");
         formRef.current.reset();
         setContacts([]);
         router.refresh(); // Refresh the page to show new data
@@ -74,7 +120,7 @@ export default function NewPatientForm() {
           position: "bottom-left",
         });
       } else {
-        console.error("API call failed: ", result.error);
+        console.error("API call failed: ", second_result.error);
       }
     } catch (error) {
       console.error("Failed to submit patient data: ", error);
@@ -142,20 +188,6 @@ export default function NewPatientForm() {
                 <option value="no neurodegen">no neurodegen</option>
               </select>
             </label>
-            {/* <label htmlFor="gender" className="block">
-              <span className="text-gray-700">Gender:</span>
-              <select
-                id="gender"
-                ref={genderRef}
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
-              >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </label> */}
             <label htmlFor="cf" className="block">
               <span className="text-gray-700">Codice Fiscale:</span>
 
@@ -188,6 +220,53 @@ export default function NewPatientForm() {
               />
             </label>
 
+            <label htmlFor="apartmentType" className="block">
+              <span className="text-gray-700">Apartment Type:</span>
+              <input
+                type="text"
+                id="apartmentType"
+                ref={apartmentTypeRef}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </label>
+            <label htmlFor="internetType" className="block">
+              <span className="text-gray-700">Internet Type:</span>
+              <textarea
+                id="internetType"
+                ref={internetTypeRef}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </label>
+            <label htmlFor="flatmates" className="block">
+              <span className="text-gray-700">Flatmates:</span>
+              <textarea
+                id="flatmates"
+                ref={flatmatesRef}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </label>
+            <label htmlFor="pets" className="block">
+              <span className="text-gray-700">Pets:</span>
+              <textarea
+                id="pets"
+                ref={petsRef}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </label>
+            <label htmlFor="smartphoneModel" className="block">
+              <span className="text-gray-700">Smartphone Model:</span>
+              <textarea
+                id="smartphoneModel"
+                ref={smartphoneModelRef}
+                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </label>
+
             <div className="mt-4">
               <h3 className="text-lg font-bold">Contacts</h3>
               {contacts.map((contact, index) => (
@@ -210,62 +289,60 @@ export default function NewPatientForm() {
                   </a>
                 </div>
               ))}
-              <div>
-                <div className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 space-y-1">
-                  <label htmlFor="alias" className="block">
-                    <span className="text-gray-700">Alias:</span>
-                    <input
-                      type="text"
-                      name="alias"
-                      placeholder="Alias"
-                      ref={aliasRef}
-                      className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </label>
+              <div className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 space-y-1">
+                <label htmlFor="alias" className="block">
+                  <span className="text-gray-700">Alias:</span>
+                  <input
+                    type="text"
+                    name="alias"
+                    placeholder="Alias"
+                    ref={aliasRef}
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </label>
 
-                  <label htmlFor="phone_no" className="block">
-                    <span className="text-gray-700">Phone number:</span>
-                    <input
-                      type="text"
-                      name="phone_no"
-                      placeholder="Phone Number"
-                      ref={phoneNoRef}
-                      className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </label>
+                <label htmlFor="phone_no" className="block">
+                  <span className="text-gray-700">Phone number:</span>
+                  <input
+                    type="text"
+                    name="phone_no"
+                    placeholder="Phone Number"
+                    ref={phoneNoRef}
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </label>
 
-                  <label htmlFor="email" className="block">
-                    <span className="text-gray-700">Email:</span>
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                      ref={emailRef}
-                      className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                  </label>
+                <label htmlFor="email" className="block">
+                  <span className="text-gray-700">Email:</span>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    ref={emailRef}
+                    className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </label>
 
-                  <span>
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        addContact({
-                          alias: aliasRef.current.value,
-                          phone_no: phoneNoRef.current.value,
-                          email: emailRef.current.value,
-                        });
-                        // Clear the input fields after adding the contact
-                        aliasRef.current.value = "";
-                        phoneNoRef.current.value = "";
-                        emailRef.current.value = "";
-                      }}
-                      className="mt-3 w-32 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white no-underline bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                      Add Contact
-                    </a>
-                  </span>
-                </div>
+                <span>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      addContact({
+                        alias: aliasRef.current.value,
+                        phone_no: phoneNoRef.current.value,
+                        email: emailRef.current.value,
+                      });
+                      // Clear the input fields after adding the contact
+                      aliasRef.current.value = "";
+                      phoneNoRef.current.value = "";
+                      emailRef.current.value = "";
+                    }}
+                    className="mt-3 w-32 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white no-underline bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Add Contact
+                  </a>
+                </span>
               </div>
             </div>
             <div className="mt-6">
