@@ -24,8 +24,9 @@ from ..schemas.installation import (
     InstallationDetailUpdate,
     InstallationStatus,
 )
+from ..schemas.patient_base import PatientBase
 from ..utils import unfoundable
-from . import tickets
+from . import patient_status, tickets
 
 
 @unfoundable("patient")
@@ -42,9 +43,12 @@ def read_one(db: Session, *, patient_id: int) -> InstallationDetailRead:
     detail_orm = query_one(db, patient_id=patient_id)
     detail = InstallationDetailBase.model_validate(detail_orm)
 
-    kw = InstallationDetailBase.model_dump(detail)
-    kw["hue"] = arlecchino.draw(patient_id, SALT_HASH)
+    patient_orm = patient_status.query_one(db, patient_id=patient_id)
+    patient = PatientBase.model_validate(patient_orm)
 
+    kw = PatientBase.model_dump(patient)
+    kw |= InstallationDetailBase.model_dump(detail)
+    kw["hue"] = arlecchino.draw(patient_id, SALT_HASH)
     result = InstallationDetailRead.model_validate(kw)
     return result
 
