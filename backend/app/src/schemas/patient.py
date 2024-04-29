@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from pydantic import BaseModel
 
@@ -17,6 +17,8 @@ class PatientCreate(BaseModel):
     contacts: list[ContactCreate] | None = None
 
     medical_notes: str | None = None
+
+    joining_now: bool
 
 
 class PatientUpdate(BaseModel):
@@ -39,6 +41,9 @@ class PatientStatus(BaseModel):
     status: str
     hue: str | None
 
+    date_join: datetime | None
+    date_exit: datetime | None
+
 
 class PatientRead(BaseModel):
     patient_id: int
@@ -50,6 +55,9 @@ class PatientRead(BaseModel):
     place_of_birth: str
     gender: str
     age: int
+
+    date_join: datetime | None = None
+    date_exit: datetime | None = None
 
     neuro_diag: str | None
     age_class: str | None

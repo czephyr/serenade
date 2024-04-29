@@ -24,7 +24,7 @@ from ..schemas.patient import (
 from ..schemas.ticket import TicketCreate
 from ..schemas.ticket_message import TicketMessageCreate
 from ..utils import to_age, to_city, unfoundable
-from . import patient_contacts, tickets, installation_details
+from . import patient_contacts, tickets, installation_details, patient_status
 
 
 @unfoundable("patient")
@@ -62,6 +62,9 @@ def read_one(db: Session, *, patient_id: int) -> PatientRead:
         contacts=[
             ContactEntry.model_validate(contact) for contact in result_orm.contacts
         ],
+        # DATES
+        date_join=result_orm.date_join,
+        date_exit=result_orm.date_exit,
     )
     return result
 
@@ -78,6 +81,8 @@ def read_many(db: Session) -> list[PatientStatus]:
             patient_id=result_orm.patient_id,
             status=installation_details.status(db, patient_id=result_orm.patient_id),
             hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
+            date_join=result_orm.date_join,
+            date_exit=result_orm.date_exit,
         )
         for result_orm in results_orm
     ]
@@ -129,6 +134,9 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
     db.add(result_orm)
 
     db.commit()
+
+    if patient.joining_now:
+        patient_status.open(db, patient_id=patient_id)
 
     if patient.contacts is not None:
         _ = patient_contacts.create_many(
