@@ -2,7 +2,7 @@
 THE PROJECT IS WIP.
 
 How to spin up the project:
-1. clone the repo
+1. clone the repo and checkout the branch `feat-portability`
 2. in the source folder `docker compose up`
 3. mount the hostnames in your `/etc/hosts` file to use the traefik redirection:
     ```
