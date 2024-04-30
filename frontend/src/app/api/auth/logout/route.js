@@ -1,5 +1,5 @@
 import authOptions from "../[...nextauth]/options";
-import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth";
 import { getIdToken } from "@/utils/sessionTokenAccessor";
 
 export async function GET() {
