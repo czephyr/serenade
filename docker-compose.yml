@@ -1,14 +1,14 @@
 services:
   dbkeycloak:
     container_name: dbkeycloak
-    image: postgres:latest
+    image: postgres:16.2
     env_file:
       - .envars/.env.dbkeycloak
     ports:
       - ${DB_KEYCLOAK_PORT}:5432
   dbpercona:
     container_name: dbpercona
-    image: perconalab/postgres-tde-ext:latest
+    image: perconalab/postgres-tde-ext:0a65d3f0079e83e2573bc2ce1c970df89a5422f3
     env_file:
       - .envars/.env.dbpercona
     volumes:
@@ -68,7 +68,7 @@ services:
       - "traefik.http.routers.frontend.entrypoints=web"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
   traefik:
-    image: traefik:latest
+    image: traefik:3.0.0
     container_name: traefik
     ports:
       - 80:80

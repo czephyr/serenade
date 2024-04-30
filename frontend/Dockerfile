@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:22.0.0
 
 WORKDIR /src
 
