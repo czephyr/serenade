@@ -34,13 +34,12 @@ export default async function TicketPage({ params }) {
   const patient = await fetchPatient(params.id);
   console.log(JSON.stringify(patient));
   return (
-    <main className="text-white p-4">
-      <h1 className="text-4xl text-center mb-6">Patient Details</h1>
-      <div className="details-container">
-        {/* {ticket && <TicketDetails ticket={ticket} />} */}
-        {JSON.stringify(roleFound)}
+    <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
+      <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+        <h1 className="text-2xl font-bold text-center text-black mb-2">
+          Dettagli paziente
+        </h1>
         <PatientDetail initialData={patient} role={roleFound} />
-        {/* {patient && <PatientDetails patient={patient} role={roleFound} />} */}
       </div>
     </main>
   );

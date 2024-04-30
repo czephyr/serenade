@@ -8,26 +8,16 @@ export async function POST(req) {
   console.log("reached internal post");
   if (session) {
     const postBody = await req.json();
-    const url = `${process.env.BACKEND_HOST}/api/v1/tickets/?patient_id=${postBody.patient_id}`;
+    const url = `${process.env.BACKEND_HOST}/api/v1/installations/${req.nextUrl.searchParams.get("installation_id")}`;
     let accessToken = await getAccessToken();
-    console.log(
-      "POST" +
-        JSON.stringify({
-          patient_id: postBody.patient_id,
-          message: { body: postBody.message.body, sender: session.user.name },
-          category: postBody.category,
-        })
-    );
+
     const resp = await fetch(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
       },
       method: "POST",
-      body: JSON.stringify({
-        message: { body: postBody.message.body, sender: session.user.name },
-        category: postBody.category,
-      }),
+      body: JSON.stringify(postBody),
     });
 
     if (resp.ok) {

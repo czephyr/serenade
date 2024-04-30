@@ -137,11 +137,11 @@ const PatientDetail = ({ initialData, role }) => {
           </span>
         </label>
       );
-    } else if ((field === "age_class") & (role === "dottore")) {
+    } else if ((field === "age") & (role === "dottore")) {
       return (
         <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
-            Classe età:
+            Età:
             <input
               type="text"
               id={field}
@@ -402,22 +402,20 @@ const PatientDetail = ({ initialData, role }) => {
     <main>
       <Toaster />
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-center text-black mb-2">
-          Dettagli paziente
-        </h1>
+        <h1 className="text-lg font-bold leading-tight mb-4">Paziente</h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
             {fields.map((field) => renderField(field, role))}
-            <div className="bg-white shadow rounded-lg p-6 mt-6">
-              <h3 className="text-lg font-semibold leading-tight text-gray-900 mb-4">
+            <div className="bg-white p-6 mt-6 shadow-lg rounded">
+              <h3 className="text-lg font-semibold text-black leading-tight  mb-4">
                 Contacts
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-4 ">
                 {console.log(contacts)}
                 {contacts.map((contact, index) => (
                   <div
                     key={index}
-                    className="flex justify-between items-center mb-2 bg-white p-2 shadow rounded"
+                    className="flex justify-between items-center mb-2 bg-white p-2"
                   >
                     <span className="text-gray-800">
                       {contact.alias} - {contact.phone_no} - {contact.email}
@@ -437,7 +435,7 @@ const PatientDetail = ({ initialData, role }) => {
               </div>
               <button
                 onClick={() => setShowAddContactForm(true)}
-                className="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-4 rounded"
               >
                 Add New Contact
               </button>

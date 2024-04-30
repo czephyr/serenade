@@ -40,13 +40,8 @@ function DocumentManager({ initialDocuments, installation_id }) {
   }
 
   const downloadDocument = (documentId) => {
-    // /api/v1/documents/{document_id}
     const downloadUrl = `/api/documents/download?documentId=${documentId}`;
-    window.location.href = downloadUrl;
-    console.log(`Downloading document with ID ${documentId}`);
-    console.log(downloadUrl);
-    // In a real scenario, this would be a file download operation
-    // alert(`Download document with ID: ${documentId}`);
+    window.open(downloadUrl, "_blank");
   };
 
   async function uploadDocument(event) {
@@ -79,8 +74,8 @@ function DocumentManager({ initialDocuments, installation_id }) {
   }
 
   return (
-    <div className="p-5">
-      <h1 className="text-lg font-bold leading-tight mb-4">Document Manager</h1>
+    <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+      <h1 className="text-lg font-bold leading-tight mb-4">Documenti</h1>
       <div className="flex flex-col">
         {Object.values(documents).map((doc) => (
           <div
