@@ -1,5 +1,24 @@
 # 🎻 serenade
+How to spin up the project:
+1. clone the repo and checkout the branch `feat-portability`
+2. in the source folder `docker compose up`
+3. mount the hostnames in your `/etc/hosts` file to use the traefik redirection:
+    ```
+    127.0.0.1 frontend
+    127.0.0.1 keycloak
+    127.0.0.1 backend
+    ```
+4. Access the components at `http://component_name` ex: `http://frontend`
+5. Login as users:
+   ```
+   IIT
+   username: iit-gennaro
+   pswd: gennaro
 
+   HOS
+   username: dottore-alice
+   pswd: alice
+   ```
 ## Logic Model
 
 ### V0 - Fist model draft
