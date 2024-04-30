@@ -32,7 +32,9 @@ const PatientDetail = ({ initialData, role }) => {
     age_class: false,
     home_address: false,
     medical_notes: false,
-    gender: false, // Only true when editing
+    gender: false, // Only true when editing,
+    date_join: false,
+    date_exit: false,
   });
 
   const handleEdit = (field) => {
@@ -76,6 +78,8 @@ const PatientDetail = ({ initialData, role }) => {
   };
 
   const fields = [
+    "date_join",
+    "date_exit",
     "first_name",
     "last_name",
     "codice_fiscale",
@@ -336,6 +340,62 @@ const PatientDetail = ({ initialData, role }) => {
           </div>
         </span>
       );
+    } else if ((field == "date_join") & (role === "dottore")) {
+      return (
+        <span className="text-gray-700 flex w-full items-center">
+          <label htmlFor={field} className="flex-1">
+            Data di Ingresso:
+          </label>
+          <div className="flex flex-grow items-center">
+            <input
+              type="date"
+              id={field}
+              value={patient[field] ? patient[field].slice(0, 10) : ""}
+              onChange={(e) => handleChange(e, field)}
+              disabled={!isEditing[field]}
+              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+            <button
+              className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+              onClick={() =>
+                isEditing[field]
+                  ? handleSend(patient.patient_id, field, patient[field])
+                  : handleEdit(field)
+              }
+            >
+              {isEditing[field] ? "Send" : "Edit"}
+            </button>
+          </div>
+        </span>
+      );
+    } else if ((field === "date_exit") & (role === "dottore")) {
+      return (
+        <span className="text-gray-700 flex w-full items-center">
+          <label htmlFor={field} className="flex-1">
+            Data di Fine:
+          </label>
+          <div className="flex flex-grow items-center">
+            <input
+              type="date"
+              id={field}
+              value={patient[field] ? patient[field].slice(0, 10) : ""}
+              onChange={(e) => handleChange(e, field)}
+              disabled={!isEditing[field]}
+              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+            <button
+              className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+              onClick={() =>
+                isEditing[field]
+                  ? handleSend(patient.patient_id, field, patient[field])
+                  : handleEdit(field)
+              }
+            >
+              {isEditing[field] ? "Send" : "Edit"}
+            </button>
+          </div>
+        </span>
+      );
     } else {
       return "";
     }
@@ -400,6 +460,7 @@ const PatientDetail = ({ initialData, role }) => {
 
   return (
     <main>
+      {JSON.stringify(initialData)}
       <Toaster />
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <h1 className="text-lg font-bold leading-tight mb-4">Paziente</h1>
