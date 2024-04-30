@@ -14,6 +14,8 @@
 - [X] check CF before CREATE
 - [ ] Remove duplicate CF constraint
 - [ ] crud create: controlla che _id esista ForeingConstraint
+- [ ] contraints su date_
+- [ ] da datetime a date
 
 ## keycloak
 - [ ] SSL

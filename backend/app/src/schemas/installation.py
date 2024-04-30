@@ -40,6 +40,8 @@ class InstallationDetailCreate(BaseModel):
     issues_notes: str | None = None
     habits_notes: str | None = None
     other_notes: str | None = None
+    date_start: datetime | None = None
+    date_end: datetime | None = None
 
 
 class InstallationDetailUpdate(InstallationDetailCreate):

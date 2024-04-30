@@ -102,7 +102,10 @@ export default async function TicketPage({ params }) {
             installationTickets={installationTickets}
           />
           <PatientDetail initialData={patientDetails} role={roleFound} />
-          <InstallationDetail initialData={installation} />
+          <InstallationDetail
+            installation_id={params.id}
+            initialData={installation}
+          />
           <DocumentManager
             initialDocuments={documents}
             installation_id={params.id}

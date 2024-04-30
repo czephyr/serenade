@@ -20,6 +20,8 @@ export default function NewPatientForm() {
   const medicalNotesRef = useRef();
   const neuroRef = useRef();
   const formRef = useRef();
+  const joinDateRef = useRef();
+  const endingDateRef = useRef();
 
   const apartmentTypeRef = useRef();
   const internetTypeRef = useRef();
@@ -65,7 +67,13 @@ export default function NewPatientForm() {
       home_address: addressRef.current.value,
       medical_notes: medicalNotesRef.current.value,
       contacts: contacts,
+      date_join: joinDateRef.current.value,
     };
+    // Conditionally add 'ending_date' if it is not empty
+    if (endingDateRef.current && endingDateRef.current.value !== "") {
+      patientData.date_exit = endingDateRef.current.value;
+    }
+
     console.log(JSON.stringify(patientData));
     try {
       const response = await fetch("/api/patients/create", {
@@ -90,11 +98,11 @@ export default function NewPatientForm() {
     }
 
     const installationData = {
-      apartment_type: firstNameRef.current.value,
-      internet_type: lastNameRef.current.value,
-      flatmates: cfRef.current.value,
-      pets: neuroRef.current.value,
-      smartphone_model: addressRef.current.value,
+      apartment_type: apartmentTypeRef.current.value,
+      internet_type: internetTypeRef.current.value,
+      flatmates: flatmatesRef.current.value,
+      pets: petsRef.current.value,
+      smartphone_model: smartphoneModelRef.current.value,
       appliances: "",
       issues_notes: "",
       habits_notes: "",
@@ -138,6 +146,28 @@ export default function NewPatientForm() {
         <h1 className="text-2xl font-bold text-center mb-2">Create Patient</h1>
         <form onSubmit={handleSubmit} className="space-y-6" ref={formRef}>
           <div className="grid grid-cols-1 gap-1">
+            <div className="grid grid-cols-2 gap-3 mb-1">
+              <label htmlFor="joinDate" className="block">
+                <span className="text-gray-700">Join Date:</span>
+                <input
+                  type="date"
+                  id="joinDate"
+                  ref={joinDateRef}
+                  defaultValue={new Date().toISOString().substring(0, 10)}
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  required
+                />
+              </label>
+              <label htmlFor="endingDate" className="block">
+                <span className="text-gray-700">Ending Date:</span>
+                <input
+                  type="date"
+                  id="endingDate"
+                  ref={endingDateRef}
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              </label>
+            </div>
             <label htmlFor="firstName" className="block">
               <span className="text-gray-700">First Name:</span>
 

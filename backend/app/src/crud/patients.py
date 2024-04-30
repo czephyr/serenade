@@ -102,6 +102,8 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
 
     patient_orm = Patient(
         patient_id=patient_id,
+        date_join=patient.date_join,
+        date_exit=patient.date_exit,
     )
     db.add(patient_orm)
     db.commit()
@@ -177,6 +179,11 @@ def update(db: Session, *, patient_id: int, patient: PatientUpdate) -> PatientRe
         result_orm.details.home_address = patient.home_address
     if "medical_notes" in kw:
         result_orm.note.medical_notes = patient.medical_notes
+
+    if "date_join" in kw:
+        result_orm.date_join = patient.date_join
+    if "date_exit" in kw:
+        result_orm.date_exit = patient.date_exit
 
     if "first_name" in kw:
         if not patient.first_name:
