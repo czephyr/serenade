@@ -6,7 +6,7 @@ import { SetDynamicRoute } from "@/utils/setDynamicRoute";
 import StatusBadge from "../../components/statusBadge"; // Assume this is your form component
 
 async function getAllPatients() {
-  const url = `${process.env.BACKEND_HOST}/api/v1/patients/`;
+  const url = `${process.env.BACKEND_HOST}/api/v1/patients`;
 
   let accessToken = await getAccessToken();
 

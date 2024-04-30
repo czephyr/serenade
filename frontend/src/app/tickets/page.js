@@ -5,7 +5,7 @@ import { getAccessToken } from "../../utils/sessionTokenAccessor";
 import { SetDynamicRoute } from "@/utils/setDynamicRoute";
 
 async function getAllTickets() {
-  const url = `${process.env.BACKEND_HOST}/api/v1/tickets/`; // Adjust the URL to your tickets API endpoint
+  const url = `${process.env.BACKEND_HOST}/api/v1/tickets`; // Adjust the URL to your tickets API endpoint
 
   let accessToken = await getAccessToken();
 
