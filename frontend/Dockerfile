@@ -4,14 +4,15 @@ WORKDIR /src
 
 COPY ./src/package*.json ./
 
-RUN npm ci --include=dev
+RUN npm install
+# RUN npm ci --include=dev
 
 COPY ./src .
 
-RUN npm run build
+# RUN npm run build
 
 EXPOSE 80
 
-ENTRYPOINT ["npm", "start"]
-# ENTRYPOINT ["npm", "run", "dev"]
+# ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npm", "run", "dev"]
 CMD ["--", "--port", "80"]
