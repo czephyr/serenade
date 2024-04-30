@@ -101,39 +101,3 @@ def update_contact(
         contacts=contacts,
     )
     return result
-
-
-@router.post("/{patient_id}/exit", response_model=PatientBase)
-def close(
-    patient_id: int,
-    force: bool = False,
-    role: str = Depends(require_role([HOS])),
-    db: Session = Depends(get_db),
-) -> PatientBase:
-    try:
-        result = patient_status.close(db, patient_id=patient_id, force=force)
-    except BadValues as excp:
-        raise HTTPException(
-            status.HTTP_423_LOCKED,
-            detail=excp.args,
-        ) from excp
-    else:
-        return result
-
-
-@router.post("/{patient_id}/join", response_model=PatientBase)
-def open(
-    patient_id: int,
-    force: bool = False,
-    role: str = Depends(require_role([HOS, IMT])),
-    db: Session = Depends(get_db),
-) -> PatientBase:
-    try:
-        result = patient_status.open(db, patient_id=patient_id, force=force)
-    except BadValues as excp:
-        raise HTTPException(
-            status.HTTP_423_LOCKED,
-            detail=excp.args,
-        ) from excp
-    else:
-        return result

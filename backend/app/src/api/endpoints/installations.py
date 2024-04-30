@@ -77,50 +77,6 @@ def update(
     return result
 
 
-@router.post("/{patient_id}/close", response_model=InstallationDetailRead)
-def close(
-    patient_id: int,
-    force: bool = False,
-    role: str = Depends(require_role([IIT, IMT])),
-    db: Session = Depends(get_db),
-) -> InstallationDetailRead:
-    try:
-        result = maskable(installation_details.close, role)(
-            db,
-            patient_id=patient_id,
-            force=force,
-        )
-    except BadValues as excp:
-        raise HTTPException(
-            status.HTTP_423_LOCKED,
-            detail=excp.args,
-        ) from excp
-    else:
-        return result
-
-
-@router.post("/{patient_id}/open", response_model=InstallationDetailRead)
-def open(
-    patient_id: int,
-    force: bool = False,
-    role: str = Depends(require_role([IIT, IMT])),
-    db: Session = Depends(get_db),
-) -> InstallationDetailRead:
-    try:
-        result = maskable(installation_details.open, role)(
-            db,
-            patient_id=patient_id,
-            force=force,
-        )
-    except BadValues as excp:
-        raise HTTPException(
-            status.HTTP_423_LOCKED,
-            detail=excp.args,
-        ) from excp
-    else:
-        return result
-
-
 @router.get("/{patient_id}/tickets", response_model=list[TicketStatus])
 def read_tickets(
     patient_id: int,

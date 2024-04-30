@@ -134,34 +134,3 @@ def status(db: Session, *, patient_id: int) -> str:
             return INSTALLATION_CLOSING
         case _:
             return INSTALLATION_UNKNOW
-
-
-def open(
-    db: Session, *, patient_id: int, force: bool = False
-) -> InstallationDetailRead:
-    result_orm = query_one(db, patient_id=patient_id)
-    if not force and result_orm.date_start is not None:
-        raise BadValues("Installation is already marked as active.")
-    result_orm.date_start = datetime.now()
-    result_orm.date_end = None
-
-    db.commit()
-    db.refresh(result_orm)
-
-    result = read_one(db, patient_id=patient_id)
-    return result
-
-
-def close(
-    db: Session, *, patient_id: int, force: bool = False
-) -> InstallationDetailRead:
-    result_orm = query_one(db, patient_id=patient_id)
-    if not force and result_orm.date_end is not None:
-        raise BadValues("Installation is already marked as inactive.")
-    result_orm.date_end = datetime.now()
-
-    db.commit()
-    db.refresh(result_orm)
-
-    result = read_one(db, patient_id=patient_id)
-    return result

@@ -18,7 +18,8 @@ class PatientCreate(BaseModel):
 
     medical_notes: str | None = None
 
-    joining_now: bool
+    date_join: datetime | None = None
+    date_exit: datetime | None = None
 
 
 class PatientUpdate(BaseModel):
@@ -31,6 +32,9 @@ class PatientUpdate(BaseModel):
     home_address: str | None = None
 
     medical_notes: str | None = None
+
+    date_join: datetime | None = None
+    date_exit: datetime | None = None
 
 
 class PatientStatus(BaseModel):
