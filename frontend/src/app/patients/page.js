@@ -75,7 +75,9 @@ export default async function Patients() {
                         {patient.neuro_diag}
                       </td>
                       <td className="px-5 py-5 border-b">
-                        <StatusBadge status={patient.status} />
+                        <StatusBadge
+                          status={patient.date_exit ? "inattivo" : "attivo"}
+                        />
                       </td>
                       <td className="px-5 py-5 border-b">
                         <a
