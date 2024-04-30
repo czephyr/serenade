@@ -1,5 +1,27 @@
 # 🎻 serenade
 THE PROJECT IS WIP.
+
+How to spin up the project:
+1. clone the repo
+2. in the source folder `docker compose up`
+3. mount the hostnames in your `/etc/hosts` file to use the traefik redirection:
+    ```
+    127.0.0.1 frontend
+    127.0.0.1 keycloak
+    127.0.0.1 backend
+    ```
+4. Access the components at `http://component_name` ex: `http://frontend`
+5. Login as users:
+   ```
+   IIT
+   username: iit-gennaro
+   pswd: gennaro
+
+   HOS
+   username: dottore-alice
+   pswd: alice
+   ```
+
 ## Project Overview
 This project is a Pilot study for developing a platform to support the Serenade medical study by Policlinico di Milano in collaboration with Universita' degli studi di Milano. The platform is needed to facilitate the intercollaboration between the Hospital personnel, the hardware installators and the University team of researchers overseeing the study. 
 
