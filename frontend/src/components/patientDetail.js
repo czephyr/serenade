@@ -460,7 +460,6 @@ const PatientDetail = ({ initialData, role }) => {
 
   return (
     <main>
-      {JSON.stringify(initialData)}
       <Toaster />
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <h1 className="text-lg font-bold leading-tight mb-4">Paziente</h1>

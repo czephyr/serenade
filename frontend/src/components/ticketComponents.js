@@ -72,7 +72,6 @@ function DocForm({ documents }) {
   return (
     <div>
       <div className="text-white">
-        {/* {JSON.stringify(patient_id)} */}
         <form onSubmit={handleUpload} enctype="multipart/form-data">
           <input
             type="file"
