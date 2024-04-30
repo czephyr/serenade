@@ -1,0 +1,32 @@
+debug = true
+logLevel = "DEBUG"
+
+defaultEntryPoints = [
+  "http",
+  "https",
+  ]
+
+[entryPoints]
+  [entryPoints.web]
+    address = ":80"
+  [entryPoints.websecure]
+    address = ":443"
+
+[providers]
+  [providers.docker]
+    exposedbydefault=false
+  [providers.file]
+    directory = "/etc/traefik/dyn"
+
+[docker]
+  domain = "docker.local"
+  watch = true
+
+[api]
+  insecure = true
+  dashboard = true
+
+[log]
+  level = "DEBUG"
+
+[accessLog]

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date,datetime
 
 from pydantic import BaseModel
 
@@ -18,23 +18,32 @@ class PatientCreate(BaseModel):
 
     medical_notes: str | None = None
 
+    date_join: datetime | None = None
+    date_exit: datetime | None = None
+
 
 class PatientUpdate(BaseModel):
-    neuro_diag: str | None
-    age_class: str | None
+    first_name: str | None = None
+    last_name: str | None = None
 
-    home_address: str | None
-    contacts: list[ContactCreate] | None
+    neuro_diag: str | None = None
+    age_class: str | None = None
 
-    medical_notes: str | None
+    home_address: str | None = None
+
+    medical_notes: str | None = None
+
+    date_join: datetime | None = None
+    date_exit: datetime | None = None
 
 
 class PatientStatus(BaseModel):
     first_name: str
     last_name: str
-    age: int
+    neuro_diag: str | None
     patient_id: int
     status: str
+    hue: str | None
 
 
 class PatientRead(BaseModel):
@@ -45,6 +54,8 @@ class PatientRead(BaseModel):
     gender: str
     date_of_birth: date
     place_of_birth: str
+    gender: str
+    age: int
 
     neuro_diag: str | None
     age_class: str | None
@@ -58,3 +69,11 @@ class PatientRead(BaseModel):
 class PatientScreeningCreate(BaseModel):
     neuro_diag: str | None = None
     age_class: str | None = None
+
+
+class PatientInfo(BaseModel):
+    first_name: str
+    last_name: str
+    home_address: str | None
+
+    contacts: list[ContactEntry]

@@ -1,39 +1,39 @@
 # TODO
 
-- [ ] logica `ON DELETE` (fittizia, tipo `date_end` `NULL`)
+## dbpercona
+- [ ] chiave per crittografare
+- [ ] logica `ON DELETE`
   - [ ] coumunque `ON CASCADE` per gli admin, NON esposto su `endpoint`
   - [ ] bannare `ON UPDATE` su tutti gli `unique`
-- [ ] inverso di `validate_model` non solleva errori, conrolla che lo faccia in debug mode off
-- [ ] ticket visibile anche da `installations/{i_no}/tickets`
-  - [X] ma anche tutti gli altri `endpoint` (con swagger ??)
-- [X] (?????????) usare async / await per davvero:
-  - <https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html#engine-api-documentation>
-  - <https://fastapi.tiangolo.com/async/>
-- [ ] aggiungere `title` alla entità ticket
-- [X] (!?) `creation_date` su ogni entità
-- [ ] chiedere esplicitamente nell'API con che tipo di ruolo si vuole accedere ai dati (ruolo misto IIT IMT)
-- [X] pensare se è una buona idea mettere `OggettoCrete` come classe padre di `OggettoBase`
-  - vantaggio: puoi usare `model_dump` nella `create()`
-- [X] Dockerfile per il backend
 
-- [ ] env file con:
-  - KEYCLOAK_URL
-  - KEYCLOAK_REALM
-  - KEYCLOAK_CLIENT_ID
-  - KEYCLOAK_CLIENT_SECRET
-  - KEYCLOAK_PUBLIC_KEY
-- [X] gitignore js / node / react
-- [X] auto swagger api controlla
+## backend
+- [ ] 484 su `keycloak_openid.introspect`
+- [ ] allunga nomi funzioni endpoint (così si specchiano)
+- [ ] dataset diverso da arlecchino
+- [ ] BIGINT sqlachemy
+- [X] check CF before CREATE
+- [ ] Remove duplicate CF constraint
+- [ ] crud create: controlla che _id esista ForeingConstraint
+- [ ] contraints su date_
+- [ ] da datetime a date
 
-- [ ] 484 su keycloak_openid.introspect
-- [X] data_inizio e data_fine
-- [X] file multipli
-- [ ] filtro per ruolo
-- [ ] wrapper mascherare patient_id
-- [ ] mappa aliases
-- [X] update nullable
-- [ ] wrapper 404
-- [ ] patient PUT
-- [ ] solleva LOCKED su open/close invalido
-- [ ] allunga nomi endpoint
+## keycloak
+- [ ] SSL
+- [ ] gruppo admin
 
+## frontend
+- [ ] Nei dettagli paziente, il tasto per seguire alle dashboards anche nei dettagli `{DASHBOARD_SERVER_URL}?pid={patient_id}`
+- redirects
+  - [ ] sign up `{KEYCLOAK_SERVER_URL}/realms/{KEYCLOAK_REALM_NAME}/login-actions/registration`
+  - [ ] account details `{KEYCLOAK_SERVER_URL}/realms/{KEYCLOAK_REALM_NAME}/account/`
+- [ ] When user is not logged, it needs to be redirected to home, not go in error
+
+## frontend - UI
+- [ ] In installation detail, a button to open and to close the installation, so that start and end get populated. Also they need to be moved up on the installation detail component and put on the same line
+- [ ] Nella creazione del paziente serve una tickbox che se tickata imposta la join date a "adessp", se no la si inserisce (endpoint join)
+- [ ] Nella pagina del paziente si puo' editare la join date e la closing date (enpoint exit)
+## altro
+- [X] bug autobuild docker
+- [ ] dockerfile frontend
+- [ ] dischi persistenti nel dockerfile + dargli un nome
+- [ ] togliere volumi montati nei compose

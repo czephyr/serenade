@@ -1,20 +1,11 @@
 import random
 
+import arlecchino
 from codicefiscale import codicefiscale as cf
 from sqlalchemy.orm import Session
 
-from ..core.status import (
-    INSTALLATION_CLOSED,
-    INSTALLATION_CLOSING,
-    INSTALLATION_OPEN,
-    INSTALLATION_OPENING,
-    INSTALLATION_PAUSE,
-    TICKET_CLOSED,
-    INSTALLATION_UNKNOW,
-)
-
-from ..core.const import ADMIN_USERNAME, SMS_PATIENT_CREATE
-from ..core.excp import DuplicateCF
+from ..core.const import ADMIN_USERNAME, SALT_HASH, SMS_PATIENT_CREATE
+from ..core.excp import BadValues, DuplicateCF
 from ..ormodels import (
     Patient,
     PatientDetail,
@@ -26,24 +17,24 @@ from ..schemas.contact import ContactEntry
 from ..schemas.patient import (
     PatientCreate,
     PatientRead,
-    PatientScreeningCreate,
     PatientStatus,
     PatientUpdate,
+    PatientInfo,
 )
-from ..schemas.patient_base import PatientScreeningBase
 from ..schemas.ticket import TicketCreate
 from ..schemas.ticket_message import TicketMessageCreate
-from ..utils import to_age, to_city
-from . import contacts, tickets
+from ..utils import to_age, to_city, unfoundable
+from . import patient_contacts, tickets, installation_details
 
 
-def query_one(db: Session, patient_id: int) -> PatientFull:
+@unfoundable("patient")
+def query_one(db: Session, *, patient_id: int) -> PatientFull:
     result_orm = db.query(PatientFull).where(PatientFull.patient_id == patient_id).one()
     return result_orm
 
 
-def read_one(db: Session, patient_id: int) -> PatientRead:
-    result_orm = query_one(db, patient_id)
+def read_one(db: Session, *, patient_id: int) -> PatientRead:
+    result_orm = query_one(db, patient_id=patient_id)
     codice_fiscale = result_orm.note.codice_fiscale
     result = PatientRead(
         # Patient
@@ -57,11 +48,16 @@ def read_one(db: Session, patient_id: int) -> PatientRead:
         codice_fiscale=result_orm.note.codice_fiscale,
         # PatientNote : codice_fiscale
         gender=cf.decode(codice_fiscale)["gender"],
+        age=to_age(codice_fiscale),
         date_of_birth=cf.decode(codice_fiscale)["birthdate"],
         place_of_birth=to_city(codice_fiscale),
         # PatientScreening
-        neuro_diag=result_orm.screenings[-1].neuro_diag,
-        age_class=result_orm.screenings[-1].age_class,
+        neuro_diag=(
+            result_orm.screenings[-1].neuro_diag if result_orm.screenings else None
+        ),
+        age_class=(
+            result_orm.screenings[-1].age_class if result_orm.screenings else None
+        ),
         # Contact
         contacts=[
             ContactEntry.model_validate(contact) for contact in result_orm.contacts
@@ -70,22 +66,28 @@ def read_one(db: Session, patient_id: int) -> PatientRead:
     return result
 
 
-def read_many(db: Session, *, skip: int = 0, limit: int = 100) -> list[PatientStatus]:
-    results_orm = db.query(PatientFull).offset(skip).limit(limit).all()
+def read_many(db: Session) -> list[PatientStatus]:
+    results_orm = db.query(PatientFull).all()
     results = [
         PatientStatus(
             first_name=result_orm.details.first_name,
             last_name=result_orm.details.last_name,
-            age=to_age(result_orm.note.codice_fiscale),
+            neuro_diag=(
+                result_orm.screenings[-1].neuro_diag if result_orm.screenings else None
+            ),
             patient_id=result_orm.patient_id,
-            status=status(db, patient_id=result_orm.patient_id),
+            status=installation_details.status(db, patient_id=result_orm.patient_id),
+            hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
         )
         for result_orm in results_orm
     ]
     return results
 
 
-def create(db: Session, patient: PatientCreate) -> PatientRead:
+def create(db: Session, *, patient: PatientCreate) -> PatientRead:
+    if not cf.is_valid(patient.codice_fiscale):
+        raise BadValues("Invalid codice_fiscale")
+
     if (
         db.query(PatientNote)
         .where(PatientNote.codice_fiscale == patient.codice_fiscale)
@@ -94,12 +96,14 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
         raise DuplicateCF
 
     while True:
-        patient_id = int.from_bytes(random.randbytes(7), byteorder="little")
+        patient_id = random.randrange(2**1, 2**52)
         if not db.query(Patient).where(Patient.patient_id == patient_id).count():
             break
 
     patient_orm = Patient(
         patient_id=patient_id,
+        date_join=patient.date_join,
+        date_exit=patient.date_exit,
     )
     db.add(patient_orm)
     db.commit()
@@ -126,81 +130,86 @@ def create(db: Session, patient: PatientCreate) -> PatientRead:
     )
     db.add(result_orm)
 
+    db.commit()
+
     if patient.contacts is not None:
-        _ = contacts.create_many(db, patient_id, patient.contacts)
+        _ = patient_contacts.create_many(
+            db,
+            patient_id=patient_id,
+            contacts=patient.contacts,
+        )
 
     ticket = TicketCreate(
-        patient_id=patient_id,
         message=TicketMessageCreate(
             body=SMS_PATIENT_CREATE,
             sender=ADMIN_USERNAME,
         ),
+        category="PRIMA INSTALLAZIONE",
     )
-    tickets.create(db, ticket)
 
-    result = read_one(db, patient_id)
+    tickets.create(
+        db,
+        patient_id=patient_id,
+        ticket=ticket,
+    )
+
+    result = read_one(db, patient_id=patient_id)
     return result
 
 
-def update(db: Session, patient_id: int, patient: PatientUpdate) -> PatientRead:
-    result_orm = query_one(db, patient_id)
+def update(db: Session, *, patient_id: int, patient: PatientUpdate) -> PatientRead:
+    result_orm = query_one(db, patient_id=patient_id)
 
-    _ = create_screening(
-        db,
-        patient_id,
-        PatientScreeningCreate(
+    kw = patient.model_dump(exclude_unset=True)
+
+    if any([e in kw for e in ("neuro_diag", "age_class")]):
+        screening_orm = PatientScreening(
+            patient_id=patient_id,
             neuro_diag=patient.neuro_diag,
             age_class=patient.age_class,
-        ),
-    )
-    result_orm.details.home_address = patient.home_address
-    result_orm.note.medical_notes = patient.medical_notes
+        )
+        if result_orm.screenings:
+            if "nuero_diag" not in kw:
+                screening_orm.neuro_diag = result_orm.screenings[-1].neuro_diag
+            if "age_class" not in kw:
+                screening_orm.age_class = result_orm.screenings[-1].age_class
+        db.add(screening_orm)
 
-    if patient.contacts is not None:
-        contacts.delete_many(db, patient_id)
-        contacts.create_many(db, patient_id, patient.contacts)
+    if "home_address" in kw:
+        result_orm.details.home_address = patient.home_address
+    if "medical_notes" in kw:
+        result_orm.note.medical_notes = patient.medical_notes
+
+    if "date_join" in kw:
+        result_orm.date_join = patient.date_join
+    if "date_exit" in kw:
+        result_orm.date_exit = patient.date_exit
+
+    if "first_name" in kw:
+        if not patient.first_name:
+            raise BadValues("first_name cannot be empty")
+        result_orm.details.first_name = patient.first_name
+
+    if "last_name" in kw:
+        if not patient.last_name:
+            raise BadValues("last_name cannot be empty")
+        result_orm.details.last_name = patient.last_name
 
     db.commit()
 
-    result = read_one(db, patient_id)
+    result = read_one(db, patient_id=patient_id)
     return result
 
 
-def status(db: Session, patient_id: int) -> str:
-    result_orm = query_one(db, patient_id)
-    ticket_status = all(
-        e.status == TICKET_CLOSED for e in tickets.read_many(db, patient_id=patient_id)
+@unfoundable("patient")
+def info(db: Session, *, patient_id: int) -> PatientInfo:
+    result_orm = (
+        db.query(PatientDetail).where(PatientDetail.patient_id == patient_id).one()
     )
-    context = (
-        result_orm.date_start is not None,
-        result_orm.date_end is not None,
-        ticket_status,
+    result = PatientInfo(
+        first_name=result_orm.first_name,
+        last_name=result_orm.last_name,
+        home_address=result_orm.home_address,
+        contacts=patient_contacts.read_many(db, patient_id=patient_id),
     )
-    match context:
-        case (True, False, True):
-            return INSTALLATION_OPEN
-        case (True, False, False):
-            return INSTALLATION_PAUSE
-        case (_, True, True):
-            return INSTALLATION_CLOSED
-        case (False, _, False):
-            return INSTALLATION_OPENING
-        case (True, True, False):
-            return INSTALLATION_CLOSING
-        case _:
-            return INSTALLATION_UNKNOW
-
-
-def create_screening(
-    db: Session, patient_id: int, screening: PatientScreeningCreate
-) -> PatientScreeningBase:
-
-    result_orm = PatientScreening(
-        patient_id=patient_id,
-        neuro_diag=screening.neuro_diag,
-        age_class=screening.age_class,
-    )
-    db.add(result_orm)
-    db.refresh(result_orm)
-    result = PatientScreeningBase.model_validate(result_orm)
     return result

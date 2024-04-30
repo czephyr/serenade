@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, ForeignKey, MetaData, String
+from sqlalchemy import BigInteger, ForeignKey, MetaData
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from typing_extensions import Annotated
 
@@ -11,7 +11,6 @@ _metadata = MetaData()
 class Base(DeclarativeBase):
     metadata = _metadata
     type_annotation_map = {
-        str: String().with_variant(String(255), "mysql", "mariadb"),
         bigint: BigInteger(),
     }
 
@@ -21,8 +20,8 @@ class Patient(Base):
 
     ts: Mapped[datetime] = mapped_column(default=datetime.now)
     patient_id: Mapped[bigint] = mapped_column(primary_key=True)
-    date_start: Mapped[datetime | None]
-    date_end: Mapped[datetime | None]
+    date_join: Mapped[datetime | None]
+    date_exit: Mapped[datetime | None]
 
 
 class PatientFull(Patient):
@@ -81,7 +80,7 @@ class Contact(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     patient_id: Mapped[bigint] = mapped_column(ForeignKey("patients.patient_id"))
-    alias: Mapped[str]
+    alias: Mapped[str | None]
     phone_no: Mapped[str | None]
     email: Mapped[str | None]
 
@@ -105,6 +104,8 @@ class InstallationDetail(Base):
     issues_notes: Mapped[str | None]
     habits_notes: Mapped[str | None]
     other_notes: Mapped[str | None]
+    date_start: Mapped[datetime | None]
+    date_end: Mapped[datetime | None]
 
     patient: Mapped[Patient] = relationship()
     documents: Mapped[list["InstallationDocument"]] = relationship(
@@ -148,6 +149,7 @@ class Ticket(Base):
 
     patient_id: Mapped[bigint] = mapped_column(ForeignKey("patients.patient_id"))
     date_closed: Mapped[datetime | None]
+    category: Mapped[str | None]
 
     patient: Mapped[Patient] = relationship()
     messages: Mapped[list[TicketMessage]] = relationship(back_populates="ticket")

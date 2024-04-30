@@ -1,0 +1,4 @@
+[http.middlewares]
+  [http.middlewares.achillelauro.stripPrefix]
+    prefixes = ["/frontend", "/backend", "/keycloak"]
+    forceSlash = false
