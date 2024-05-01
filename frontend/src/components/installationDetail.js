@@ -83,20 +83,19 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
     }
   };
 
-  const fields = [
-    "date_start",
-    "date_end",
-    "apartment_type",
-    "internet_type",
-    "flatmates",
-    "pets",
-    "visitors",
-    "smartphone_model",
-    "appliances", // Only true when editing
-    "issues_notes",
-    "habits_notes",
-    "other_notes",
-  ];
+  const fields = {
+    dottore: ["apartment_type", "internet_type", "flatmates", "pets"],
+    imt_iit: [
+      "date_start",
+      "date_end",
+      "visitors",
+      "smartphone_model",
+      "appliances",
+      "issues_notes",
+      "habits_notes",
+      "other_notes",
+    ],
+  };
 
   const renderField = (field) => {
     // Define labels and editable status for specific fields
@@ -114,6 +113,14 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       date_start: { label: "Start Date:", editable: true },
       date_end: { label: "End Date:", editable: true },
     };
+
+    // Check if the field should be displayed for the current role
+    if (
+      (role === "dottore" && !fields.dottore.includes(field)) ||
+      ((role === "imt" || role === "iit") && !fields.imt_iit.includes(field))
+    ) {
+      return null; // Don't render anything if the field is not included for the role
+    }
 
     // Special handling for notes which might use textarea
     const textAreaFields = ["issues_notes", "habits_notes", "other_notes"];
@@ -207,7 +214,9 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         <h1 className="text-lg font-bold leading-tight mb-4">Installazione</h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
-            {fields.map((field) => renderField(field, role))}
+            {[...fields.dottore, ...fields.imt_iit].map((field) =>
+              renderField(field, role)
+            )}
           </div>
         </div>
       </div>

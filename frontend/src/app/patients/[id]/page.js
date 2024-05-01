@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import authOptions from "../../api/auth/[...nextauth]/options";
 import { getAccessToken } from "../../../utils/sessionTokenAccessor";
 import PatientDetail from "../../../components/patientDetail";
+import InstallationDetail from "@/components/installationDetail";
 
 async function fetchPatient(patient_id) {
   const accessToken = await getAccessToken();
@@ -20,6 +21,22 @@ async function fetchPatient(patient_id) {
   return resp.json();
 }
 
+async function fetchInstallationDetails(installation_id) {
+  const accessToken = await getAccessToken();
+  const url = `${process.env.BACKEND_HOST}/api/v1/installations/${installation_id}`;
+
+  const resp = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!resp.ok) {
+    throw new Error("Failed to fetch installation details.");
+  }
+  return resp.json();
+}
+
 export default async function TicketPage({ params }) {
   const session = await getServerSession(authOptions);
   let roleFound = "";
@@ -32,6 +49,7 @@ export default async function TicketPage({ params }) {
   }
   console.log(params.id);
   const patient = await fetchPatient(params.id);
+  const installation = await fetchInstallationDetails(params.id);
   console.log(JSON.stringify(patient));
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
@@ -40,6 +58,11 @@ export default async function TicketPage({ params }) {
           Dettagli paziente
         </h1>
         <PatientDetail initialData={patient} role={roleFound} />
+        <InstallationDetail
+          installation_id={params.id}
+          initialData={installation}
+          role={roleFound}
+        />
       </div>
     </main>
   );
