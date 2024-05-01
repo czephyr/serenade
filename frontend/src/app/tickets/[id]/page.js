@@ -60,7 +60,7 @@ const renderField = (field, data) => {
 function TicketDetails({ ticket }) {
   const ticketFields = [
     { key: "ticket_id", label: "Ticket ID" },
-    { key: "patient_id", label: "Patient ID" },
+    { key: "patient_id", label: "Installazione" },
     {
       key: "ts",
       label: "Issue Date and Time",
