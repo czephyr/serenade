@@ -4,17 +4,16 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect } from "react";
 
 async function keycloakSessionLogOut() {
-    try {
-      await fetch(`/api/auth/logout`, { method: "GET" });
-    } catch (err) {
-      console.error(err);
-    }
+  try {
+    await fetch(`/api/auth/logout`, { method: "GET" });
+  } catch (err) {
+    console.error(err);
   }
+}
 
 export default function AuthStatus() {
-  const { data: session, status } = useSession(); 
+  const { data: session, status } = useSession();
   useEffect(() => {
-    
     if (
       status != "loading" &&
       session &&
@@ -24,18 +23,20 @@ export default function AuthStatus() {
     }
   }, [session, status]);
 
-
   if (status == "loading") {
     return <div className="my-3">Loading...</div>;
   } else if (session) {
-    return ( 
+    return (
       <div className="my-3">
-        Logged in as <span className="text-yellow-100">{session.user.email}</span>{" "}
+        <span className="text-black-100">
+          <b>Username:</b> {session?.user.name}
+        </span>
         <button
-          className="bg-blue-900 font-bold text-white py-1 px-2 rounded border border-gray-50"
+          className="bg-blue-900 font-bold text-white py-1 px-2 ml-3 rounded border border-gray-50"
           onClick={() => {
             keycloakSessionLogOut().then(() => signOut({ callbackUrl: "/" }));
-          }}>
+          }}
+        >
           Log out
         </button>
       </div>
@@ -43,13 +44,11 @@ export default function AuthStatus() {
   }
 
   return (
-    <div className="my-3">
-      Not logged in.{" "}
-      <button
-        className="bg-blue-900 font-bold text-white py-1 px-2 rounded border border-gray-50"
-        onClick={() => signIn("keycloak")}>
-        Log in
-      </button>
-    </div>
+    <button
+      className="w-80 bg-blue-500 hover:bg-blue-700 text-white font-bold my-5 py-2 px-1 rounded focus:outline-none focus:shadow-outline"
+      onClick={() => signIn("keycloak", { callbackUrl: "/redirect" })}
+    >
+      Autenticati
+    </button>
   );
 }
