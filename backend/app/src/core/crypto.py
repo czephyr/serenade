@@ -1,18 +1,18 @@
 import base64
 import os
 from functools import wraps
-from typing import Callable, TypeVar, ParamSpec
-
-P = ParamSpec("P")
-T = TypeVar("T")
-
-from .roles import IIT
+from typing import Callable, ParamSpec, TypeVar
 
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 
+from .roles import IIT
+
 HUE_SIZE = int(os.getenv("HUE_SIZE", 25))
 __F = Fernet(os.getenv("FERNET_KEY", Fernet.generate_key()))
+
+P = ParamSpec("P")
+T = TypeVar("T")
 
 
 # TODO molto meglio se rifatta con i `Protocol`

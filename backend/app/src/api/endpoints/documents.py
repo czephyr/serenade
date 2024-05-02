@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
 from ...core.crypto import maskable
-from ...core.excp import RESOURCE_NOT_FOUND
 from ...core.roles import IIT, IMT, UNIMI
 from ...crud import installation_documents
 from ...schemas.installation_document import InstallationDocumentRead

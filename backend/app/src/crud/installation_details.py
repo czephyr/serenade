@@ -5,7 +5,6 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from ..core import crypto
-from ..core.excp import BadValues
 from ..core.status import (
     INSTALLATION_CLOSED,
     INSTALLATION_CLOSING,
