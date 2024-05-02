@@ -3,6 +3,7 @@ import authOptions from "../api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
 import { getAccessToken } from "../../utils/sessionTokenAccessor";
 import StatusBadge from "../../components/statusBadge"; // Assume this is your form component
+import genHue from "../../utils/hue";
 
 async function getAllInstallations() {
   const url = `${process.env.BACKEND_HOST}/api/v1/installations`; // Adjust the URL to your tickets API endpoint
@@ -62,7 +63,7 @@ export default async function Installations() {
                 <tbody>
                   {installations.map((installation) => (
                     <tr key={installation.patient_id}>
-                      <td className="px-5 py-5 border-b">{installation.hue}</td>
+                      <td className="px-5 py-5 border-b">{genHue(installation.hue)}</td>
                       <td className="px-5 py-5 border-b">
                         <StatusBadge status={installation.status} />
                       </td>
