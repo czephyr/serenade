@@ -1,11 +1,10 @@
 from datetime import datetime
 
-import arlecchino
 import humanize
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from ..core.const import SALT_HASH
+from ..core import crypto
 from ..core.excp import BadValues
 from ..core.status import (
     INSTALLATION_CLOSED,
@@ -48,7 +47,7 @@ def read_one(db: Session, *, patient_id: str) -> InstallationDetailRead:
 
     kw = PatientBase.model_dump(patient)
     kw |= InstallationDetailBase.model_dump(detail)
-    kw["hue"] = arlecchino.draw(patient_id, SALT_HASH)
+    kw["hue"] = crypto.hue(patient_id)
     result = InstallationDetailRead.model_validate(kw)
     return result
 
@@ -60,7 +59,7 @@ def read_many(db: Session) -> list[InstallationStatus]:
             patient_id=result_orm.patient_id,
             status=status(db, patient_id=result_orm.patient_id),
             date_delta=last_update(db, patient_id=result_orm.patient_id),
-            hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
+            hue=crypto.hue(result_orm.patient_id),
         )
         for result_orm in results_orm
     ]

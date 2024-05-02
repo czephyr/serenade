@@ -30,5 +30,5 @@ class TicketStatus(BaseModel):
     date_delta: str
     status: str
     last_sender: str | None
-    hue: str | None
+    hue: int | None
     category: str | None

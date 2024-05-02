@@ -31,6 +31,9 @@ P = ParamSpec("P")
 T = TypeVar("T")
 
 from .roles import IIT
+from cryptography.hazmat.primitives import hashes
+
+HUE_SIZE = int(os.getenv("HUE_SIZE", 25))
 
 
 # TODO molto meglio se rifatta con i `Protocol`
@@ -62,3 +65,12 @@ def maskable(func: Callable[P, T], role: str) -> Callable[P, T]:
         return result
 
     return wrapper
+
+
+def hue(value: str, max_size=HUE_SIZE) -> int:
+    digest = hashes.Hash(hashes.SHAKE128(max_size))
+    digest.update(value.encode())
+    rbytes = digest.finalize()
+
+    result = int.from_bytes(rbytes, byteorder="big")
+    return result

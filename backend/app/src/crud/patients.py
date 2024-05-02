@@ -4,7 +4,7 @@ import arlecchino
 from codicefiscale import codicefiscale as cf
 from sqlalchemy.orm import Session
 
-from ..core.const import ADMIN_USERNAME, SALT_HASH, SMS_PATIENT_CREATE
+from ..core.const import ADMIN_USERNAME, SMS_PATIENT_CREATE
 from ..core.excp import BadValues, DuplicateCF
 from ..ormodels import (
     Patient,
@@ -25,6 +25,7 @@ from ..schemas.ticket import TicketCreate
 from ..schemas.ticket_message import TicketMessageCreate
 from ..utils import to_age, to_city, unfoundable
 from . import patient_contacts, tickets, installation_details
+from ..core import crypto
 
 
 @unfoundable("patient")
@@ -77,7 +78,7 @@ def read_many(db: Session) -> list[PatientStatus]:
             ),
             patient_id=result_orm.patient_id,
             status=installation_details.status(db, patient_id=result_orm.patient_id),
-            hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
+            hue=crypto.hue(result_orm.patient_id),
         )
         for result_orm in results_orm
     ]

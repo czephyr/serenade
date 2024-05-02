@@ -43,7 +43,7 @@ class PatientStatus(BaseModel):
     neuro_diag: str | None
     patient_id: str
     status: str
-    hue: str | None
+    hue: int | None
 
 
 class PatientRead(BaseModel):

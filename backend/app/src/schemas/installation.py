@@ -26,7 +26,7 @@ class InstallationDetailBase(BaseModel):
 class InstallationDetailRead(InstallationDetailBase):
     date_join: datetime | None
     date_exit: datetime | None
-    hue: str | None
+    hue: int | None
 
 
 class InstallationDetailCreate(BaseModel):
@@ -52,4 +52,4 @@ class InstallationStatus(BaseModel):
     patient_id: str
     status: str
     date_delta: str
-    hue: str | None
+    hue: int | None

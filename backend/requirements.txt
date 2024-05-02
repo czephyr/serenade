@@ -9,4 +9,3 @@ python-codicefiscale
 python-multipart
 requests
 humanize
-arlecchino
