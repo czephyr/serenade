@@ -30,7 +30,7 @@ from . import patient_status, tickets
 
 
 @unfoundable("patient")
-def query_one(db: Session, *, patient_id: int) -> InstallationDetail:
+def query_one(db: Session, *, patient_id: str) -> InstallationDetail:
     result_orm = (
         db.query(InstallationDetail)
         .where(InstallationDetail.patient_id == patient_id)
@@ -39,7 +39,7 @@ def query_one(db: Session, *, patient_id: int) -> InstallationDetail:
     return result_orm
 
 
-def read_one(db: Session, *, patient_id: int) -> InstallationDetailRead:
+def read_one(db: Session, *, patient_id: str) -> InstallationDetailRead:
     detail_orm = query_one(db, patient_id=patient_id)
     detail = InstallationDetailBase.model_validate(detail_orm)
 
@@ -68,7 +68,7 @@ def read_many(db: Session) -> list[InstallationStatus]:
 
 
 def create(
-    db: Session, *, patient_id: int, installation: InstallationDetailCreate
+    db: Session, *, patient_id: str, installation: InstallationDetailCreate
 ) -> InstallationDetailRead:
     kw = installation.model_dump(exclude_unset=True)
     result_orm = InstallationDetail(**kw)
@@ -83,7 +83,7 @@ def create(
 
 
 def update(
-    db: Session, *, patient_id: int, installation: InstallationDetailUpdate
+    db: Session, *, patient_id: str, installation: InstallationDetailUpdate
 ) -> InstallationDetailRead:
     result_orm = query_one(db, patient_id=patient_id)
     kw = installation.model_dump(exclude_unset=True)
@@ -96,7 +96,7 @@ def update(
     return result
 
 
-def last_update(db: Session, *, patient_id: int) -> str:
+def last_update(db: Session, *, patient_id: str) -> str:
     ts_max = max(
         [
             m.ts
@@ -108,7 +108,7 @@ def last_update(db: Session, *, patient_id: int) -> str:
     return date_delta
 
 
-def status(db: Session, *, patient_id: int) -> str:
+def status(db: Session, *, patient_id: str) -> str:
     try:
         result_orm = query_one(db, patient_id=patient_id)
     except HTTPException as excp:

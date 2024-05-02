@@ -8,7 +8,7 @@ class InstallationDocumentBase(BaseModel):
 
     document_id: int
     ts: datetime
-    patient_id: int
+    patient_id: str
     file_name: str | None
     file_type: str | None
     file_content: bytes

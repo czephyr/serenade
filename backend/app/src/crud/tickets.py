@@ -11,7 +11,7 @@ from ..schemas.ticket import TicketBase, TicketCreate, TicketStatus
 from ..utils import unfoundable
 
 
-def create(db: Session, *, patient_id: int, ticket: TicketCreate) -> TicketBase:
+def create(db: Session, *, patient_id: str, ticket: TicketCreate) -> TicketBase:
     result_orm = Ticket(
         patient_id=patient_id,
         category=ticket.category,
@@ -46,7 +46,7 @@ def read_one(db: Session, *, ticket_id: int) -> TicketBase:
     return result
 
 
-def read_many(db: Session, *, patient_id: int | None = None) -> list[TicketStatus]:
+def read_many(db: Session, *, patient_id: str | None = None) -> list[TicketStatus]:
     results_orm = db.query(Ticket)
     if patient_id is not None:
         results_orm = results_orm.where(Ticket.patient_id == patient_id)

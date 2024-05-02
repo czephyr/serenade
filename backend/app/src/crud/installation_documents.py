@@ -24,7 +24,7 @@ def download(db: Session, *, document_id: int) -> bytes:
 def create(
     db: Session,
     *,
-    patient_id: int,
+    patient_id: str,
     file: bytes,
     file_type: str | None = None,
     file_name: str | None = None,
@@ -45,7 +45,7 @@ def create(
 
 
 @unfoundable("patient")
-def read_many(db: Session, *, patient_id: int) -> list[InstallationDocumentRead]:
+def read_many(db: Session, *, patient_id: str) -> list[InstallationDocumentRead]:
     results_orm = (
         db.query(InstallationDocument)
         .where(InstallationDocument.patient_id == patient_id)

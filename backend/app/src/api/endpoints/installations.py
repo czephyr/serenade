@@ -29,7 +29,7 @@ def read_many(
 
 @router.get("/{patient_id}", response_model=InstallationDetailRead)
 def read_one(
-    patient_id: int,
+    patient_id: str,
     role: str = Depends(require_role([IIT, IMT, UNIMI, HOS])),
     db: Session = Depends(get_db),
 ) -> InstallationDetailRead:
@@ -39,7 +39,7 @@ def read_one(
 
 @router.get("/{patient_id}/info", response_model=PatientInfo)
 def read_info(
-    patient_id: int,
+    patient_id: str,
     role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> PatientInfo:
@@ -49,7 +49,7 @@ def read_info(
 
 @router.post("/{patient_id}", response_model=InstallationDetailRead)
 def create(
-    patient_id: int,
+    patient_id: str,
     installation: InstallationDetailCreate,
     role: str = Depends(require_role([HOS, IIT, IMT])),
     db: Session = Depends(get_db),
@@ -64,7 +64,7 @@ def create(
 
 @router.put("/{patient_id}", response_model=InstallationDetailRead)
 def update(
-    patient_id: int,
+    patient_id: str,
     installation: InstallationDetailUpdate,
     role: str = Depends(require_role([HOS, IIT, IMT])),
     db: Session = Depends(get_db),
@@ -79,7 +79,7 @@ def update(
 
 @router.get("/{patient_id}/tickets", response_model=list[TicketStatus])
 def read_tickets(
-    patient_id: int,
+    patient_id: str,
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
 ) -> list[TicketStatus]:
@@ -89,7 +89,7 @@ def read_tickets(
 
 @router.post("/{patient_id}/tickets", response_model=TicketBase)
 def create_ticket(
-    patient_id: int,
+    patient_id: str,
     message: TicketCreate,
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),

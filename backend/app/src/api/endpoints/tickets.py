@@ -22,7 +22,7 @@ def read_many(
 
 @router.post("", response_model=TicketBase)
 def create(
-    patient_id: int,
+    patient_id: str,
     ticket: TicketCreate,
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),

@@ -28,12 +28,12 @@ from . import patient_contacts, tickets, installation_details
 
 
 @unfoundable("patient")
-def query_one(db: Session, *, patient_id: int) -> PatientFull:
+def query_one(db: Session, *, patient_id: str) -> PatientFull:
     result_orm = db.query(PatientFull).where(PatientFull.patient_id == patient_id).one()
     return result_orm
 
 
-def read_one(db: Session, *, patient_id: int) -> PatientRead:
+def read_one(db: Session, *, patient_id: str) -> PatientRead:
     result_orm = query_one(db, patient_id=patient_id)
     codice_fiscale = result_orm.note.codice_fiscale
     result = PatientRead(
@@ -157,7 +157,7 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
     return result
 
 
-def update(db: Session, *, patient_id: int, patient: PatientUpdate) -> PatientRead:
+def update(db: Session, *, patient_id: str, patient: PatientUpdate) -> PatientRead:
     result_orm = query_one(db, patient_id=patient_id)
 
     kw = patient.model_dump(exclude_unset=True)
@@ -202,7 +202,7 @@ def update(db: Session, *, patient_id: int, patient: PatientUpdate) -> PatientRe
 
 
 @unfoundable("patient")
-def info(db: Session, *, patient_id: int) -> PatientInfo:
+def info(db: Session, *, patient_id: str) -> PatientInfo:
     result_orm = (
         db.query(PatientDetail).where(PatientDetail.patient_id == patient_id).one()
     )

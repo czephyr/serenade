@@ -36,7 +36,7 @@ def delete(
     "/installations/{patient_id}/documents", response_model=InstallationDocumentRead
 )
 async def upload(
-    patient_id: int,
+    patient_id: str,
     file: UploadFile,
     file_type: str | None = None,
     file_name: str | None = None,
@@ -59,7 +59,7 @@ async def upload(
     response_model=list[InstallationDocumentRead],
 )
 async def read_many(
-    patient_id: int,
+    patient_id: str,
     role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> list[InstallationDocumentRead]:

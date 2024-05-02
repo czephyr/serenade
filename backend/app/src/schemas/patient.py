@@ -41,13 +41,13 @@ class PatientStatus(BaseModel):
     first_name: str
     last_name: str
     neuro_diag: str | None
-    patient_id: int
+    patient_id: str
     status: str
     hue: str | None
 
 
 class PatientRead(BaseModel):
-    patient_id: int
+    patient_id: str
     first_name: str
     last_name: str
     codice_fiscale: str
