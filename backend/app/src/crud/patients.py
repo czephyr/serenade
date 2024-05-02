@@ -1,6 +1,3 @@
-import random
-
-import arlecchino
 from codicefiscale import codicefiscale as cf
 from sqlalchemy.orm import Session
 
@@ -97,7 +94,7 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
         raise DuplicateCF
 
     while True:
-        patient_id = random.randrange(2**1, 2**52)
+        patient_id = crypto.draw()
         if not db.query(Patient).where(Patient.patient_id == patient_id).count():
             break
 
