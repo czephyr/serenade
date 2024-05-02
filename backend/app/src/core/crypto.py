@@ -8,7 +8,7 @@ from cryptography.hazmat.primitives import hashes
 
 from .roles import IIT
 
-HUE_SIZE = int(os.getenv("HUE_SIZE", 25))
+HUE_SIZE = int(os.getenv("HUE_SIZE", 6))
 __F = Fernet(os.getenv("FERNET_KEY", Fernet.generate_key()))
 
 P = ParamSpec("P")
