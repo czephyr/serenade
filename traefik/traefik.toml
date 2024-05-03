@@ -27,6 +27,6 @@ defaultEntryPoints = [
   dashboard = true
 
 [log]
-  level = "DEBUG"
+  level = "INFO"
 
 [accessLog]

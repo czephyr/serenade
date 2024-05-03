@@ -46,8 +46,8 @@ def read_one(db: Session, *, patient_id: str) -> InstallationDetailRead:
 
     kw = PatientBase.model_dump(patient)
     kw |= InstallationDetailBase.model_dump(detail)
-    kw["hue"] = crypto.hue(patient_id)
     result = InstallationDetailRead.model_validate(kw)
+    result.hue = crypto.hue(patient_id)
     return result
 
 
