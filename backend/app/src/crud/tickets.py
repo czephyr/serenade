@@ -29,7 +29,7 @@ def create(db: Session, *, patient_id: str, ticket: TicketCreate) -> TicketRead:
     db.commit()
     db.refresh(result_orm)
 
-    result = TicketBase.model_validate(result_orm)
+    result = read_one(db, ticket_id=result_orm.ticket_id)
     return result
 
 
@@ -39,9 +39,10 @@ def query_one(db: Session, *, ticket_id: int) -> Ticket:
     return result_orm
 
 
-def read_one(db: Session, *, ticket_id: int) -> TicketBase:
+def read_one(db: Session, *, ticket_id: int) -> TicketRead:
     result_orm = query_one(db, ticket_id=ticket_id)
-    result = TicketBase.model_validate(result_orm)
+    result = TicketRead.model_validate(result_orm)
+    result.hue = crypto.hue(result_orm.patient_id)
     return result
 
 
@@ -72,5 +73,5 @@ def update(db: Session, *, ticket_id: int) -> TicketRead:
     db.commit()
     db.refresh(result_orm)
 
-    result = TicketBase.model_validate(result_orm)
+    result = read_one(db, ticket_id=result_orm.ticket_id)
     return result
