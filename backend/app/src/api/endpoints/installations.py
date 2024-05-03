@@ -13,7 +13,7 @@ from ...schemas.installation import (
     InstallationStatus,
 )
 from ...schemas.patient import PatientInfo
-from ...schemas.ticket import TicketBase, TicketCreate, TicketStatus
+from ...schemas.ticket import TicketRead, TicketCreate, TicketStatus
 
 router = APIRouter()
 
@@ -87,13 +87,13 @@ def read_tickets(
     return result
 
 
-@router.post("/{patient_id}/tickets", response_model=TicketBase)
+@router.post("/{patient_id}/tickets", response_model=TicketRead)
 def create_ticket(
     patient_id: str,
     message: TicketCreate,
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
-) -> TicketBase:
+) -> TicketRead:
     result = maskable(tickets.create, role)(
         db,
         patient_id=patient_id,
