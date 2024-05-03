@@ -100,7 +100,8 @@ def last_update(db: Session, *, patient_id: str) -> str:
             m.ts
             for t in tickets.read_many(db, patient_id=patient_id)
             for m in tickets.query_one(db, ticket_id=t.ticket_id).messages
-        ]
+        ],
+        default=patient_status.query_one(db, patient_id=patient_id).ts,
     )
     date_delta = humanize.naturaltime((datetime.now() - ts_max))
     return date_delta
