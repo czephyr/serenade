@@ -7,7 +7,7 @@ from ..core import crypto
 from ..core.status import TICKET_CLOSED, TICKET_OPEN
 from ..ormodels import Ticket, TicketMessage
 from ..schemas.ticket import TicketCreate, TicketRead, TicketStatus
-from ..utils import unfoundable
+from ..core.excp import unfoundable
 
 
 def create(db: Session, *, patient_id: str, ticket: TicketCreate) -> TicketRead:

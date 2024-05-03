@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from ..ormodels import TicketMessage
 from ..schemas.ticket_message import TicketMessageBase, TicketMessageCreate
-from ..utils import unfoundable
+from ..core.excp import unfoundable
 
 
 @unfoundable("ticket")

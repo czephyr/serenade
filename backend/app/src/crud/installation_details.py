@@ -23,7 +23,7 @@ from ..schemas.installation import (
     InstallationStatus,
 )
 from ..schemas.patient_base import PatientBase
-from ..utils import unfoundable
+from ..core.excp import unfoundable
 from . import patient_status, tickets
 
 

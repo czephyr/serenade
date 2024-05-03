@@ -1,11 +1,8 @@
-from datetime import datetime
-
 from sqlalchemy.orm import Session
 
-from ..core.excp import BadValues
+from ..core.excp import unfoundable
 from ..ormodels import Patient
 from ..schemas.patient_base import PatientBase
-from ..utils import unfoundable
 
 
 @unfoundable("patient")

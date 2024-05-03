@@ -20,7 +20,8 @@ from ..schemas.patient import (
 )
 from ..schemas.ticket import TicketCreate
 from ..schemas.ticket_message import TicketMessageCreate
-from ..utils import to_age, to_city, unfoundable
+from ..utils import to_age, to_city
+from ..core.excp import unfoundable
 from . import patient_contacts, tickets, installation_details
 from ..core import crypto
 
