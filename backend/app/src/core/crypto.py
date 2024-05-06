@@ -8,7 +8,7 @@ from cryptography.hazmat.primitives import hashes
 
 from .roles import IIT
 
-HUE_SIZE = int(os.getenv("HUE_SIZE", 6))
+HUE_BYTE_SIZE = int(os.getenv("HUE_BYTE_SIZE", 6))
 __F = Fernet(os.getenv("FERNET_KEY", Fernet.generate_key()))
 
 P = ParamSpec("P")
@@ -72,7 +72,7 @@ def draw(size=24) -> str:
     return result
 
 
-def hue(value: str, max_size=HUE_SIZE) -> int:
+def hue(value: str, max_size=HUE_BYTE_SIZE) -> int:
     digest = hashes.Hash(hashes.SHAKE128(max_size))
     digest.update(value.encode())
     rbytes = digest.finalize()

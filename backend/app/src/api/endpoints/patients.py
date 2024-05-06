@@ -34,6 +34,11 @@ def create(
             status_code=409,
             detail=f"Patient {patient.codice_fiscale} already exists in database",
         ) from excp
+    except BadValues as excp:
+        raise HTTPException(
+            status_code=422,
+            detail=excp.args,
+        ) from excp
     else:
         return result
 
