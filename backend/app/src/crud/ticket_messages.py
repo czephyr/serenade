@@ -15,6 +15,7 @@ def read_many(db: Session, *, ticket_id: int) -> list[TicketMessageBase]:
     return results
 
 
+@unfoundable("ticket")
 def create(
     db: Session, *, ticket_id: int, message: TicketMessageCreate
 ) -> TicketMessageBase:

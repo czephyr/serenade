@@ -65,6 +65,7 @@ def read_many(db: Session) -> list[InstallationStatus]:
     return results
 
 
+@unfoundable("patient")
 def create(
     db: Session, *, patient_id: str, installation: InstallationDetailCreate
 ) -> InstallationDetailRead:

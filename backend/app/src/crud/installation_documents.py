@@ -21,6 +21,7 @@ def download(db: Session, *, document_id: int) -> bytes:
     return result
 
 
+@unfoundable("patient")
 def create(
     db: Session,
     *,

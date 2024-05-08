@@ -10,6 +10,7 @@ from ..schemas.ticket import TicketCreate, TicketRead, TicketStatus
 from ..core.excp import unfoundable
 
 
+@unfoundable("patient")
 def create(db: Session, *, patient_id: str, ticket: TicketCreate) -> TicketRead:
     result_orm = Ticket(
         patient_id=patient_id,
