@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from ...core.excp import BadValues, DuplicateCF
-from ...core.roles import HOS, IMT, IIT
-from ...crud import patient_contacts, patients, patient_status
+from ...core.roles import HOS, IIT
+from ...crud import patient_contacts, patients
 from ...schemas.contact import ContactCreate, ContactEntry
 from ...schemas.patient import PatientCreate, PatientRead, PatientStatus, PatientUpdate
 from ...schemas.patient_base import PatientBase
@@ -31,12 +31,12 @@ def create(
         result = patients.create(db, patient=patient)
     except DuplicateCF as excp:
         raise HTTPException(
-            status_code=409,
+            status.HTTP_409_CONFLICT,
             detail=f"Patient {patient.codice_fiscale} already exists in database",
         ) from excp
     except BadValues as excp:
         raise HTTPException(
-            status_code=422,
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail=excp.args,
         ) from excp
     else:

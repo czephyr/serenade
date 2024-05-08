@@ -82,7 +82,9 @@ def read_many(db: Session) -> list[PatientStatus]:
                 result_orm.screenings[-1].neuro_diag if result_orm.screenings else None
             ),
             patient_id=result_orm.patient_id,
-            status=installation_details.status(db, patient_id=result_orm.patient_id),
+            status=installation_details.read_status(
+                db, patient_id=result_orm.patient_id
+            ),
             hue=crypto.hue(result_orm.patient_id),
         )
         for result_orm in results_orm

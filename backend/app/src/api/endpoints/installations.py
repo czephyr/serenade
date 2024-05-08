@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
 from ...core.crypto import maskable
-from ...core.excp import BadValues
 from ...core.roles import HOS, IIT, IMT, UNIMI
 from ...crud import installation_details, tickets, patients
 from ...schemas.installation import (

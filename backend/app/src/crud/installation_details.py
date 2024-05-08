@@ -56,7 +56,7 @@ def read_many(db: Session) -> list[InstallationStatus]:
     results = [
         InstallationStatus(
             patient_id=result_orm.patient_id,
-            status=status(db, patient_id=result_orm.patient_id),
+            status=read_status(db, patient_id=result_orm.patient_id),
             date_delta=last_update(db, patient_id=result_orm.patient_id),
             hue=crypto.hue(result_orm.patient_id),
         )
@@ -134,11 +134,11 @@ def last_update(db: Session, *, patient_id: str) -> str:
     return date_delta
 
 
-def status(db: Session, *, patient_id: str) -> str:
+def read_status(db: Session, *, patient_id: str) -> str:
     try:
         result_orm = query_one(db, patient_id=patient_id)
     except HTTPException as excp:
-        if excp.status_code == 404:
+        if excp.status_code == status.HTTP_404_NOT_FOUND:
             return INSTALLATION_UNKNOW
         else:
             raise excp

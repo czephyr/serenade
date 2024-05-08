@@ -25,11 +25,11 @@ oauth2_scheme = OAuth2PasswordBearer(
 
 
 def get_db():
+    session = SessionLocal()
     try:
-        db = SessionLocal()
-        yield db
+        yield session
     finally:
-        db.close()
+        session.close()
 
 
 def user_info(token: str = Security(oauth2_scheme)) -> dict:
@@ -37,7 +37,7 @@ def user_info(token: str = Security(oauth2_scheme)) -> dict:
         token_info = keycloak_openid.introspect(token)
     except KeycloakAuthenticationError as inst:
         raise HTTPException(
-            status_code=401,
+            status.HTTP_401_UNAUTHORIZED,
             detail=f'{{"error": "Invalid credentials", "message": "{inst.error_message}", "body": "{inst.response_body}"}}',
         ) from inst
     if not token_info.get("active"):
@@ -68,7 +68,8 @@ def require_role(admitted_roles: list[str]) -> Callable[[dict], str]:
                 return role
 
         raise HTTPException(
-            status.HTTP_403_FORBIDDEN, detail="Insufficient permissions"
+            status.HTTP_403_FORBIDDEN,
+            detail="Insufficient permissions",
         )
 
     return role_checker
