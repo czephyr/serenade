@@ -4,9 +4,14 @@ from fastapi import HTTPException, status
 from sqlalchemy.exc import NoResultFound, IntegrityError
 
 RESOURCE_NOT_FOUND = "Resource {_id} has not been found in {resource}"
+JHON_TITOR = "{prev_key}={prev_value} is inconsistent with {curr_key}={curr_value}"
 
 
 class DuplicateCF(Exception):
+    pass
+
+
+class JhonTitor(ValueError):
     pass
 
 
@@ -41,5 +46,25 @@ def unfoundable(resource: str, argloc: str | int = 1) -> Callable:
     return outer
 
 
-def strictvalues():
-    pass
+def john_titor(prev, curr) -> bool:
+    if curr is None:
+        return False
+    if prev is None:
+        return True
+    return prev > curr
+
+
+def johntitorable(foo: Callable[P, T]) -> Callable[P, T]:
+    @wraps(foo)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        try:
+            result = foo(*args, **kwargs)
+        except JhonTitor as excp:
+            raise HTTPException(
+                status.HTTP_409_CONFLICT,
+                detail=excp.args,
+            ) from excp
+        else:
+            return result
+
+    return wrapper

@@ -1,10 +1,11 @@
 from datetime import datetime
 
 import humanize
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from ..core import crypto
+from ..core.excp import JHON_TITOR, JhonTitor, john_titor, johntitorable, unfoundable
 from ..core.status import (
     INSTALLATION_CLOSED,
     INSTALLATION_CLOSING,
@@ -23,7 +24,6 @@ from ..schemas.installation import (
     InstallationStatus,
 )
 from ..schemas.patient_base import PatientBase
-from ..core.excp import unfoundable
 from . import patient_status, tickets
 
 
@@ -65,10 +65,22 @@ def read_many(db: Session) -> list[InstallationStatus]:
     return results
 
 
+@johntitorable
 @unfoundable("patient")
 def create(
     db: Session, *, patient_id: str, installation: InstallationDetailCreate
 ) -> InstallationDetailRead:
+
+    if john_titor(installation.date_start, installation.date_end):
+        raise JhonTitor(
+            JHON_TITOR.format(
+                prev_key="date_start",
+                prev_value=installation.date_start,
+                curr_key="date_end",
+                curr_value=installation.date_end,
+            )
+        )
+
     kw = installation.model_dump(exclude_unset=True)
     result_orm = InstallationDetail(**kw)
     result_orm.patient_id = patient_id
@@ -81,11 +93,25 @@ def create(
     return result
 
 
+@johntitorable
 def update(
     db: Session, *, patient_id: str, installation: InstallationDetailUpdate
 ) -> InstallationDetailRead:
     result_orm = query_one(db, patient_id=patient_id)
     kw = installation.model_dump(exclude_unset=True)
+
+    date_start = result_orm.date_start if "date_start" not in kw else kw["date_start"]
+    date_end = result_orm.date_end if "date_end" not in kw else kw["date_end"]
+    if john_titor(date_start, date_end):
+        raise JhonTitor(
+            JHON_TITOR.format(
+                prev_key="date_start",
+                prev_value=date_start,
+                curr_key="date_end",
+                curr_value=date_end,
+            )
+        )
+
     for k, v in kw.items():
         setattr(result_orm, k, v)
     db.commit()
