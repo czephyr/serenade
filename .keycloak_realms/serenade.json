@@ -422,7 +422,6 @@
   "otpPolicyCodeReusable" : false,
   "otpSupportedApplications" : [ "totpAppFreeOTPName", "totpAppGoogleName", "totpAppMicrosoftAuthenticatorName" ],
   "localizationTexts" : { },
-  "webAuthnPolicyRpEntityName" : "keycloak",
   "webAuthnPolicySignatureAlgorithms" : [ "ES256" ],
   "webAuthnPolicyRpId" : "",
   "webAuthnPolicyAttestationConveyancePreference" : "not specified",
@@ -433,7 +432,6 @@
   "webAuthnPolicyAvoidSameAuthenticatorRegister" : false,
   "webAuthnPolicyAcceptableAaguids" : [ ],
   "webAuthnPolicyExtraOrigins" : [ ],
-  "webAuthnPolicyPasswordlessRpEntityName" : "keycloak",
   "webAuthnPolicyPasswordlessSignatureAlgorithms" : [ "ES256" ],
   "webAuthnPolicyPasswordlessRpId" : "",
   "webAuthnPolicyPasswordlessAttestationConveyancePreference" : "not specified",
@@ -2127,7 +2125,6 @@
     "clientSessionMaxLifespan" : "0",
     "acr.loa.map" : "{}"
   },
-  "keycloakVersion" : "24.0.3",
   "userManagedAccessAllowed" : false,
   "clientProfiles" : {
     "profiles" : [ {
