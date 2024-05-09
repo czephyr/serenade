@@ -1,0 +1,11 @@
+[[tls.certificates]]
+  certFile = "/etc/certs/keycloak-server.crt.pem"
+  keyFile = "/etc/certs/keycloak-server.key.pem"
+
+[[tls.certificates]]
+  certFile = "/etc/certs/backend.crt.pem"
+  keyFile = "/etc/certs/backend.key.pem"
+
+[[tls.certificates]]
+  certFile = "/etc/certs/frontend.crt.pem"
+  keyFile = "/etc/certs/frontend.key.pem"
