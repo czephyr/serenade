@@ -35,8 +35,8 @@ services:
       - "traefik.http.routers.keycloak_solid.tls=true"
       - "traefik.http.routers.keycloak_solid.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
       - "traefik.http.routers.keycloak_solid.entrypoints=websecure"
-      - "traefik.http.routers.keycloak_risky.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
-      - "traefik.http.routers.keycloak_risky.entrypoints=web"
+      # - "traefik.http.routers.keycloak_risky.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
+      # - "traefik.http.routers.keycloak_risky.entrypoints=web"
       - "traefik.http.services.keycloak.loadbalancer.server.port=80"
   backend:
     container_name: backend
