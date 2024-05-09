@@ -32,9 +32,12 @@ services:
     command: -v start-dev --import-realm
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
-      - "traefik.http.routers.keycloak.entrypoints=web"
-      - traefik.http.services.keycloak.loadbalancer.server.port=80
+      - "traefik.http.routers.keycloak_solid.tls=true"
+      - "traefik.http.routers.keycloak_solid.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
+      - "traefik.http.routers.keycloak_solid.entrypoints=websecure"
+      - "traefik.http.routers.keycloak_risky.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
+      - "traefik.http.routers.keycloak_risky.entrypoints=web"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=80"
   backend:
     container_name: backend
     build: backend
@@ -47,8 +50,11 @@ services:
       - ./backend/app:/app
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`${BACKEND_HOSTNAME}`)"
-      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.routers.backend_solid.tls=true"
+      - "traefik.http.routers.backend_risky.rule=Host(`${BACKEND_HOSTNAME}`)"
+      - "traefik.http.routers.backend_risky.entrypoints=web"
+      - "traefik.http.routers.backend_solid.rule=Host(`${BACKEND_HOSTNAME}`)"
+      - "traefik.http.routers.backend_solid.entrypoints=websecure"
       - "traefik.http.services.backend.loadbalancer.server.port=80"
   frontend:
     container_name: frontend
@@ -64,8 +70,11 @@ services:
       - ./frontend/src/utils:/src/utils
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`${FRONTEND_HOSTNAME}`)"
-      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.routers.frontend_solid.tls=true"
+      - "traefik.http.routers.frontend_solid.rule=Host(`${FRONTEND_HOSTNAME}`)"
+      - "traefik.http.routers.frontend_solid.entrypoints=websecure"
+      - "traefik.http.routers.frontend_risky.rule=Host(`${FRONTEND_HOSTNAME}`)"
+      - "traefik.http.routers.frontend_risky.entrypoints=web"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
   traefik:
     image: traefik:latest
