@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
-import authOptions from "../api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
+
+import authOptions from "@/app/api/auth/[...nextauth]/options";
 
 export default async function RoleBasedRedirect() {
   const session = await getServerSession(authOptions);

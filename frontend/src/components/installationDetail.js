@@ -100,12 +100,12 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
   const renderField = (field) => {
     // Define labels and editable status for specific fields
     const fieldDetails = {
-      apartment_type: { label: "Type of Apartment:", editable: true },
-      internet_type: { label: "Type of Internet:", editable: true },
+      apartment_type: { label: "Tipo appartamento:", editable: true },
+      internet_type: { label: "Tipo connessione internet:", editable: true },
       flatmates: { label: "Informazioni abitazione:", editable: true },
-      pets: { label: "Pets:", editable: true },
+      pets: { label: "Animali domestici:", editable: true },
       visitors: { label: "Allowed Visitors:", editable: true },
-      smartphone_model: { label: "Smartphone Model:", editable: true },
+      smartphone_model: { label: "Modello smartphone:", editable: true },
       appliances: { label: "Appliances:", editable: true },
       issues_notes: { label: "Issue Notes:", editable: true },
       habits_notes: { label: "Habits Notes:", editable: true },

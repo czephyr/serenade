@@ -1,28 +1,9 @@
 import { getServerSession } from "next-auth";
-import authOptions from "../api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
-import { getAccessToken } from "../../utils/sessionTokenAccessor";
+
+import authOptions from "@/app/api/auth/[...nextauth]/options";
+import { fetchFromBackend } from "@/utils/fetches";
 import { SetDynamicRoute } from "@/utils/setDynamicRoute";
-
-async function getAllTickets() {
-  const url = `${process.env.BACKEND_HOST}/api/v1/tickets`; // Adjust the URL to your tickets API endpoint
-
-  let accessToken = await getAccessToken();
-
-  const resp = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + accessToken,
-    },
-  });
-
-  if (resp.ok) {
-    const data = await resp.json();
-    return data;
-  }
-
-  throw new Error("Failed to fetch tickets. Status: " + resp.status);
-}
 
 export default async function Tickets() {
   const session = await getServerSession(authOptions);
@@ -33,7 +14,7 @@ export default async function Tickets() {
     (session.roles?.includes("iit") || session.roles?.includes("imt"))
   ) {
     try {
-      const tickets = await getAllTickets(); // Fetch tickets instead of patients
+      const tickets = await fetchFromBackend("tickets", "tickets"); // Fetch tickets instead of patients
 
       return (
         <main className="text-white">
