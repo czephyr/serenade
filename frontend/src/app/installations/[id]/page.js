@@ -101,7 +101,9 @@ export default async function TicketPage({ params }) {
             installation_id={params.id}
             installationTickets={installationTickets}
           />
-          <PatientDetail initialData={patientDetails} role={roleFound} />
+          {roleFound === "iit" && (
+            <PatientDetail initialData={patientDetails} role={roleFound} />
+          )}
           <InstallationDetail
             installation_id={params.id}
             initialData={installation}

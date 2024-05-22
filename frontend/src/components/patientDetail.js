@@ -235,7 +235,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </span>
@@ -266,7 +266,7 @@ const PatientDetail = ({ initialData, role }) => {
     } else if (field == "home_address") {
       return (
         <label htmlFor={field} className="block">
-          <span className="text-gray-700">Address:</span>
+          <span className="text-gray-700">Indirizzo:</span>
           <div className="flex items-center mt-1">
             <input
               type="text"
@@ -284,7 +284,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </label>
@@ -391,7 +391,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </span>
@@ -468,7 +468,7 @@ const PatientDetail = ({ initialData, role }) => {
             {fields.map((field) => renderField(field, role))}
             <div className="bg-white p-6 mt-6 shadow-lg rounded">
               <h3 className="text-lg font-semibold text-black leading-tight  mb-4">
-                Contacts
+                Contatti
               </h3>
               <div className="space-y-4 ">
                 {console.log(contacts)}
@@ -488,7 +488,7 @@ const PatientDetail = ({ initialData, role }) => {
                       }}
                       className="py-1 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
-                      Remove
+                      Elimina
                     </a>
                   </div>
                 ))}
@@ -497,7 +497,7 @@ const PatientDetail = ({ initialData, role }) => {
                 onClick={() => setShowAddContactForm(true)}
                 className="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-4 rounded"
               >
-                Add New Contact
+                Aggiungi contatto
               </button>
             </div>
             {showAddContactForm && (

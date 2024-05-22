@@ -63,24 +63,24 @@ function TicketDetails({ ticket }) {
     { key: "patient_id", label: "Installazione" },
     {
       key: "ts",
-      label: "Issue Date and Time",
+      label: "Data di apertura",
       formatter: (value) => new Date(value).toLocaleString(),
     },
     {
       key: "date_closed",
-      label: "Closure Date and Time",
+      label: "Data di chiusura",
       formatter: (value) => value && new Date(value).toLocaleString(),
     },
     {
       key: "category",
-      label: "Category",
+      label: "Categoria",
     },
   ];
 
   return (
     <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
       <h1 className="text-2xl font-bold text-center text-black mb-4">
-        Ticket Details
+        Dettagli del ticket
       </h1>
       <div className="space-y-6 text-black">
         <div className="grid grid-cols-1 gap-1">

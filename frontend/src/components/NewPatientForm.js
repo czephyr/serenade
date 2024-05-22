@@ -230,7 +230,7 @@ export default function NewPatientForm() {
               />
             </label>
             <label htmlFor="address" className="block">
-              <span className="text-gray-700">Address:</span>
+              <span className="text-gray-700">Indirizzo:</span>
 
               <input
                 type="text"

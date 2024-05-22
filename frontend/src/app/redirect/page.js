@@ -4,12 +4,13 @@ import { redirect } from "next/navigation";
 
 export default async function RoleBasedRedirect() {
   const session = await getServerSession(authOptions);
-  let roleFound = "";
-  if (session?.roles?.includes("iit")) {
-    roleFound = "iit";
+  if (
+    session?.roles?.includes("iit") ||
+    session?.roles?.includes("unimi") ||
+    session?.roles?.includes("imt")
+  ) {
     redirect("/installations");
   } else if (session?.roles?.includes("dottore")) {
-    roleFound = "dottore";
     redirect("/patients");
   }
 }

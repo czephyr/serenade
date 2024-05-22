@@ -94,9 +94,7 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
   return (
     <div className="text-black">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h3 className="text-lg font-bold leading-tight mb-4">
-          Ticket Messages
-        </h3>
+        <h3 className="text-lg font-bold leading-tight mb-4">Messaggi</h3>
         <ul className="list-disc pl-5 mb-4">
           {messages.map((msg, index) => (
             <li key={index} className="mb-1">

@@ -50,12 +50,12 @@ const NewTicketForm = ({ installation_id }) => {
     <div>
       <div className="mt-4">
         <Toaster />
-        <a
+        <button
           onClick={() => setShowAddTicket(true)}
-          className="text-blue-500 hover:underline"
+          className="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-4 rounded"
         >
           Nuovo ticket
-        </a>
+        </button>
         <Toaster />
       </div>
       {showAddTicket && (
