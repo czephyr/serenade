@@ -160,7 +160,7 @@ const PatientDetail = ({ initialData, role }) => {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
-            Neuro:
+            Categoria:
           </label>
           <div className="flex flex-grow items-center">
             <select
@@ -182,7 +182,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </span>
@@ -190,7 +190,7 @@ const PatientDetail = ({ initialData, role }) => {
     } else if ((field === "medical_notes") & (role === "dottore")) {
       return (
         <label htmlFor={field} className="block mt-3">
-          <span className="text-gray-700">Medical notes:</span>
+          <span className="text-gray-700">Note mediche:</span>
           <div className="flex items-center mt-1">
             <textarea
               id={field}
@@ -207,7 +207,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </label>
@@ -335,7 +335,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </span>
@@ -344,7 +344,7 @@ const PatientDetail = ({ initialData, role }) => {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
-            Data di Ingresso:
+            Data di Inizio:
           </label>
           <div className="flex flex-grow items-center">
             <input
@@ -363,7 +363,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </span>

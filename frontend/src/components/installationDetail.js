@@ -102,7 +102,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
     const fieldDetails = {
       apartment_type: { label: "Type of Apartment:", editable: true },
       internet_type: { label: "Type of Internet:", editable: true },
-      flatmates: { label: "Number of Flatmates:", editable: true },
+      flatmates: { label: "Informazioni abitazione:", editable: true },
       pets: { label: "Pets:", editable: true },
       visitors: { label: "Allowed Visitors:", editable: true },
       smartphone_model: { label: "Smartphone Model:", editable: true },
@@ -123,7 +123,12 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
     }
 
     // Special handling for notes which might use textarea
-    const textAreaFields = ["issues_notes", "habits_notes", "other_notes"];
+    const textAreaFields = [
+      "issues_notes",
+      "habits_notes",
+      "other_notes",
+      "flatmates",
+    ];
 
     const fieldInfo = fieldDetails[field] || { label: field, editable: false };
 
@@ -167,7 +172,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           )}
         </div>
