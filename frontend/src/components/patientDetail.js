@@ -505,20 +505,20 @@ const PatientDetail = ({ initialData, role }) => {
                 <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                   <div className="mt-3 text-center">
                     <h3 className="text-lg leading-6 font-medium text-gray-900">
-                      Add New Contact
+                      Aggiungi contatto
                     </h3>
                     <div className="mt-2 px-7 py-3">
                       <input
                         type="text"
                         name="alias"
-                        placeholder="Alias"
+                        placeholder="Nome"
                         ref={aliasRef}
                         className="mb-3 px-3 py-2 text-black border border-gray-300 rounded-md w-full"
                       />
                       <input
                         type="text"
                         name="phone_no"
-                        placeholder="Phone Number"
+                        placeholder="Numero di telefono"
                         ref={phoneNoRef}
                         className="mb-3 px-3 py-2 text-black border border-gray-300 rounded-md w-full"
                       />
@@ -544,7 +544,7 @@ const PatientDetail = ({ initialData, role }) => {
                         }
                         className="px-4 py-2 bg-green-500 text-base font-medium rounded-md w-full shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300"
                       >
-                        Add Contact
+                        Aggiungi
                       </button>
                     </div>
                     <div className="items-center px-4 py-3">
@@ -552,7 +552,7 @@ const PatientDetail = ({ initialData, role }) => {
                         onClick={() => setShowAddContactForm(false)}
                         className="px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
                       >
-                        Cancel
+                        Annulla
                       </button>
                     </div>
                   </div>

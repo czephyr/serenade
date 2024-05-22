@@ -104,14 +104,14 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       internet_type: { label: "Tipo connessione internet:", editable: true },
       flatmates: { label: "Informazioni abitazione:", editable: true },
       pets: { label: "Animali domestici:", editable: true },
-      visitors: { label: "Allowed Visitors:", editable: true },
+      visitors: { label: "Visitatori:", editable: true },
       smartphone_model: { label: "Modello smartphone:", editable: true },
-      appliances: { label: "Appliances:", editable: true },
-      issues_notes: { label: "Issue Notes:", editable: true },
-      habits_notes: { label: "Habits Notes:", editable: true },
-      other_notes: { label: "Other Notes:", editable: true },
-      date_start: { label: "Start Date:", editable: true },
-      date_end: { label: "End Date:", editable: true },
+      appliances: { label: "Elettrodomestici:", editable: true },
+      issues_notes: { label: "Note sui problemi:", editable: true },
+      habits_notes: { label: "Note sulle abitudini:", editable: true },
+      other_notes: { label: "Altre note:", editable: true },
+      date_start: { label: "Data inizio:", editable: true },
+      date_end: { label: "Data conclusione:", editable: true },
     };
 
     // Check if the field should be displayed for the current role

@@ -68,7 +68,7 @@ const NewTicketForm = ({ installation_id }) => {
               <div className="mt-2 px-7 py-3">
                 <textarea
                   name="msg"
-                  placeholder="Message"
+                  placeholder="Messaggio iniziale del ticket"
                   ref={msgRef}
                   className="flex-grow px-3 py-2 w-full bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
@@ -81,10 +81,10 @@ const NewTicketForm = ({ installation_id }) => {
                   className="mb-3 px-3 py-2 rounded-md w-full"
                   required
                 >
-                  <option value="">Select Category</option>
-                  <option value="installazione">installazione</option>
-                  <option value="manutenzione">manutenzione</option>
-                  <option value="disinstallazione">disinstallazione</option>
+                  <option value="">Seleziona una categoria</option>
+                  <option value="installazione">Installazione</option>
+                  <option value="manutenzione">Manutenzione</option>
+                  <option value="disinstallazione">Disinstallazione</option>
                 </select>
               </div>
               <div className="items-center px-4 py-3">
@@ -98,7 +98,7 @@ const NewTicketForm = ({ installation_id }) => {
                   }
                   className="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300"
                 >
-                  Send
+                  Invia
                 </button>
               </div>
               <div className="items-center px-4 py-3">
@@ -106,7 +106,7 @@ const NewTicketForm = ({ installation_id }) => {
                   onClick={() => setShowAddTicket(false)}
                   className="px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
                 >
-                  Cancel
+                  Annulla
                 </button>
               </div>
             </div>

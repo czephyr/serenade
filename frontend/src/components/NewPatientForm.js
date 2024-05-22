@@ -141,7 +141,7 @@ export default function NewPatientForm() {
         formRef.current.reset();
         setContacts([]);
         router.refresh(); // Refresh the page to show new data
-        toast.success("Successfully created!", {
+        toast.success("Paziente creato con successo!", {
           position: "bottom-left",
         });
       } else {
