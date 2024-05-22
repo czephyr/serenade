@@ -5,6 +5,7 @@ import { fetchFromBackend } from "@/utils/fetches";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
 
 import TicketMessages from "@/components/ticketMessageForm";
+import BackButton from "@/components/backButton";
 
 const renderField = (field, data) => {
   if (!data[field.key] && field.key === "date_closed") return null; // Do not render if no closure date
@@ -43,6 +44,7 @@ function TicketDetails({ ticket }) {
 
   return (
     <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+      <BackButton />
       <h1 className="text-2xl font-bold text-center text-black mb-4">
         Dettagli del ticket
       </h1>

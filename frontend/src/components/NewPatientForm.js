@@ -8,6 +8,8 @@ import CodiceFiscale from "codice-fiscale-js";
 import React, { useRef, useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
+import BackButton from "@/components/backButton";
+
 export default function NewPatientForm() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -160,6 +162,7 @@ export default function NewPatientForm() {
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
       <Toaster />
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+        <BackButton />
         <h1 className="text-2xl font-bold text-center mb-2">
           Creazione paziente
         </h1>

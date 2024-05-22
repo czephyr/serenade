@@ -65,7 +65,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       if (response.ok) {
         setPatient((prev) => ({ ...prev, [field]: value }));
         setIsEditing({ ...isEditing, [field]: false });
-        toast.success("Successfully edited!", {
+        toast.success("Modificato con successo!", {
           position: "bottom-left",
         });
       } else {
