@@ -29,7 +29,7 @@ function handleDelete(documentId) {
   })
     .then((response) => {
       if (response.ok) {
-        alert("Document deleted successfully");
+        alert("Documento eliminato con successo!");
         // Optionally refresh the list or remove the document from the display
       } else {
         alert("Failed to delete the document");
@@ -57,7 +57,7 @@ const handleUpload = async (event) => {
     );
 
     if (response.ok) {
-      alert("File uploaded successfully");
+      alert("Documento caricato con successo!");
     } else {
       alert("Failed to upload file");
     }

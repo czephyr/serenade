@@ -1,43 +1,22 @@
 import { getServerSession } from "next-auth";
-import authOptions from "../api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
-import { getAccessToken } from "../../utils/sessionTokenAccessor";
-import { SetDynamicRoute } from "@/utils/setDynamicRoute";
-import StatusBadge from "../../components/statusBadge"; // Assume this is your form component
 
-async function getAllPatients() {
-  const url = `${process.env.BACKEND_HOST}/api/v1/patients`;
+import { fetchFromBackend } from "@/utils/fetches";
+import authOptions from "@/app/api/auth/[...nextauth]/options";
 
-  let accessToken = await getAccessToken();
-
-  const resp = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + accessToken,
-    },
-  });
-
-  if (resp.ok) {
-    const data = await resp.json();
-    return data;
-  }
-
-  throw new Error("Failed to fetch data. Status: " + resp.status);
-}
+import StatusBadge from "@/components/statusBadge";
 
 export default async function Patients() {
   const session = await getServerSession(authOptions);
 
   if (session && session.roles?.includes("dottore")) {
     try {
-      const patients = await getAllPatients();
+      const patients = await fetchFromBackend("patients", "patients");
 
       return (
         <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
           <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
-            <h1 className="text-2xl font-bold text-center mb-2">
-              Patients List
-            </h1>
+            <h1 className="text-2xl font-bold text-center mb-2">Pazienti</h1>
             <div className="overflow-x-auto">
               <table className="min-w-full leading-normal">
                 <thead>
@@ -49,7 +28,7 @@ export default async function Patients() {
                       Cognome
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
-                      Neuro
+                      Categoria
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
                       Status
@@ -132,9 +111,10 @@ export default async function Patients() {
             <div className="mt-4">
               <a
                 href="/patients/create"
-                className="text-blue-500 hover:underline"
+                className="inline-flex items-center justify-center mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                role="button"
               >
-                Create new patient
+                Aggiungi nuovo paziente
               </a>
             </div>
           </div>

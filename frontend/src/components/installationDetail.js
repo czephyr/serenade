@@ -65,7 +65,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       if (response.ok) {
         setPatient((prev) => ({ ...prev, [field]: value }));
         setIsEditing({ ...isEditing, [field]: false });
-        toast.success("Successfully edited!", {
+        toast.success("Modificato con successo!", {
           position: "bottom-left",
         });
       } else {
@@ -100,18 +100,18 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
   const renderField = (field) => {
     // Define labels and editable status for specific fields
     const fieldDetails = {
-      apartment_type: { label: "Type of Apartment:", editable: true },
-      internet_type: { label: "Type of Internet:", editable: true },
-      flatmates: { label: "Number of Flatmates:", editable: true },
-      pets: { label: "Pets:", editable: true },
-      visitors: { label: "Allowed Visitors:", editable: true },
-      smartphone_model: { label: "Smartphone Model:", editable: true },
-      appliances: { label: "Appliances:", editable: true },
-      issues_notes: { label: "Issue Notes:", editable: true },
-      habits_notes: { label: "Habits Notes:", editable: true },
-      other_notes: { label: "Other Notes:", editable: true },
-      date_start: { label: "Start Date:", editable: true },
-      date_end: { label: "End Date:", editable: true },
+      apartment_type: { label: "Tipo appartamento:", editable: true },
+      internet_type: { label: "Tipo connessione internet:", editable: true },
+      flatmates: { label: "Informazioni abitazione:", editable: true },
+      pets: { label: "Animali domestici:", editable: true },
+      visitors: { label: "Visitatori:", editable: true },
+      smartphone_model: { label: "Modello smartphone:", editable: true },
+      appliances: { label: "Elettrodomestici:", editable: true },
+      issues_notes: { label: "Note sui problemi:", editable: true },
+      habits_notes: { label: "Note sulle abitudini:", editable: true },
+      other_notes: { label: "Altre note:", editable: true },
+      date_start: { label: "Data inizio:", editable: true },
+      date_end: { label: "Data conclusione:", editable: true },
     };
 
     // Check if the field should be displayed for the current role
@@ -123,7 +123,12 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
     }
 
     // Special handling for notes which might use textarea
-    const textAreaFields = ["issues_notes", "habits_notes", "other_notes"];
+    const textAreaFields = [
+      "issues_notes",
+      "habits_notes",
+      "other_notes",
+      "flatmates",
+    ];
 
     const fieldInfo = fieldDetails[field] || { label: field, editable: false };
 
@@ -167,7 +172,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           )}
         </div>

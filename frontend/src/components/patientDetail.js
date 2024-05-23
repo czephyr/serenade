@@ -59,7 +59,7 @@ const PatientDetail = ({ initialData, role }) => {
       if (response.ok) {
         setPatient((prev) => ({ ...prev, [field]: value }));
         setIsEditing({ ...isEditing, [field]: false });
-        toast.success("Successfully edited!", {
+        toast.success("Modificato con successo!", {
           position: "bottom-left",
         });
       } else {
@@ -160,7 +160,7 @@ const PatientDetail = ({ initialData, role }) => {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
-            Neuro:
+            Categoria:
           </label>
           <div className="flex flex-grow items-center">
             <select
@@ -182,7 +182,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </span>
@@ -190,7 +190,7 @@ const PatientDetail = ({ initialData, role }) => {
     } else if ((field === "medical_notes") & (role === "dottore")) {
       return (
         <label htmlFor={field} className="block mt-3">
-          <span className="text-gray-700">Medical notes:</span>
+          <span className="text-gray-700">Note mediche:</span>
           <div className="flex items-center mt-1">
             <textarea
               id={field}
@@ -207,7 +207,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </label>
@@ -235,7 +235,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </span>
@@ -266,7 +266,7 @@ const PatientDetail = ({ initialData, role }) => {
     } else if (field == "home_address") {
       return (
         <label htmlFor={field} className="block">
-          <span className="text-gray-700">Address:</span>
+          <span className="text-gray-700">Indirizzo:</span>
           <div className="flex items-center mt-1">
             <input
               type="text"
@@ -284,7 +284,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </label>
@@ -335,7 +335,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </span>
@@ -344,7 +344,7 @@ const PatientDetail = ({ initialData, role }) => {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
-            Data di Ingresso:
+            Data di Inizio:
           </label>
           <div className="flex flex-grow items-center">
             <input
@@ -363,7 +363,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </span>
@@ -391,7 +391,7 @@ const PatientDetail = ({ initialData, role }) => {
                   : handleEdit(field)
               }
             >
-              {isEditing[field] ? "Send" : "Edit"}
+              {isEditing[field] ? "Salva" : "Modifica"}
             </button>
           </div>
         </span>
@@ -468,7 +468,7 @@ const PatientDetail = ({ initialData, role }) => {
             {fields.map((field) => renderField(field, role))}
             <div className="bg-white p-6 mt-6 shadow-lg rounded">
               <h3 className="text-lg font-semibold text-black leading-tight  mb-4">
-                Contacts
+                Contatti
               </h3>
               <div className="space-y-4 ">
                 {console.log(contacts)}
@@ -488,7 +488,7 @@ const PatientDetail = ({ initialData, role }) => {
                       }}
                       className="py-1 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
-                      Remove
+                      Elimina
                     </a>
                   </div>
                 ))}
@@ -497,7 +497,7 @@ const PatientDetail = ({ initialData, role }) => {
                 onClick={() => setShowAddContactForm(true)}
                 className="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-4 rounded"
               >
-                Add New Contact
+                Aggiungi contatto
               </button>
             </div>
             {showAddContactForm && (
@@ -505,20 +505,20 @@ const PatientDetail = ({ initialData, role }) => {
                 <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                   <div className="mt-3 text-center">
                     <h3 className="text-lg leading-6 font-medium text-gray-900">
-                      Add New Contact
+                      Aggiungi contatto
                     </h3>
                     <div className="mt-2 px-7 py-3">
                       <input
                         type="text"
                         name="alias"
-                        placeholder="Alias"
+                        placeholder="Nome"
                         ref={aliasRef}
                         className="mb-3 px-3 py-2 text-black border border-gray-300 rounded-md w-full"
                       />
                       <input
                         type="text"
                         name="phone_no"
-                        placeholder="Phone Number"
+                        placeholder="Numero di telefono"
                         ref={phoneNoRef}
                         className="mb-3 px-3 py-2 text-black border border-gray-300 rounded-md w-full"
                       />
@@ -544,7 +544,7 @@ const PatientDetail = ({ initialData, role }) => {
                         }
                         className="px-4 py-2 bg-green-500 text-base font-medium rounded-md w-full shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300"
                       >
-                        Add Contact
+                        Aggiungi
                       </button>
                     </div>
                     <div className="items-center px-4 py-3">
@@ -552,7 +552,7 @@ const PatientDetail = ({ initialData, role }) => {
                         onClick={() => setShowAddContactForm(false)}
                         className="px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
                       >
-                        Cancel
+                        Annulla
                       </button>
                     </div>
                   </div>

@@ -1,41 +1,12 @@
 // pages/tickets.js
 import { getServerSession } from "next-auth";
-import authOptions from "../../api/auth/[...nextauth]/options";
-import { getAccessToken } from "../../../utils/sessionTokenAccessor";
-import PatientDetail from "../../../components/patientDetail";
+import { fetchFromBackend } from "@/utils/fetches";
+
+import authOptions from "@/app/api/auth/[...nextauth]/options";
+
+import PatientDetail from "@/components/patientDetail";
 import InstallationDetail from "@/components/installationDetail";
-
-async function fetchPatient(patient_id) {
-  const accessToken = await getAccessToken();
-  const url = `${process.env.BACKEND_HOST}/api/v1/patients/${patient_id}`;
-
-  const resp = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  if (!resp.ok) {
-    throw new Error("Failed to fetch ticket details.");
-  }
-  return resp.json();
-}
-
-async function fetchInstallationDetails(installation_id) {
-  const accessToken = await getAccessToken();
-  const url = `${process.env.BACKEND_HOST}/api/v1/installations/${installation_id}`;
-
-  const resp = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  if (!resp.ok) {
-    throw new Error("Failed to fetch installation details.");
-  }
-  return resp.json();
-}
+import BackButton from "@/components/backButton";
 
 export default async function TicketPage({ params }) {
   const session = await getServerSession(authOptions);
@@ -48,12 +19,19 @@ export default async function TicketPage({ params }) {
     return { redirect: { destination: "/unauthorized", permanent: false } };
   }
   console.log(params.id);
-  const patient = await fetchPatient(params.id);
-  const installation = await fetchInstallationDetails(params.id);
+  const patient = await fetchFromBackend(
+    `patient with id ${params.id}`,
+    `patients/${params.id}`
+  );
+  const installation = await fetchFromBackend(
+    `installation with id ${params.id}`,
+    `installations/${params.id}`
+  );
   console.log(JSON.stringify(patient));
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+        <BackButton />
         <h1 className="text-2xl font-bold text-center text-black mb-2">
           Dettagli paziente
         </h1>
