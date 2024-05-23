@@ -7,7 +7,6 @@ class InstallationDetailBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     ts: datetime
-    patient_id: str
 
     apartment_type: str | None
     internet_type: str | None
