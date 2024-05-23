@@ -14,7 +14,7 @@ function DocumentManager({ initialDocuments, installation_id }) {
   };
 
   async function deleteDocument(documentId) {
-    if (window.confirm("Are you sure you want to delete this document?")) {
+    if (window.confirm("Sei sicuro di voler eliminare questo documento?")) {
       const postBody = {
         document_id: documentId,
       };

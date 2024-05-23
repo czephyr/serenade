@@ -54,16 +54,16 @@ VALUES
 -- Populating the `ticket_messages` table
 INSERT INTO ticket_messages (ts, sender, body, ticket_id)
 VALUES 
-    ('2024-04-12 08:00:00', '>Bob', 'Message 1', 1),
-    ('2024-04-12 09:00:00', 'CHARLIE@ME', 'Message 2', 2),
-    ('2024-04-12 10:00:00', '>Bob', 'Message 3', 3),
-    ('2024-04-12 11:00:00', 'CHARLIE@ME', 'Message 4', 4),
-    ('2024-04-12 12:00:00', '>Bob', 'Message 5', 5),
-    ('2024-04-13 08:00:00', 'CHARLIE@ME', 'Message 1', 1),
-    ('2024-04-13 09:00:00', '>Bob', 'Message 2', 2),
-    ('2024-04-13 10:00:00', 'CHARLIE@ME', 'Message 3', 3),
-    ('2024-04-13 11:00:00', '>Bob', 'Message 4', 4),
-    ('2024-04-13 12:00:00', 'Admin', 'Message 5', 5);
+    ('2024-04-12 08:00:00', 'iit-gennaro', 'Message 1', 1),
+    ('2024-04-12 09:00:00', 'imt-vincenzo', 'Message 2', 2),
+    ('2024-04-12 10:00:00', 'iit-gennaro', 'Message 3', 3),
+    ('2024-04-12 11:00:00', 'imt-vincenzo', 'Message 4', 4),
+    ('2024-04-12 12:00:00', 'iit-gennaro', 'Message 5', 5),
+    ('2024-04-13 08:00:00', 'imt-vincenzo', 'Message 1', 1),
+    ('2024-04-13 09:00:00', 'iit-gennaro', 'Message 2', 2),
+    ('2024-04-13 10:00:00', 'imt-vincenzo', 'Message 3', 3),
+    ('2024-04-13 11:00:00', 'iit-gennaro', 'Message 4', 4),
+    ('2024-04-13 12:00:00', 'imt-vincenzo', 'Message 5', 5);
 
 INSERT INTO installation_documents (ts, patient_id, file_name, file_type, file_content)
 VALUES

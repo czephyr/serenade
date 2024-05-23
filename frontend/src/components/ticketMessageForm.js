@@ -9,7 +9,6 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   async function sendMsg(newMessage, ticket_num) {
-    // Trim the message and check if it is empty, prevent submission if it is
     const trimmedMessage = newMessage.trim();
     if (trimmedMessage === "") {
       console.log("Empty message submission attempt.");
@@ -47,13 +46,11 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString("en-US", {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return date.toLocaleString('it-IT',{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'})
   };
 
   async function closeTicket(ticket_num) {

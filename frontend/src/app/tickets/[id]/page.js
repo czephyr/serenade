@@ -24,17 +24,23 @@ const renderField = (field, data) => {
 
 function TicketDetails({ ticket }) {
   const ticketFields = [
-    { key: "ticket_id", label: "Ticket ID" },
-    { key: "patient_id", label: "Installazione" },
     {
       key: "ts",
       label: "Data di apertura",
-      formatter: (value) => new Date(value).toLocaleString(),
+      formatter: (value) => new Date(value).toLocaleString('it-IT',{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'}),
     },
     {
       key: "date_closed",
       label: "Data di chiusura",
-      formatter: (value) => value && new Date(value).toLocaleString(),
+      formatter: (value) => value && new Date(value).toLocaleString('it-IT',{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'}),
     },
     {
       key: "category",
