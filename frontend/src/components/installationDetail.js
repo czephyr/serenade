@@ -47,7 +47,6 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
   };
 
   async function handleSend(patient_id, field, value) {
-    // Here you would ideally send data to your endpoint and handle the response
     console.log(patient_id);
     const postBody = {
       patient_id: patient_id,
@@ -98,7 +97,6 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
   };
 
   const renderField = (field) => {
-    // Define labels and editable status for specific fields
     const fieldDetails = {
       apartment_type: { label: "Tipo appartamento:", editable: true },
       internet_type: { label: "Tipo connessione internet:", editable: true },
@@ -219,7 +217,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         <h1 className="text-lg font-bold leading-tight mb-4">Installazione</h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
-            {[...fields.dottore, ...fields.imt_iit].map((field) =>
+            {[...fields.imt_iit,...fields.dottore].map((field) =>
               renderField(field, role)
             )}
           </div>
