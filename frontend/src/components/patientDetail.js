@@ -94,8 +94,133 @@ const PatientDetail = ({ initialData, role }) => {
     "medical_notes",
   ];
 
-  const renderField = (field, role) => {
-    if ((field === "gender") & ((role === "imt") | (role === "dottore"))) {
+  const fields_acl = {
+    date_join: {
+      label: "Data di Inizio:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: false, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: true }
+      }
+    },
+    first_name: {
+      label: "Nome:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: true, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: false }
+      }
+    },
+    last_name: {
+      label: "Cognome:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: true, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: false }
+      }
+    },
+    codice_fiscale: {
+      label: "Codice fiscale:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: true, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: false }
+      }
+    },
+    gender: {
+      label: "Sesso:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: true, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: false }
+      }
+    },
+    date_of_birth: {
+      label: "Data di nascita:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: false, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: false }
+      }
+    },
+    place_of_birth: {
+      label: "Nato a:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: false, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: false }
+      }
+    },
+    age: {
+      label: "Età:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: false, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: false }
+      }
+    },
+    age_class: {
+      label: "Classe:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: false, editable: false },
+        unimi: { visible: true, editable: false },
+        dottore: { visible: true, editable: false }
+      }
+    },
+    home_address: {
+      label: "Indirizzo:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: false, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: false }
+      }
+    },
+    neuro_diag: {
+      label: "Categoria:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: false, editable: false },
+        unimi: { visible: true, editable: false },
+        dottore: { visible: true, editable: true }
+      }
+    },
+    medical_notes: {
+      label: "Note mediche:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: false, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: true }
+      }
+    },
+    date_exit: {
+      label: "Data di Fine:",
+      roles: {
+        iit: { visible: false, editable: false },
+        imt: { visible: false, editable: false },
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: true }
+      }
+    }
+  };
+
+  const renderField = (field) => {
+    console.log("###########"+JSON.stringify(field))
+    if (!fields_acl[field]["roles"][role]["visible"]) {
+      return null; // Don't render anything if the field is not included for the role
+    }
+
+    if (field === "gender") {
       return (
         <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
@@ -110,7 +235,7 @@ const PatientDetail = ({ initialData, role }) => {
           </span>
         </label>
       );
-    } else if ((field === "date_of_birth") & (role === "dottore")) {
+    } else if ((field === "date_of_birth")) {
       return (
         <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
@@ -127,7 +252,7 @@ const PatientDetail = ({ initialData, role }) => {
           </span>
         </label>
       );
-    } else if ((field === "place_of_birth") & (role === "dottore")) {
+    } else if ((field === "place_of_birth")) {
       return (
         <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
@@ -142,7 +267,7 @@ const PatientDetail = ({ initialData, role }) => {
           </span>
         </label>
       );
-    } else if ((field === "age") & (role === "dottore")) {
+    } else if ((field === "age")) {
       return (
         <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
@@ -157,7 +282,7 @@ const PatientDetail = ({ initialData, role }) => {
           </span>
         </label>
       );
-    } else if ((field === "neuro_diag") & (role === "dottore")) {
+    } else if ((field === "neuro_diag")) {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
@@ -175,7 +300,7 @@ const PatientDetail = ({ initialData, role }) => {
               <option value="neurodegen">neurodegen</option>
               <option value="no neurodegen">no neurodegen</option>
             </select>
-            <button
+            {fields_acl[field]["roles"][role]["editable"] && (<button
               className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
               onClick={() =>
                 isEditing[field]
@@ -184,11 +309,11 @@ const PatientDetail = ({ initialData, role }) => {
               }
             >
               {isEditing[field] ? "Salva" : "Modifica"}
-            </button>
+            </button>)}
           </div>
         </span>
       );
-    } else if ((field === "medical_notes") & (role === "dottore")) {
+    } else if ((field === "medical_notes")) {
       return (
         <label htmlFor={field} className="block mt-3">
           <span className="text-gray-700">Note mediche:</span>
@@ -313,7 +438,7 @@ const PatientDetail = ({ initialData, role }) => {
         //   </span>
         // </label>
       );
-    } else if ((field == "codice_fiscale") & (role === "dottore")) {
+    } else if ((field == "codice_fiscale")) {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
@@ -331,7 +456,7 @@ const PatientDetail = ({ initialData, role }) => {
           </div>
         </span>
       );
-    } else if ((field == "date_join") & (role === "dottore")) {
+    } else if ((field == "date_join")) {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
@@ -359,7 +484,7 @@ const PatientDetail = ({ initialData, role }) => {
           </div>
         </span>
       );
-    } else if ((field === "date_exit") & (role === "dottore")) {
+    } else if ((field === "date_exit")) {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
@@ -387,10 +512,8 @@ const PatientDetail = ({ initialData, role }) => {
           </div>
         </span>
       );
-    } else {
-      return "";
-    }
-  };
+
+  }};
 
   async function addContact(contact, patient_id) {
     const updatedContacts = [...contacts, contact];
@@ -456,8 +579,8 @@ const PatientDetail = ({ initialData, role }) => {
         <h1 className="text-lg font-bold leading-tight mb-4">Paziente</h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
-            {fields.map((field) => renderField(field, role))}
-            <div className="bg-white p-6 mt-6 shadow-lg rounded">
+            {fields.map(renderField)}
+            {role !== "unimi" && (<div className="bg-white p-6 mt-6 shadow-lg rounded">
               <h3 className="text-lg font-semibold text-black leading-tight  mb-4">
                 Contatti
               </h3>
@@ -491,7 +614,7 @@ const PatientDetail = ({ initialData, role }) => {
               >
                 Aggiungi contatto
               </button>
-            </div>
+            </div>)}
             {showAddContactForm && (
               <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
                 <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">

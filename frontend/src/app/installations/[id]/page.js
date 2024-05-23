@@ -26,7 +26,7 @@ export default async function TicketPage({ params }) {
     return { redirect: { destination: "/unauthorized", permanent: false } };
   }
 
-  if (roleFound == "iit"){
+  if (roleFound == "iit" || roleFound == "unimi"){
   try {
     patientDetails = await fetchFromBackend(
       "installations info",
@@ -65,7 +65,7 @@ export default async function TicketPage({ params }) {
             installation_id={params.id}
             installationTickets={installationTickets}
           />)}
-          {roleFound === "iit" && (
+          {(roleFound === "iit" || roleFound == "unimi") && (
             <PatientDetail initialData={patientDetails} role={roleFound} />
           )}
           <InstallationDetail

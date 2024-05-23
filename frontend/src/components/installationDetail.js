@@ -271,9 +271,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         <h1 className="text-lg font-bold leading-tight mb-4">Installazione</h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
-            {[...fields.imt_iit,...fields.dottore].map((field) =>
-              renderField(field, role)
-            )}
+            {[...fields.imt_iit,...fields.dottore].map(renderField)}
           </div>
         </div>
       </div>
