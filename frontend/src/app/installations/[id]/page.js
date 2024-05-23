@@ -17,10 +17,15 @@ export default async function TicketPage({ params }) {
   let patientDetails;
   if (session?.roles?.includes("iit")) {
     roleFound = "iit";
-    patientDetails = await fetchFromBackend(
-      "installations info",
-      `installations/${params.id}/info`
-    );
+    try {
+      patientDetails = await fetchFromBackend(
+        "installations info",
+        `installations/${params.id}/info`
+      );
+    } catch (error) {
+      console.error(error.message);
+      return { redirect: { destination: "/unauthorized", permanent: false } };
+    }
     patientDetails.patient_id = params.id;
   } else if (session?.roles?.includes("imt")) {
     roleFound = "imt";

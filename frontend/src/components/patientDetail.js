@@ -42,7 +42,6 @@ const PatientDetail = ({ initialData, role }) => {
   };
 
   async function handleSend(patient_id, field, value) {
-    // Here you would ideally send data to your endpoint and handle the response
     const postBody = {
       patient_id: patient_id,
       fieldId: field,
@@ -119,7 +118,9 @@ const PatientDetail = ({ initialData, role }) => {
             <input
               type="text"
               id={field}
-              value={patient[field]}
+              value={new Date(patient[field]).toLocaleString('it-IT',{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'})}
               disabled
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
