@@ -1,10 +1,11 @@
 from datetime import datetime
 
 import humanize
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from ..core import crypto
+from ..core.excp import JHON_TITOR, JhonTitor, john_titor, johntitorable, unfoundable
 from ..core.status import (
     INSTALLATION_CLOSED,
     INSTALLATION_CLOSING,
@@ -23,7 +24,6 @@ from ..schemas.installation import (
     InstallationStatus,
 )
 from ..schemas.patient_base import PatientBase
-from ..utils import unfoundable
 from . import patient_status, tickets
 
 
@@ -46,8 +46,8 @@ def read_one(db: Session, *, patient_id: str) -> InstallationDetailRead:
 
     kw = PatientBase.model_dump(patient)
     kw |= InstallationDetailBase.model_dump(detail)
-    kw["hue"] = crypto.hue(patient_id)
     result = InstallationDetailRead.model_validate(kw)
+    result.hue = crypto.hue(patient_id)
     return result
 
 
@@ -56,7 +56,7 @@ def read_many(db: Session) -> list[InstallationStatus]:
     results = [
         InstallationStatus(
             patient_id=result_orm.patient_id,
-            status=status(db, patient_id=result_orm.patient_id),
+            status=read_status(db, patient_id=result_orm.patient_id),
             date_delta=last_update(db, patient_id=result_orm.patient_id),
             hue=crypto.hue(result_orm.patient_id),
         )
@@ -65,9 +65,22 @@ def read_many(db: Session) -> list[InstallationStatus]:
     return results
 
 
+@johntitorable
+@unfoundable("patient")
 def create(
     db: Session, *, patient_id: str, installation: InstallationDetailCreate
 ) -> InstallationDetailRead:
+
+    if john_titor(installation.date_start, installation.date_end):
+        raise JhonTitor(
+            JHON_TITOR.format(
+                prev_key="date_start",
+                prev_value=installation.date_start,
+                curr_key="date_end",
+                curr_value=installation.date_end,
+            )
+        )
+
     kw = installation.model_dump(exclude_unset=True)
     result_orm = InstallationDetail(**kw)
     result_orm.patient_id = patient_id
@@ -80,11 +93,25 @@ def create(
     return result
 
 
+@johntitorable
 def update(
     db: Session, *, patient_id: str, installation: InstallationDetailUpdate
 ) -> InstallationDetailRead:
     result_orm = query_one(db, patient_id=patient_id)
     kw = installation.model_dump(exclude_unset=True)
+
+    date_start = result_orm.date_start if "date_start" not in kw else kw["date_start"]
+    date_end = result_orm.date_end if "date_end" not in kw else kw["date_end"]
+    if john_titor(date_start, date_end):
+        raise JhonTitor(
+            JHON_TITOR.format(
+                prev_key="date_start",
+                prev_value=date_start,
+                curr_key="date_end",
+                curr_value=date_end,
+            )
+        )
+
     for k, v in kw.items():
         setattr(result_orm, k, v)
     db.commit()
@@ -100,17 +127,18 @@ def last_update(db: Session, *, patient_id: str) -> str:
             m.ts
             for t in tickets.read_many(db, patient_id=patient_id)
             for m in tickets.query_one(db, ticket_id=t.ticket_id).messages
-        ]
+        ],
+        default=patient_status.query_one(db, patient_id=patient_id).ts,
     )
     date_delta = humanize.naturaltime((datetime.now() - ts_max))
     return date_delta
 
 
-def status(db: Session, *, patient_id: str) -> str:
+def read_status(db: Session, *, patient_id: str) -> str:
     try:
         result_orm = query_one(db, patient_id=patient_id)
     except HTTPException as excp:
-        if excp.status_code == 404:
+        if excp.status_code == status.HTTP_404_NOT_FOUND:
             return INSTALLATION_UNKNOW
         else:
             raise excp

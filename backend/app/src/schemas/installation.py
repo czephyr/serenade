@@ -26,7 +26,7 @@ class InstallationDetailBase(BaseModel):
 class InstallationDetailRead(InstallationDetailBase):
     date_join: datetime | None
     date_exit: datetime | None
-    hue: int | None
+    hue: int | None = None
 
 
 class InstallationDetailCreate(BaseModel):

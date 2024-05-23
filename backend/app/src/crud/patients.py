@@ -1,8 +1,17 @@
 from codicefiscale import codicefiscale as cf
 from sqlalchemy.orm import Session
 
+from ..core import crypto
 from ..core.const import ADMIN_USERNAME, SMS_PATIENT_CREATE
-from ..core.excp import BadValues, DuplicateCF
+from ..core.excp import (
+    JHON_TITOR,
+    BadValues,
+    DuplicateCF,
+    JhonTitor,
+    john_titor,
+    johntitorable,
+    unfoundable,
+)
 from ..ormodels import (
     Patient,
     PatientDetail,
@@ -13,16 +22,15 @@ from ..ormodels import (
 from ..schemas.contact import ContactEntry
 from ..schemas.patient import (
     PatientCreate,
+    PatientInfo,
     PatientRead,
     PatientStatus,
     PatientUpdate,
-    PatientInfo,
 )
 from ..schemas.ticket import TicketCreate
 from ..schemas.ticket_message import TicketMessageCreate
-from ..utils import to_age, to_city, unfoundable
-from . import patient_contacts, tickets, installation_details
-from ..core import crypto
+from ..utils import to_age, to_city
+from . import installation_details, patient_contacts, tickets
 
 
 @unfoundable("patient")
@@ -74,7 +82,9 @@ def read_many(db: Session) -> list[PatientStatus]:
                 result_orm.screenings[-1].neuro_diag if result_orm.screenings else None
             ),
             patient_id=result_orm.patient_id,
-            status=installation_details.status(db, patient_id=result_orm.patient_id),
+            status=installation_details.read_status(
+                db, patient_id=result_orm.patient_id
+            ),
             hue=crypto.hue(result_orm.patient_id),
         )
         for result_orm in results_orm
@@ -82,9 +92,21 @@ def read_many(db: Session) -> list[PatientStatus]:
     return results
 
 
+@johntitorable
 def create(db: Session, *, patient: PatientCreate) -> PatientRead:
     if not cf.is_valid(patient.codice_fiscale):
         raise BadValues("Invalid codice_fiscale")
+    patient.codice_fiscale = "".join(filter(str.isalnum, patient.codice_fiscale))
+
+    if john_titor(patient.date_join, patient.date_exit):
+        raise JhonTitor(
+            JHON_TITOR.format(
+                prev_key="date_join",
+                prev_value=patient.date_join,
+                curr_key="date_exit",
+                curr_value=patient.date_exit,
+            )
+        )
 
     if (
         db.query(PatientNote)
@@ -150,10 +172,25 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
     return result
 
 
+@johntitorable
 def update(db: Session, *, patient_id: str, patient: PatientUpdate) -> PatientRead:
     result_orm = query_one(db, patient_id=patient_id)
-
     kw = patient.model_dump(exclude_unset=True)
+
+    date_join = result_orm.date_join if "date_join" not in kw else kw["date_join"]
+    date_exit = result_orm.date_exit if "date_exit" not in kw else kw["date_exit"]
+    if john_titor(date_join, date_exit):
+        raise JhonTitor(
+            JHON_TITOR.format(
+                prev_key="date_join",
+                prev_value=date_join,
+                curr_key="date_exit",
+                curr_value=date_exit,
+            )
+        )
+
+    result_orm.date_join = date_join
+    result_orm.date_exit = date_exit
 
     if any([e in kw for e in ("neuro_diag", "age_class")]):
         screening_orm = PatientScreening(
@@ -172,11 +209,6 @@ def update(db: Session, *, patient_id: str, patient: PatientUpdate) -> PatientRe
         result_orm.details.home_address = patient.home_address
     if "medical_notes" in kw:
         result_orm.note.medical_notes = patient.medical_notes
-
-    if "date_join" in kw:
-        result_orm.date_join = patient.date_join
-    if "date_exit" in kw:
-        result_orm.date_exit = patient.date_exit
 
     if "first_name" in kw:
         if not patient.first_name:

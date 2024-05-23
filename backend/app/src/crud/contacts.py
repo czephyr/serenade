@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from ..ormodels import Contact
 from ..schemas.contact import ContactEntry, ContactUpdate
-from ..utils import unfoundable
+from ..core.excp import unfoundable
 
 
 @unfoundable("contact")

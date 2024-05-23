@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from ..ormodels import InstallationDocument
 from ..schemas.installation_document import InstallationDocumentRead
-from ..utils import unfoundable
+from ..core.excp import unfoundable
 
 
 @unfoundable("document")
@@ -21,6 +21,7 @@ def download(db: Session, *, document_id: int) -> bytes:
     return result
 
 
+@unfoundable("patient")
 def create(
     db: Session,
     *,

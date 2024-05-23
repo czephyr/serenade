@@ -3,12 +3,14 @@ import os
 from functools import wraps
 from typing import Callable, ParamSpec, TypeVar
 
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.primitives import hashes
+from fastapi import HTTPException, status
 
+from .excp import RESOURCE_NOT_FOUND
 from .roles import IIT
 
-HUE_SIZE = int(os.getenv("HUE_SIZE", 6))
+HUE_BYTE_SIZE = int(os.getenv("HUE_BYTE_SIZE", 6))
 __F = Fernet(os.getenv("FERNET_KEY", Fernet.generate_key()))
 
 P = ParamSpec("P")
@@ -29,7 +31,14 @@ def maskable(func: Callable[P, T], role: str) -> Callable[P, T]:
             _id = str(kwargs[arg_name])
             _id = _id.encode()
 
-            _id = __F.decrypt(_id)
+            try:
+                _id = __F.decrypt(_id)
+            except InvalidToken:
+                _id = _id.decode()
+                raise HTTPException(
+                    status.HTTP_404_NOT_FOUND,
+                    detail=RESOURCE_NOT_FOUND.format(_id=_id, resource="patient"),
+                )
             # _id = base64.urlsafe_b64encode(_id)
 
             _id = _id.decode()
@@ -72,7 +81,7 @@ def draw(size=24) -> str:
     return result
 
 
-def hue(value: str, max_size=HUE_SIZE) -> int:
+def hue(value: str, max_size=HUE_BYTE_SIZE) -> int:
     digest = hashes.Hash(hashes.SHAKE128(max_size))
     digest.update(value.encode())
     rbytes = digest.finalize()

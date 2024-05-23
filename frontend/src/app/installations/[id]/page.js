@@ -47,7 +47,7 @@ export default async function TicketPage({ params }) {
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <BackButton />
         <h1 className="text-2xl font-bold text-center text-black mb-2">
-          Installazione {genHue(installation.hue)}
+          Installazione {genHue({ seed: installation.hue })}
         </h1>
         <div className="space-y-1">
           <TicketList

@@ -46,7 +46,7 @@ export default async function Installations() {
                 <tbody>
                   {installations.map((installation) => (
                     <tr key={installation.patient_id}>
-                      <td className="px-5 py-5 border-b">{genHue(installation.hue)}</td>
+                      <td className="px-5 py-5 border-b">{genHue({ seed: installation.hue })}</td>
                       <td className="px-5 py-5 border-b">
                         <StatusBadge status={installation.status} />
                       </td>

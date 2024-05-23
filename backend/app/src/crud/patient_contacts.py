@@ -4,7 +4,7 @@ from ..ormodels import Contact
 from ..schemas.contact import ContactEntry, ContactCreate
 
 from .contacts import read_one
-from ..utils import unfoundable
+from ..core.excp import unfoundable
 
 
 @unfoundable("patient")

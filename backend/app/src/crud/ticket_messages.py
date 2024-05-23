@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from ..ormodels import TicketMessage
 from ..schemas.ticket_message import TicketMessageBase, TicketMessageCreate
-from ..utils import unfoundable
+from ..core.excp import unfoundable
 
 
 @unfoundable("ticket")
@@ -15,6 +15,7 @@ def read_many(db: Session, *, ticket_id: int) -> list[TicketMessageBase]:
     return results
 
 
+@unfoundable("ticket")
 def create(
     db: Session, *, ticket_id: int, message: TicketMessageCreate
 ) -> TicketMessageBase:

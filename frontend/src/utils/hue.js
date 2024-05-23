@@ -1,12 +1,10 @@
 const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
+const italianNames = require('../public/italianNames.json');
 
 const genHue = ({ seed }) => {
-    const relHue = uniqueNamesGenerator({
-        dictionaries: [colors, animals],
-        separator: ' ',
-        length: 2,
-        seed: seed,
-    });
+
+    const index = seed % italianNames.length;
+    const relHue = italianNames[index];
 
     return relHue;
 }
