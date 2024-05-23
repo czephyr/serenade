@@ -68,6 +68,9 @@ def read_one(db: Session, *, patient_id: str) -> PatientRead:
         contacts=[
             ContactEntry.model_validate(contact) for contact in result_orm.contacts
         ],
+        # DATES
+        date_join=result_orm.date_join,
+        date_exit=result_orm.date_exit,
     )
     return result
 
@@ -86,6 +89,8 @@ def read_many(db: Session) -> list[PatientStatus]:
                 db, patient_id=result_orm.patient_id
             ),
             hue=crypto.hue(result_orm.patient_id),
+            date_join=result_orm.date_join,
+            date_exit=result_orm.date_exit,
         )
         for result_orm in results_orm
     ]
