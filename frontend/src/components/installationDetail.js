@@ -96,21 +96,23 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
     ],
   };
 
+
+  const fieldDetails = {
+    apartment_type: { label: "Tipo appartamento:", editable: role !== "imt" },
+    internet_type: { label: "Tipo connessione internet:", editable: role !== "imt" },
+    flatmates: { label: "Informazioni abitazione:", editable: role !== "imt" },
+    pets: { label: "Animali domestici:", editable: role !== "imt" },
+    visitors: { label: "Visitatori:", editable: role !== "imt" },
+    smartphone_model: { label: "Modello smartphone:", editable: role !== "imt" },
+    appliances: { label: "Elettrodomestici:", editable: role !== "imt" },
+    issues_notes: { label: "Note sui problemi:", editable: role !== "imt" },
+    habits_notes: { label: "Note sulle abitudini:", editable: role !== "imt" },
+    other_notes: { label: "Altre note:", editable: role !== "imt" },
+    date_start: { label: "Data inizio:", editable: true },
+    date_end: { label: "Data conclusione:", editable: true },
+  };
+
   const renderField = (field) => {
-    const fieldDetails = {
-      apartment_type: { label: "Tipo appartamento:", editable: true },
-      internet_type: { label: "Tipo connessione internet:", editable: true },
-      flatmates: { label: "Informazioni abitazione:", editable: true },
-      pets: { label: "Animali domestici:", editable: true },
-      visitors: { label: "Visitatori:", editable: true },
-      smartphone_model: { label: "Modello smartphone:", editable: true },
-      appliances: { label: "Elettrodomestici:", editable: true },
-      issues_notes: { label: "Note sui problemi:", editable: true },
-      habits_notes: { label: "Note sulle abitudini:", editable: true },
-      other_notes: { label: "Altre note:", editable: true },
-      date_start: { label: "Data inizio:", editable: true },
-      date_end: { label: "Data conclusione:", editable: true },
-    };
 
     // Check if the field should be displayed for the current role
     if (

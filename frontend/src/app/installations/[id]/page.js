@@ -65,6 +65,7 @@ export default async function TicketPage({ params }) {
           <InstallationDetail
             installation_id={params.id}
             initialData={installation}
+            role={roleFound}
           />
           <DocumentManager
             initialDocuments={documents}

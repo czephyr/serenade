@@ -83,7 +83,6 @@ function DocumentManager({ initialDocuments, installation_id }) {
             className="flex justify-between items-center px-5 py-3 border-b border-gray-200"
           >
             {console.log(doc.file_name)}{" "}
-            {/* Check if file_name is outputting correctly here */}
             {console.log(JSON.stringify(documents))}
             <p>{doc.file_name}</p>
             <div className="flex space-x-2">
