@@ -40,7 +40,7 @@ async def upload(
     file: UploadFile,
     file_type: str | None = None,
     file_name: str | None = None,
-    role: str = Depends(require_role([IIT])),
+    role: str = Depends(require_role([IIT,IMT,UNIMI])),
     db: Session = Depends(get_db),
 ) -> InstallationDocumentRead:
     contents = await file.read()
@@ -60,7 +60,7 @@ async def upload(
 )
 async def read_many(
     patient_id: int,
-    role: str = Depends(require_role([IIT])),
+    role: str = Depends(require_role([IIT,IMT])),
     db: Session = Depends(get_db),
 ) -> list[InstallationDocumentRead]:
     result = maskable(installation_documents.read_many, role)(db, patient_id=patient_id)
