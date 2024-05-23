@@ -95,7 +95,7 @@ export default async function TicketPage({ params }) {
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <h1 className="text-2xl font-bold text-center text-black mb-2">
-          Installazione {genHue(installation.hue)}
+          Installazione {genHue({ seed: installation.hue })}
         </h1>
         <div className="space-y-1">
           <TicketList
