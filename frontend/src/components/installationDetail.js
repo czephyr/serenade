@@ -97,7 +97,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
-        unimi: { visible: false, editable: false }
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: true } 
       }
     },
     internet_type: {
@@ -105,7 +106,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
-        unimi: { visible: false, editable: false }
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: true } 
       }
     },
     flatmates: {
@@ -113,7 +115,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
-        unimi: { visible: false, editable: false }
+        unimi: { visible: false, editable: false },
+        dottore: { visible: true, editable: true } 
       }
     },
     pets: {
@@ -121,7 +124,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
-        unimi: { visible: true, editable: false }
+        unimi: { visible: true, editable: false },
+        dottore: { visible: true, editable: true } 
       }
     },
     visitors: {
@@ -129,7 +133,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
-        unimi: { visible: true, editable: false }
+        unimi: { visible: true, editable: false },
+        dottore: { visible: false, editable: false } 
       }
     },
     smartphone_model: {
@@ -137,7 +142,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
-        unimi: { visible: true, editable: false }
+        unimi: { visible: true, editable: false },
+        dottore: { visible: false, editable: false } 
       }
     },
     appliances: {
@@ -145,7 +151,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
-        unimi: { visible: false, editable: false }
+        unimi: { visible: false, editable: false },
+        dottore: { visible: false, editable: false } 
       }
     },
     issues_notes: {
@@ -153,7 +160,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
-        unimi: { visible: false, editable: false }
+        unimi: { visible: false, editable: false },
+        dottore: { visible: false, editable: false } 
       }
     },
     habits_notes: {
@@ -161,7 +169,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
-        unimi: { visible: false, editable: false }
+        unimi: { visible: false, editable: false },
+        dottore: { visible: false, editable: false } 
       }
     },
     other_notes: {
@@ -169,7 +178,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
-        unimi: { visible: true, editable: false }
+        unimi: { visible: true, editable: false },
+        dottore: { visible: false, editable: false } 
       }
     },
     date_start: {
@@ -177,7 +187,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: true },
-        unimi: { visible: true, editable: false }
+        unimi: { visible: true, editable: false },
+        dottore: { visible: false, editable: false } 
       }
     },
     date_end: {
@@ -185,10 +196,11 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       roles: {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: true },
-        unimi: { visible: true, editable: false }
+        unimi: { visible: true, editable: false },
+        dottore: { visible: false, editable: false } 
       }
     },
-  };
+};
   
   const renderField = (field) => {
     // Check if the field should be displayed for the current role
