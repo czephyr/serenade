@@ -58,7 +58,7 @@ def read_one(
 def update(
     patient_id: str,
     patient: PatientUpdate,
-    role: str = Depends(require_role([HOS, IIT])),
+    role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
@@ -90,7 +90,7 @@ def create_contact(
 @router.get("/{patient_id}/contacts", response_model=list[ContactEntry])
 def read_contacts(
     patient_id: str,
-    role: str = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS, IIT])),
     db: Session = Depends(get_db),
 ) -> list[ContactEntry]:
     result = maskable(patient_contacts.read_many, role)(db, patient_id=patient_id)
@@ -101,7 +101,7 @@ def read_contacts(
 def update_contact(
     patient_id: str,
     contacts: list[ContactCreate],
-    role: str = Depends(require_role([HOS])),
+    role: str = Depends(require_role([HOS, IIT])),
     db: Session = Depends(get_db),
 ) -> list[ContactEntry]:
     _ = maskable(patient_contacts.delete_many, role)(db, patient_id=patient_id)
