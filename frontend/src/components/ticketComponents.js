@@ -24,7 +24,7 @@ function CloseButton(ticket_num) {
 }
 
 function handleDelete(documentId) {
-  fetch(`${process.env.DB_HOST}/api/v1/documents/${documentId}`, {
+  fetch(`${process.env.BACKEND_HOST}/api/v1/documents/${documentId}`, {
     method: "DELETE",
   })
     .then((response) => {
@@ -49,7 +49,7 @@ const handleUpload = async (event) => {
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_DB_HOST}/api/v1/installation/${patientId}/documents`,
+      `${process.env.BACKEND_HOST}/api/v1/installation/${patientId}/documents`,
       {
         method: "POST",
         body: formData,
@@ -91,7 +91,7 @@ function DocForm({ documents }) {
             <p>File Name: {document.file_name}</p>
             <p>File Type: {document.file_type}</p>
             <form
-              action={`${process.env.DB_HOST}/api/v1/documents/${document.document_id}`}
+              action={`${process.env.BACKEND_HOST}/api/v1/documents/${document.document_id}`}
               method="get"
             >
               <button type="submit">Download PDF</button>
@@ -124,7 +124,7 @@ function SendMsgForm(ticket_num) {
     // Using fetch to send a POST request to the server
     try {
       const response = await fetch(
-        `${process.env.DB_HOST}/api/v1/tickets/${ticket_num}/messages`,
+        `${process.env.BACKEND_HOST}/api/v1/tickets/${ticket_num}/messages`,
         {
           method: "POST",
           headers: {
