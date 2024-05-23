@@ -1,10 +1,7 @@
-import random
-
-import arlecchino
 from codicefiscale import codicefiscale as cf
 from sqlalchemy.orm import Session
 
-from ..core.const import ADMIN_USERNAME, SALT_HASH, SMS_PATIENT_CREATE
+from ..core.const import ADMIN_USERNAME, SMS_PATIENT_CREATE
 from ..core.excp import BadValues, DuplicateCF
 from ..ormodels import (
     Patient,
@@ -24,16 +21,17 @@ from ..schemas.patient import (
 from ..schemas.ticket import TicketCreate
 from ..schemas.ticket_message import TicketMessageCreate
 from ..utils import to_age, to_city, unfoundable
-from . import patient_contacts, tickets, installation_details, patient_status
+from . import patient_contacts, tickets, installation_details
+from ..core import crypto
 
 
 @unfoundable("patient")
-def query_one(db: Session, *, patient_id: int) -> PatientFull:
+def query_one(db: Session, *, patient_id: str) -> PatientFull:
     result_orm = db.query(PatientFull).where(PatientFull.patient_id == patient_id).one()
     return result_orm
 
 
-def read_one(db: Session, *, patient_id: int) -> PatientRead:
+def read_one(db: Session, *, patient_id: str) -> PatientRead:
     result_orm = query_one(db, patient_id=patient_id)
     codice_fiscale = result_orm.note.codice_fiscale
     result = PatientRead(
@@ -62,9 +60,6 @@ def read_one(db: Session, *, patient_id: int) -> PatientRead:
         contacts=[
             ContactEntry.model_validate(contact) for contact in result_orm.contacts
         ],
-        # DATES
-        date_join=result_orm.date_join,
-        date_exit=result_orm.date_exit,
     )
     return result
 
@@ -80,9 +75,7 @@ def read_many(db: Session) -> list[PatientStatus]:
             ),
             patient_id=result_orm.patient_id,
             status=installation_details.status(db, patient_id=result_orm.patient_id),
-            hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
-            date_join=result_orm.date_join,
-            date_exit=result_orm.date_exit,
+            hue=crypto.hue(result_orm.patient_id),
         )
         for result_orm in results_orm
     ]
@@ -101,7 +94,7 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
         raise DuplicateCF
 
     while True:
-        patient_id = random.randrange(2**1, 2**52)
+        patient_id = crypto.draw()
         if not db.query(Patient).where(Patient.patient_id == patient_id).count():
             break
 
@@ -162,7 +155,7 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
     return result
 
 
-def update(db: Session, *, patient_id: int, patient: PatientUpdate) -> PatientRead:
+def update(db: Session, *, patient_id: str, patient: PatientUpdate) -> PatientRead:
     result_orm = query_one(db, patient_id=patient_id)
 
     kw = patient.model_dump(exclude_unset=True)
@@ -207,7 +200,7 @@ def update(db: Session, *, patient_id: int, patient: PatientUpdate) -> PatientRe
 
 
 @unfoundable("patient")
-def info(db: Session, *, patient_id: int) -> PatientInfo:
+def info(db: Session, *, patient_id: str) -> PatientInfo:
     result_orm = (
         db.query(PatientDetail).where(PatientDetail.patient_id == patient_id).one()
     )

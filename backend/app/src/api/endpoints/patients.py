@@ -40,7 +40,7 @@ def create(
 
 @router.get("/{patient_id}", response_model=PatientRead)
 def read_one(
-    patient_id: int,
+    patient_id: str,
     role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
@@ -50,7 +50,7 @@ def read_one(
 
 @router.put("/{patient_id}", response_model=PatientRead)
 def update(
-    patient_id: int,
+    patient_id: str,
     patient: PatientUpdate,
     role: str = Depends(require_role([HOS, IIT])),
     db: Session = Depends(get_db),
@@ -68,7 +68,7 @@ def update(
 
 @router.post("/{patient_id}/contacts", response_model=ContactEntry)
 def create_contact(
-    patient_id: int,
+    patient_id: str,
     contact: ContactCreate,
     role: str = Depends(require_role([HOS, IIT])),
     db: Session = Depends(get_db),
@@ -79,7 +79,7 @@ def create_contact(
 
 @router.get("/{patient_id}/contacts", response_model=list[ContactEntry])
 def read_contacts(
-    patient_id: int,
+    patient_id: str,
     role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> list[ContactEntry]:
@@ -89,7 +89,7 @@ def read_contacts(
 
 @router.put("/{patient_id}/contacts", response_model=list[ContactEntry])
 def update_contact(
-    patient_id: int,
+    patient_id: str,
     contacts: list[ContactCreate],
     role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),

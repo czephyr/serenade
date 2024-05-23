@@ -5,7 +5,7 @@ import { fetchFromBackend } from "@/utils/fetches";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
 
 import StatusBadge from "@/components/statusBadge";
-
+import genHue from "../../utils/hue";
 export default async function Installations() {
   const session = await getServerSession(authOptions);
 
@@ -46,7 +46,7 @@ export default async function Installations() {
                 <tbody>
                   {installations.map((installation) => (
                     <tr key={installation.patient_id}>
-                      <td className="px-5 py-5 border-b">{installation.hue}</td>
+                      <td className="px-5 py-5 border-b">{genHue(installation.hue)}</td>
                       <td className="px-5 py-5 border-b">
                         <StatusBadge status={installation.status} />
                       </td>

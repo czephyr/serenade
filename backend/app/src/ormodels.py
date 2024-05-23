@@ -19,7 +19,7 @@ class Patient(Base):
     __tablename__ = "patients"
 
     ts: Mapped[datetime] = mapped_column(default=datetime.now)
-    patient_id: Mapped[bigint] = mapped_column(primary_key=True)
+    patient_id: Mapped[str] = mapped_column(primary_key=True)
     date_join: Mapped[datetime | None]
     date_exit: Mapped[datetime | None]
 
@@ -40,7 +40,7 @@ class PatientFull(Patient):
 class PatientDetail(Base):
     __tablename__ = "patient_details"
 
-    patient_id: Mapped[bigint] = mapped_column(
+    patient_id: Mapped[str] = mapped_column(
         ForeignKey("patients.patient_id"), primary_key=True
     )
 
@@ -56,7 +56,7 @@ class PatientScreening(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     ts: Mapped[datetime] = mapped_column(default=datetime.now)
-    patient_id: Mapped[bigint] = mapped_column(ForeignKey("patients.patient_id"))
+    patient_id: Mapped[str] = mapped_column(ForeignKey("patients.patient_id"))
     neuro_diag: Mapped[str | None]
     age_class: Mapped[str | None]
 
@@ -66,7 +66,7 @@ class PatientScreening(Base):
 class PatientNote(Base):
     __tablename__ = "patient_notes"
 
-    patient_id: Mapped[bigint] = mapped_column(
+    patient_id: Mapped[str] = mapped_column(
         ForeignKey("patients.patient_id"), primary_key=True
     )
     codice_fiscale: Mapped[str] = mapped_column(unique=True)
@@ -79,7 +79,7 @@ class Contact(Base):
     __tablename__ = "contacts"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    patient_id: Mapped[bigint] = mapped_column(ForeignKey("patients.patient_id"))
+    patient_id: Mapped[str] = mapped_column(ForeignKey("patients.patient_id"))
     alias: Mapped[str | None]
     phone_no: Mapped[str | None]
     email: Mapped[str | None]
@@ -92,7 +92,7 @@ class InstallationDetail(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     ts: Mapped[datetime] = mapped_column(default=datetime.now)
-    patient_id: Mapped[bigint] = mapped_column(ForeignKey("patients.patient_id"))
+    patient_id: Mapped[str] = mapped_column(ForeignKey("patients.patient_id"))
 
     apartment_type: Mapped[str | None]
     internet_type: Mapped[str | None]
@@ -118,7 +118,7 @@ class InstallationDocument(Base):
 
     document_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     ts: Mapped[datetime] = mapped_column(default=datetime.now)
-    patient_id: Mapped[bigint] = mapped_column(
+    patient_id: Mapped[str] = mapped_column(
         ForeignKey("installation_details.patient_id")
     )
 
@@ -147,7 +147,7 @@ class Ticket(Base):
     ts: Mapped[datetime] = mapped_column(default=datetime.now)
     ticket_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
-    patient_id: Mapped[bigint] = mapped_column(ForeignKey("patients.patient_id"))
+    patient_id: Mapped[str] = mapped_column(ForeignKey("patients.patient_id"))
     date_closed: Mapped[datetime | None]
     category: Mapped[str | None]
 

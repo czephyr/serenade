@@ -1,17 +1,16 @@
 from datetime import datetime
 
-import arlecchino
 import humanize
 from sqlalchemy.orm import Session
 
-from ..core.const import SALT_HASH
+from ..core import crypto
 from ..core.status import TICKET_CLOSED, TICKET_OPEN
 from ..ormodels import Ticket, TicketMessage
 from ..schemas.ticket import TicketBase, TicketCreate, TicketStatus
 from ..utils import unfoundable
 
 
-def create(db: Session, *, patient_id: int, ticket: TicketCreate) -> TicketBase:
+def create(db: Session, *, patient_id: str, ticket: TicketCreate) -> TicketBase:
     result_orm = Ticket(
         patient_id=patient_id,
         category=ticket.category,
@@ -46,7 +45,7 @@ def read_one(db: Session, *, ticket_id: int) -> TicketBase:
     return result
 
 
-def read_many(db: Session, *, patient_id: int | None = None) -> list[TicketStatus]:
+def read_many(db: Session, *, patient_id: str | None = None) -> list[TicketStatus]:
     results_orm = db.query(Ticket)
     if patient_id is not None:
         results_orm = results_orm.where(Ticket.patient_id == patient_id)
@@ -58,7 +57,7 @@ def read_many(db: Session, *, patient_id: int | None = None) -> list[TicketStatu
             date_delta=humanize.naturaltime((datetime.now() - result_orm.ts)),
             status=TICKET_CLOSED if result_orm.date_closed else TICKET_OPEN,
             last_sender=sorted(result_orm.messages, key=lambda x: x.ts)[-1].sender,
-            hue=arlecchino.draw(result_orm.patient_id, SALT_HASH),
+            hue=crypto.hue(result_orm.patient_id),
             category=result_orm.category,
         )
         for result_orm in results_orm

@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from ...api.deps import get_db, require_role
-from ...core.excp import RESOURCE_NOT_FOUND
 from ...core.roles import HOS, IIT
 from ...crud import contacts
 from ...schemas.contact import ContactEntry, ContactUpdate

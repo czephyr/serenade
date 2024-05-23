@@ -1,11 +1,18 @@
-FROM python:3.12
+FROM node:latest
 
-WORKDIR /
+WORKDIR /src
 
-COPY ./requirements.txt ./requirements.txt
+COPY ./src/package*.json ./
 
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN npm install
+# RUN npm ci --include=dev
 
-COPY ./app ./app
+COPY ./src .
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80", "--proxy-headers"]
+# RUN npm run build
+
+EXPOSE 80
+
+# ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npm", "run", "dev"]
+CMD ["--", "--port", "80"]

@@ -9,6 +9,7 @@ import TicketList from "@/components/ticketList";
 import PatientDetail from "@/components/patientDetail";
 import InstallationDetail from "@/components/installationDetail";
 import BackButton from "@/components/backButton";
+import genHue from "../../../utils/hue";
 
 export default async function TicketPage({ params }) {
   const session = await getServerSession(authOptions);
@@ -46,7 +47,7 @@ export default async function TicketPage({ params }) {
       <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <BackButton />
         <h1 className="text-2xl font-bold text-center text-black mb-2">
-          Installazione {installation.hue}
+          Installazione {genHue(installation.hue)}
         </h1>
         <div className="space-y-1">
           <TicketList

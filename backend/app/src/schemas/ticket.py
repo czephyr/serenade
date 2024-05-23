@@ -11,7 +11,7 @@ class TicketBase(BaseModel):
     ts: datetime
     ticket_id: int
 
-    patient_id: int
+    patient_id: str
     date_closed: datetime | None
     category: str | None
 
@@ -30,5 +30,5 @@ class TicketStatus(BaseModel):
     date_delta: str
     status: str
     last_sender: str | None
-    hue: str | None
+    hue: int | None
     category: str | None

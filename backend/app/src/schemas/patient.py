@@ -41,16 +41,13 @@ class PatientStatus(BaseModel):
     first_name: str
     last_name: str
     neuro_diag: str | None
-    patient_id: int
+    patient_id: str
     status: str
-    hue: str | None
-
-    date_join: datetime | None
-    date_exit: datetime | None
+    hue: int | None
 
 
 class PatientRead(BaseModel):
-    patient_id: int
+    patient_id: str
     first_name: str
     last_name: str
     codice_fiscale: str
@@ -59,9 +56,6 @@ class PatientRead(BaseModel):
     place_of_birth: str
     gender: str
     age: int
-
-    date_join: datetime | None = None
-    date_exit: datetime | None = None
 
     neuro_diag: str | None
     age_class: str | None

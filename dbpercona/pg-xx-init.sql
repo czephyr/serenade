@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS patients (
     -- Timestamp of record creation
     ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- Unique identifier for the patient
-    patient_id BIGINT PRIMARY KEY,
+    patient_id TEXT PRIMARY KEY,
     -- Date when patient join the project
     date_join TIMESTAMP,
     -- Exit date if patient leave the project
@@ -15,11 +15,11 @@ CREATE TABLE IF NOT EXISTS patients (
 -- Description: Records screenings conducted for patients, use for UNIMI analysis.
 CREATE TABLE IF NOT EXISTS patient_screenings (
     -- Auto identifier
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     -- Timestamp of screening insertion
     ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- Foreign key referencing patient ID
-    patient_id BIGINT NOT NULL,
+    patient_id TEXT NOT NULL,
     -- Neurological diagnosis and degenreation classification
     neuro_diag VARCHAR(31),
     -- Age classification of patient
@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS patient_screenings (
 
 CREATE TABLE IF NOT EXISTS patient_notes(
     -- Foreign key referencing patient ID
-    patient_id BIGINT PRIMARY KEY,
+    patient_id TEXT PRIMARY KEY,
     -- Italian fiscal code / social security number
-    codice_fiscale VARCHAR(16) UNIQUE NOT NULL,
+    codice_fiscale CHAR(16) UNIQUE NOT NULL,
     -- Notes on medical conditions 
     medical_notes TEXT,
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS patient_notes(
 -- Description: Stores additional details useful for HOS and IIT to reach the patients.
 CREATE TABLE IF NOT EXISTS patient_details (
     -- Foreign key referencing patient ID
-    patient_id BIGINT PRIMARY KEY,
+    patient_id TEXT PRIMARY KEY,
     -- First name of the patient
     first_name VARCHAR(127) NOT NULL,
     -- Last name of the patient
@@ -58,9 +58,9 @@ CREATE TABLE IF NOT EXISTS patient_details (
 -- Description: Stores contact information related to patients.
 CREATE TABLE IF NOT EXISTS contacts (
     -- Auto identifier
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     -- Foreign key referencing patient ID
-    patient_id BIGINT NOT NULL,
+    patient_id TEXT NOT NULL,
     -- Alias or nickname for contact
     alias VARCHAR(31),
     -- Phone number of the contact
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS contacts (
 -- Description: Records details about the installation setup of patients' residences.
 CREATE TABLE IF NOT EXISTS installation_details (
     -- Auto identifier
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     -- Timestamp of installation record
     ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- Date when installation has been opened
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS installation_details (
     -- Date when installation has been closed
     date_end TIMESTAMP,
     -- Foreign key referencing patient ID
-    patient_id BIGINT NOT NULL,
+    patient_id TEXT NOT NULL,
     -- Type of apartment (e.g., studio, 1-bedroom)
     apartment_type TEXT,
     -- Type of internet connection
@@ -109,11 +109,11 @@ CREATE TABLE IF NOT EXISTS installation_details (
 -- Table storing installation documents associated with patients.
 CREATE TABLE IF NOT EXISTS installation_documents(
     -- Auto-generated unique identifier for each document
-    document_id SERIAL PRIMARY KEY,
+    document_id BIGSERIAL PRIMARY KEY,
     -- Timestamp indicating when the document was uploaded
     ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- Unique identifier referencing the patient associated with the document
-    patient_id BIGINT NOT NULL,
+    patient_id TEXT NOT NULL,
     -- Name of the uploaded file
     file_name TEXT,
     -- Type of the uploaded file (e.g., PDF, PNG, JPEG)
@@ -131,9 +131,9 @@ CREATE TABLE IF NOT EXISTS tickets (
     -- Timestamp of ticket creation
     ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- Unique identifier for the ticket
-    ticket_id SERIAL PRIMARY KEY,
+    ticket_id BIGSERIAL PRIMARY KEY,
     -- Foreign key referencing patient ID
-    patient_id BIGINT NOT NULL,
+    patient_id TEXT NOT NULL,
     -- category of the ticket
     category VARCHAR(31),
     -- End date of the ticket
@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS tickets (
 -- Description: Stores messages exchanged within support tickets.
 CREATE TABLE IF NOT EXISTS ticket_messages (
     -- Auto identifier
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     -- Timestamp of message
     ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- Sender of the message

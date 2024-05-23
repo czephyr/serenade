@@ -7,7 +7,7 @@ class PatientBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     ts: datetime | None
-    patient_id: int
+    patient_id: str
 
     date_join: datetime | None
     date_exit: datetime | None
@@ -16,7 +16,7 @@ class PatientBase(BaseModel):
 class PatientDetailBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    patient_id: int
+    patient_id: str
 
     first_name: str
     last_name: str
@@ -29,7 +29,7 @@ class PatientScreeningBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     ts: datetime
-    patient_id: int
+    patient_id: str
     neuro_diag: str
     age_class: str
 
@@ -39,7 +39,7 @@ class PatientScreeningBase(BaseModel):
 class PatientNoteBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    patient_id: int
+    patient_id: str
 
     codice_fiscale: str
     medical_notes: str

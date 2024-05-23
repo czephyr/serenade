@@ -6,7 +6,6 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     CORS_ORIGINS: list = [
         "*",
-        "http://localhost:3000",
     ]
     # Define other settings as needed
     # DATABASE_URL: str = "sqlite:///./test.db"
