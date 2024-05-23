@@ -103,31 +103,26 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
         date_join=patient.date_join,
         date_exit=patient.date_exit,
     )
-    db.add(patient_orm)
-    db.commit()
-
-    result_orm = PatientDetail(
+    detail_orm = PatientDetail(
         patient_id=patient_id,
         first_name=patient.first_name,
         last_name=patient.last_name,
         home_address=patient.home_address,
     )
-    db.add(result_orm)
-
-    result_orm = PatientScreening(
-        patient_id=patient_id,
-        neuro_diag=patient.neuro_diag,
-        age_class=patient.age_class,
-    )
-    db.add(result_orm)
-
-    result_orm = PatientNote(
+    note_orm = PatientNote(
         patient_id=patient_id,
         codice_fiscale=patient.codice_fiscale,
         medical_notes=patient.medical_notes,
     )
-    db.add(result_orm)
+    db.add_all([detail_orm, note_orm, patient_orm])
+    db.commit()
 
+    screening_orm = PatientScreening(
+        patient_id=patient_id,
+        neuro_diag=patient.neuro_diag,
+        age_class=patient.age_class,
+    )
+    db.add(screening_orm)
     db.commit()
 
     if patient.contacts is not None:
