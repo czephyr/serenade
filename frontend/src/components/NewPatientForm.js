@@ -308,9 +308,9 @@ export default function NewPatientForm() {
 
             <div className="mt-4">
               <h3 className="text-lg font-bold">Contatti</h3>
-              {contacts.map((contact, index) => (
+              {contacts.map((contact) => (
                 <div
-                  key={index}
+                  key={contact.id}
                   className="flex justify-between items-center mb-2 bg-white p-2 shadow rounded"
                 >
                   <span className="text-gray-800">
@@ -320,7 +320,7 @@ export default function NewPatientForm() {
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      removeContactAtIndex(index);
+                      removeContactAtIndex(contact.id);
                     }}
                     className="py-1 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >

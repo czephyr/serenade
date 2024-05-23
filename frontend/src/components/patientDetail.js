@@ -462,9 +462,9 @@ const PatientDetail = ({ initialData, role }) => {
               </h3>
               <div className="space-y-4 ">
                 {console.log(contacts)}
-                {contacts.map((contact, index) => (
+                {contacts.map((contact) => (
                   <div
-                    key={index}
+                    key={contact.id}
                     className="flex justify-between items-center mb-2 bg-white p-2"
                   >
                     <span className="text-gray-800">
@@ -474,7 +474,7 @@ const PatientDetail = ({ initialData, role }) => {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
-                        removeContactAtIndex(index);
+                        removeContactAtIndex(contact.id);
                       }}
                       className="py-1 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
