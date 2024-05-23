@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from ...core.crypto import maskable
 from ...core.roles import IIT, IMT
 from ...crud import ticket_messages, tickets
-from ...schemas.ticket import TicketBase, TicketCreate, TicketStatus
+from ...schemas.ticket import TicketRead, TicketCreate, TicketStatus
 from ...schemas.ticket_message import TicketMessageBase, TicketMessageCreate
 from ..deps import get_db, require_role
 
@@ -20,13 +20,13 @@ def read_many(
     return result
 
 
-@router.post("", response_model=TicketBase)
+@router.post("", response_model=TicketRead)
 def create(
     patient_id: str,
     ticket: TicketCreate,
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
-) -> TicketBase:
+) -> TicketRead:
     result = maskable(tickets.create, role)(
         db,
         patient_id=patient_id,
@@ -35,12 +35,12 @@ def create(
     return result
 
 
-@router.get("/{ticket_id}", response_model=TicketBase)
+@router.get("/{ticket_id}", response_model=TicketRead)
 def read_one(
     ticket_id: int,
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
-) -> TicketBase:
+) -> TicketRead:
     result = maskable(tickets.read_one, role)(db, ticket_id=ticket_id)
     return result
 
@@ -66,11 +66,11 @@ def create_message(
     return result
 
 
-@router.post("/{ticket_id}/close", response_model=TicketBase)
+@router.post("/{ticket_id}/close", response_model=TicketRead)
 def close(
     ticket_id: int,
     role: str = Depends(require_role([IIT, IMT])),
     db: Session = Depends(get_db),
-) -> TicketBase:
+) -> TicketRead:
     result = maskable(tickets.update, role)(db, ticket_id=ticket_id)
     return result

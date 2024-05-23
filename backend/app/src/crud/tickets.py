@@ -6,11 +6,11 @@ from sqlalchemy.orm import Session
 from ..core import crypto
 from ..core.status import TICKET_CLOSED, TICKET_OPEN
 from ..ormodels import Ticket, TicketMessage
-from ..schemas.ticket import TicketBase, TicketCreate, TicketStatus
+from ..schemas.ticket import TicketCreate, TicketRead, TicketStatus
 from ..utils import unfoundable
 
 
-def create(db: Session, *, patient_id: str, ticket: TicketCreate) -> TicketBase:
+def create(db: Session, *, patient_id: str, ticket: TicketCreate) -> TicketRead:
     result_orm = Ticket(
         patient_id=patient_id,
         category=ticket.category,
@@ -29,7 +29,7 @@ def create(db: Session, *, patient_id: str, ticket: TicketCreate) -> TicketBase:
     db.commit()
     db.refresh(result_orm)
 
-    result = TicketBase.model_validate(result_orm)
+    result = read_one(db, ticket_id=result_orm.ticket_id)
     return result
 
 
@@ -39,9 +39,10 @@ def query_one(db: Session, *, ticket_id: int) -> Ticket:
     return result_orm
 
 
-def read_one(db: Session, *, ticket_id: int) -> TicketBase:
+def read_one(db: Session, *, ticket_id: int) -> TicketRead:
     result_orm = query_one(db, ticket_id=ticket_id)
-    result = TicketBase.model_validate(result_orm)
+    result = TicketRead.model_validate(result_orm)
+    result.hue = crypto.hue(result_orm.patient_id)
     return result
 
 
@@ -65,12 +66,12 @@ def read_many(db: Session, *, patient_id: str | None = None) -> list[TicketStatu
     return results
 
 
-def update(db: Session, *, ticket_id: int) -> TicketBase:
+def update(db: Session, *, ticket_id: int) -> TicketRead:
     result_orm = query_one(db, ticket_id=ticket_id)
     result_orm.date_closed = datetime.now()
 
     db.commit()
     db.refresh(result_orm)
 
-    result = TicketBase.model_validate(result_orm)
+    result = read_one(db, ticket_id=result_orm.ticket_id)
     return result

@@ -16,6 +16,10 @@ class TicketBase(BaseModel):
     category: str | None
 
 
+class TicketRead(TicketBase):
+    hue: int | None = None
+
+
 class TicketCreate(BaseModel):
     message: TicketMessageCreate
     category: str | None = None
