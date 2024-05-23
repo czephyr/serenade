@@ -12,7 +12,7 @@ export default async function Installations() {
   // Adjust the role check to include 'iit' or 'iim'
   if (
     session &&
-    (session.roles?.includes("iit") || session.roles?.includes("imt"))
+    (session.roles?.includes("iit") || session.roles?.includes("imt") || session.roles?.includes("unimi"))
   ) {
     try {
       const installations = await fetchFromBackend(

@@ -8,13 +8,8 @@ import toast, { Toaster } from "react-hot-toast";
 const InstallationDetail = ({ installation_id, initialData, role }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [showAddContactForm, setShowAddContactForm] = useState(false);
-  const [contacts, setContacts] = useState(initialData.contacts);
 
   const [patient, setPatient] = useState(initialData);
-  const aliasRef = useRef(null);
-  const phoneNoRef = useRef(null);
-  const emailRef = useRef(null);
   useEffect(() => {
     // if (
     //   status === "unauthenticated" ||
@@ -96,29 +91,108 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
     ],
   };
 
-
-  const fieldDetails = {
-    apartment_type: { label: "Tipo appartamento:", editable: role !== "imt" },
-    internet_type: { label: "Tipo connessione internet:", editable: role !== "imt" },
-    flatmates: { label: "Informazioni abitazione:", editable: role !== "imt" },
-    pets: { label: "Animali domestici:", editable: role !== "imt" },
-    visitors: { label: "Visitatori:", editable: role !== "imt" },
-    smartphone_model: { label: "Modello smartphone:", editable: role !== "imt" },
-    appliances: { label: "Elettrodomestici:", editable: role !== "imt" },
-    issues_notes: { label: "Note sui problemi:", editable: role !== "imt" },
-    habits_notes: { label: "Note sulle abitudini:", editable: role !== "imt" },
-    other_notes: { label: "Altre note:", editable: role !== "imt" },
-    date_start: { label: "Data inizio:", editable: true },
-    date_end: { label: "Data conclusione:", editable: true },
+  const fields_acl = {
+    apartment_type: {
+      label: "Tipo appartamento:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: false },
+        unimi: { visible: false, editable: false }
+      }
+    },
+    internet_type: {
+      label: "Tipo connessione internet:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: false },
+        unimi: { visible: false, editable: false }
+      }
+    },
+    flatmates: {
+      label: "Informazioni abitazione:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: false },
+        unimi: { visible: false, editable: false }
+      }
+    },
+    pets: {
+      label: "Animali domestici:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: false },
+        unimi: { visible: true, editable: false }
+      }
+    },
+    visitors: {
+      label: "Visitatori:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: false },
+        unimi: { visible: true, editable: false }
+      }
+    },
+    smartphone_model: {
+      label: "Modello smartphone:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: false },
+        unimi: { visible: true, editable: false }
+      }
+    },
+    appliances: {
+      label: "Elettrodomestici:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: false },
+        unimi: { visible: false, editable: false }
+      }
+    },
+    issues_notes: {
+      label: "Note sui problemi:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: false },
+        unimi: { visible: false, editable: false }
+      }
+    },
+    habits_notes: {
+      label: "Note sulle abitudini:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: false },
+        unimi: { visible: false, editable: false }
+      }
+    },
+    other_notes: {
+      label: "Altre note:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: false },
+        unimi: { visible: true, editable: false }
+      }
+    },
+    date_start: {
+      label: "Data inizio:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: true },
+        unimi: { visible: true, editable: false }
+      }
+    },
+    date_end: {
+      label: "Data conclusione:",
+      roles: {
+        iit: { visible: true, editable: true },
+        imt: { visible: true, editable: true },
+        unimi: { visible: true, editable: false }
+      }
+    },
   };
-
+  
   const renderField = (field) => {
-
     // Check if the field should be displayed for the current role
-    if (
-      (role === "dottore" && !fields.dottore.includes(field)) ||
-      ((role === "imt" || role === "iit") && !fields.imt_iit.includes(field))
-    ) {
+    if (!fields_acl[field]["roles"][role]["visible"]) {
       return null; // Don't render anything if the field is not included for the role
     }
 
@@ -130,11 +204,9 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       "flatmates",
     ];
 
-    const fieldInfo = fieldDetails[field] || { label: field, editable: false };
-
     return (
       <label htmlFor={field} className="block mt-3">
-        <span className="text-gray-700">{fieldInfo.label}</span>
+        <span className="text-gray-700">{fields_acl[field]["label"]}</span>
         <div className="flex items-center mt-1">
           {textAreaFields.includes(field) ? (
             <textarea
@@ -163,7 +235,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
               className="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           )}
-          {fieldInfo.editable && (
+          {fields_acl[field]["roles"][role]["editable"] && (
             <button
               className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
               onClick={() =>
@@ -178,38 +250,6 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         </div>
       </label>
     );
-  };
-
-  async function addContact(contact, patient_id) {
-    const updatedContacts = [...contacts, contact];
-    console.log(updatedContacts);
-    console.log(contacts);
-
-    const postBody = {
-      patient_id: patient_id,
-      contact: contact,
-    };
-
-    try {
-      const response = await fetch("/api/patients/contacts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(postBody),
-      });
-      const result = await response.json();
-      if (response.ok) {
-        setContacts(updatedContacts);
-        setShowAddContactForm(false);
-      } else {
-        console.error("API call failed: ", result.error);
-      }
-    } catch (error) {
-      console.error("Failed to submit patient data: ", error);
-    }
-  }
-
-  const removeContactAtIndex = (index) => {
-    setContacts(contacts.filter((_, idx) => idx !== index));
   };
 
   return (

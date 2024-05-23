@@ -17,31 +17,37 @@ export default async function TicketPage({ params }) {
   let patientDetails;
   if (session?.roles?.includes("iit")) {
     roleFound = "iit";
-    try {
-      patientDetails = await fetchFromBackend(
-        "installations info",
-        `installations/${params.id}/info`
-      );
-    } catch (error) {
-      console.error(error.message);
-      return { redirect: { destination: "/unauthorized", permanent: false } };
-    }
-    patientDetails.patient_id = params.id;
   } else if (session?.roles?.includes("imt")) {
     roleFound = "imt";
+  } else if (session?.roles?.includes("unimi")) {
+    roleFound = "unimi";
   }
-
   if (!roleFound) {
     return { redirect: { destination: "/unauthorized", permanent: false } };
   }
+
+  if (roleFound == "iit"){
+  try {
+    patientDetails = await fetchFromBackend(
+      "installations info",
+      `installations/${params.id}/info`
+    );
+  } catch (error) {
+    console.error(error.message);
+    return { redirect: { destination: "/unauthorized", permanent: false } };
+  }
+  patientDetails.patient_id = params.id;}
+
   const installation = await fetchFromBackend(
     "installations",
     `installations/${params.id}`
   );
-  const installationTickets = await fetchFromBackend(
+  let installationTickets;
+  if ((roleFound === "imt") || (roleFound ==="iit")){
+  installationTickets = await fetchFromBackend(
     "tickets",
     `installations/${params.id}/tickets`
-  );
+  );}
   const documents = await fetchFromBackend(
     "documents",
     `installations/${params.id}/documents`
@@ -55,10 +61,10 @@ export default async function TicketPage({ params }) {
           Installazione {genHue({ seed: installation.hue })}
         </h1>
         <div className="space-y-1">
-          <TicketList
+          {roleFound !== "unimi" && (<TicketList
             installation_id={params.id}
             installationTickets={installationTickets}
-          />
+          />)}
           {roleFound === "iit" && (
             <PatientDetail initialData={patientDetails} role={roleFound} />
           )}
