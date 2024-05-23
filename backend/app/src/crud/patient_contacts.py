@@ -19,6 +19,7 @@ def read_many(db: Session, *, patient_id: str) -> list[ContactEntry]:
     return result
 
 
+@unfoundable("patient")
 def create_one(db: Session, *, patient_id: str, contact: ContactCreate) -> ContactEntry:
     kw = contact.model_dump(exclude_unset=True)
     result_orm = Contact(**kw)
@@ -30,6 +31,7 @@ def create_one(db: Session, *, patient_id: str, contact: ContactCreate) -> Conta
     return result
 
 
+@unfoundable("patient")
 def create_many(
     db: Session, *, patient_id: str, contacts: list[ContactCreate]
 ) -> list[ContactEntry]:

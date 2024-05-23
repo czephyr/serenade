@@ -59,7 +59,7 @@ async def upload(
 )
 async def read_many(
     patient_id: str,
-    role: str = Depends(require_role([IIT])),
+    role: str = Depends(require_role([IIT, IMT, UNIMI])),
     db: Session = Depends(get_db),
 ) -> list[InstallationDocumentRead]:
     result = maskable(installation_documents.read_many, role)(db, patient_id=patient_id)
