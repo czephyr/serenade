@@ -55,7 +55,7 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
 
   async function closeTicket(ticket_num) {
     // Confirm dialog to ensure the user wants to close the ticket
-    const confirmClose = confirm("Are you sure you want to close this ticket?");
+    const confirmClose = confirm("Sei sicuro di voler chiudere questo ticket?");
     if (!confirmClose) {
       return; // If the user cancels, exit the function
     }
