@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from ...core.crypto import maskable
 from ...core.excp import BadValues, DuplicateCF
 from ...core.roles import HOS, IIT
 from ...crud import patient_contacts, patients
@@ -78,7 +79,11 @@ def create_contact(
     role: str = Depends(require_role([HOS, IIT])),
     db: Session = Depends(get_db),
 ) -> ContactEntry:
-    result = patient_contacts.create_one(db, patient_id=patient_id, contact=contact)
+    result = maskable(patient_contacts.create_one, role)(
+        db,
+        patient_id=patient_id,
+        contact=contact,
+    )
     return result
 
 
@@ -88,7 +93,7 @@ def read_contacts(
     role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> list[ContactEntry]:
-    result = patient_contacts.read_many(db, patient_id=patient_id)
+    result = maskable(patient_contacts.read_many, role)(db, patient_id=patient_id)
     return result
 
 
@@ -99,8 +104,8 @@ def update_contact(
     role: str = Depends(require_role([HOS])),
     db: Session = Depends(get_db),
 ) -> list[ContactEntry]:
-    _ = patient_contacts.delete_many(db, patient_id=patient_id)
-    result = patient_contacts.create_many(
+    _ = maskable(patient_contacts.delete_many, role)(db, patient_id=patient_id)
+    result = maskable(patient_contacts.create_many, role)(
         db,
         patient_id=patient_id,
         contacts=contacts,
