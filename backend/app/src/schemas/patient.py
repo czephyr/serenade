@@ -72,11 +72,6 @@ class PatientRead(BaseModel):
     date_exit: datetime | None = None
 
 
-class PatientScreeningCreate(BaseModel):
-    neuro_diag: str | None = None
-    age_class: str | None = None
-
-
 class PatientInfo(BaseModel):
     first_name: str
     last_name: str
