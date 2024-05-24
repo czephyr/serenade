@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import humanize
 from sqlalchemy.orm import Session
 
 from ..core import crypto
@@ -56,7 +55,7 @@ def read_many(db: Session, *, patient_id: str | None = None) -> list[TicketStatu
     results = [
         TicketStatus(
             ticket_id=result_orm.ticket_id,
-            date_delta=humanize.naturaltime((datetime.now() - result_orm.ts)),
+            date_delta=(datetime.now() - result_orm.ts).total_seconds(),
             status=TICKET_CLOSED if result_orm.date_closed else TICKET_OPEN,
             last_sender=sorted(result_orm.messages, key=lambda x: x.ts)[-1].sender,
             hue=crypto.hue(result_orm.patient_id),

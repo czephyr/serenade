@@ -31,7 +31,7 @@ class TicketUpdate(BaseModel):
 
 class TicketStatus(BaseModel):
     ticket_id: int
-    date_delta: str
+    date_delta: float
     status: str
     last_sender: str | None
     hue: int | None
