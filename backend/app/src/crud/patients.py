@@ -204,7 +204,7 @@ def update(db: Session, *, patient_id: str, patient: PatientUpdate) -> PatientRe
             age_class=patient.age_class,
         )
         if result_orm.screenings:
-            if "nuero_diag" not in kw:
+            if "neuro_diag" not in kw:
                 screening_orm.neuro_diag = result_orm.screenings[-1].neuro_diag
             if "age_class" not in kw:
                 screening_orm.age_class = result_orm.screenings[-1].age_class
