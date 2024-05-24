@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import genHue from "../../utils/hue";
 
 import { fetchFromBackend } from "@/utils/fetches";
 import authOptions from "@/app/api/auth/[...nextauth]/options";

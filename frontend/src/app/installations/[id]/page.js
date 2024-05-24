@@ -8,8 +8,8 @@ import DocumentManager from "@/components/documentManager";
 import TicketList from "@/components/ticketList";
 import PatientDetail from "@/components/patientDetail";
 import InstallationDetail from "@/components/installationDetail";
+import genHue from "@/utils/hue";
 import BackButton from "@/components/backButton";
-import genHue from "../../../utils/hue";
 
 export default async function TicketPage({ params }) {
   const session = await getServerSession(authOptions);
