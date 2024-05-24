@@ -45,6 +45,9 @@ class PatientStatus(BaseModel):
     status: str
     hue: int | None
 
+    date_join: datetime | None
+    date_exit: datetime | None
+
 
 class PatientRead(BaseModel):
     patient_id: str
@@ -64,6 +67,9 @@ class PatientRead(BaseModel):
     contacts: list[ContactEntry]
 
     medical_notes: str | None = None
+
+    date_join: datetime | None = None
+    date_exit: datetime | None = None
 
 
 class PatientScreeningCreate(BaseModel):
