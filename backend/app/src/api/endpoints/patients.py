@@ -3,11 +3,11 @@ from sqlalchemy.orm import Session
 
 from ...core.crypto import maskable
 from ...core.excp import BadValues, DuplicateCF
-from ...core.roles import HOS, IIT
-from ...crud import patient_contacts, patients
+from ...core.roles import HOS, IIT, UNIMI
+from ...crud import patient_contacts, patient_screenings, patients
 from ...schemas.contact import ContactCreate, ContactEntry
 from ...schemas.patient import PatientCreate, PatientRead, PatientStatus, PatientUpdate
-from ...schemas.patient_base import PatientBase
+from ...schemas.patient_screening import PatientScreeningRead
 from ..deps import get_db, require_role
 
 router = APIRouter()
@@ -51,6 +51,26 @@ def read_one(
     db: Session = Depends(get_db),
 ) -> PatientRead:
     result = patients.read_one(db, patient_id=patient_id)
+    return result
+
+
+@router.get("/{patient_id}/screenings", response_model=list[PatientScreeningRead])
+def read_info(
+    patient_id: str,
+    role: str = Depends(require_role([HOS, UNIMI])),
+    db: Session = Depends(get_db),
+) -> list[PatientScreeningRead]:
+    result = patient_screenings.read_many(db, patient_id=patient_id)
+    return result
+
+
+@router.get("/{patient_id}/screenings/lastest", response_model=PatientScreeningRead)
+def read_info(
+    patient_id: str,
+    role: str = Depends(require_role([HOS, UNIMI])),
+    db: Session = Depends(get_db),
+) -> PatientScreeningRead:
+    result = patient_screenings.read_one(db, patient_id=patient_id)
     return result
 
 
