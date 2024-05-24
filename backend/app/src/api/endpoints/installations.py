@@ -39,7 +39,7 @@ def read_one(
 @router.get("/{patient_id}/info", response_model=PatientInfo)
 def read_info(
     patient_id: str,
-    role: str = Depends(require_role([IIT,UNIMI])),
+    role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> PatientInfo:
     result = maskable(patients.info, role)(db, patient_id=patient_id)
