@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import humanize
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -121,7 +120,7 @@ def update(
     return result
 
 
-def last_update(db: Session, *, patient_id: str) -> str:
+def last_update(db: Session, *, patient_id: str) -> float:
     ts_max = max(
         [
             m.ts
@@ -130,7 +129,7 @@ def last_update(db: Session, *, patient_id: str) -> str:
         ],
         default=patient_status.query_one(db, patient_id=patient_id).ts,
     )
-    date_delta = humanize.naturaltime((datetime.now() - ts_max))
+    date_delta = (datetime.now() - ts_max).total_seconds()
     return date_delta
 
 

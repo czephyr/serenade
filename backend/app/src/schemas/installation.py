@@ -50,5 +50,5 @@ class InstallationDetailUpdate(InstallationDetailCreate):
 class InstallationStatus(BaseModel):
     patient_id: str
     status: str
-    date_delta: str
+    date_delta: float
     hue: int | None
