@@ -512,6 +512,24 @@ const PatientDetail = ({ initialData, role }) => {
           </div>
         </span>
       );
+    } else if ((field === "age_class")) {
+      return (
+        <span className="text-gray-700 flex w-full items-center">
+          <label htmlFor={field} className="flex-1">
+            Gruppo età:
+          </label>
+          <div className="flex flex-grow items-center">
+            <input
+              type="text"
+              id={field}
+              value={patient[field]}
+              onChange={(e) => handleChange(e, field)}
+              disabled={!isEditing[field]}
+              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+        </span>
+      );
 
   }};
 

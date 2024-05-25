@@ -1,7 +1,11 @@
 import NewTicketForm from "./newTicketForm";
 import StatusBadge from "./statusBadge";
+import TimeAgo from "javascript-time-ago";
+import it from "javascript-time-ago/locale/it";
 
 const TicketList = ({ installation_id, installationTickets }) => {
+  TimeAgo.addDefaultLocale(it);
+  const timeAgo = new TimeAgo("it-IT");
   return (
     <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
       <h1 className="text-lg font-bold leading-tight mb-4">Tickets</h1>
@@ -30,7 +34,9 @@ const TicketList = ({ installation_id, installationTickets }) => {
             {installationTickets.map((ticket) => (
               <tr key={ticket.ticket_id}>
                 <td className="px-5 py-5 border-b">{ticket.category}</td>
-                <td className="px-5 py-5 border-b">{ticket.date_delta}</td>
+                <td className="px-5 py-5 border-b">
+                  {timeAgo.format(Date.now() - ticket.date_delta)}
+                </td>
                 <td className="px-5 py-5 border-b">
                   <StatusBadge status={ticket.status} />
                 </td>

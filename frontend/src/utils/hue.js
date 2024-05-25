@@ -1,5 +1,5 @@
 const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
-const italianNames = require('../public/italianNames.json');
+const italianNames = require('@/public/italianNames.json');
 
 const genHue = ({ seed }) => {
 

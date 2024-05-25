@@ -1,19 +1,24 @@
+import TimeAgo from "javascript-time-ago";
+import it from "javascript-time-ago/locale/it";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import genHue from "../../utils/hue";
 
 import { fetchFromBackend } from "@/utils/fetches";
 import authOptions from "@/app/api/auth/[...nextauth]/options";
 
 import StatusBadge from "@/components/statusBadge";
-import genHue from "../../utils/hue";
+import genHue from "@/utils/hue";
 export default async function Installations() {
   const session = await getServerSession(authOptions);
+  TimeAgo.addDefaultLocale(it);
+  const timeAgo = new TimeAgo("it-IT");
 
   // Adjust the role check to include 'iit' or 'iim'
   if (
     session &&
-    (session.roles?.includes("iit") || session.roles?.includes("imt") || session.roles?.includes("unimi"))
+    (session.roles?.includes("iit") ||
+      session.roles?.includes("imt") ||
+      session.roles?.includes("unimi"))
   ) {
     try {
       const installations = await fetchFromBackend(
@@ -47,12 +52,14 @@ export default async function Installations() {
                 <tbody>
                   {installations.map((installation) => (
                     <tr key={installation.patient_id}>
-                      <td className="px-5 py-5 border-b">{genHue({ seed: installation.hue })}</td>
+                      <td className="px-5 py-5 border-b">
+                        {genHue({ seed: installation.hue })}
+                      </td>
                       <td className="px-5 py-5 border-b">
                         <StatusBadge status={installation.status} />
                       </td>
                       <td className="px-5 py-5 border-b">
-                        {installation.date_delta}
+                        {timeAgo.format(Date.now() - installation.date_delta)}
                       </td>
                       <td className="px-5 py-5 border-b">
                         <a
