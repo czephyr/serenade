@@ -13,5 +13,7 @@ export default async function RoleBasedRedirect() {
     redirect("/installations");
   } else if (session?.roles?.includes("dottore")) {
     redirect("/patients");
+  } else {
+    redirect("/");
   }
 }
