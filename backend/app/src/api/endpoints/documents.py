@@ -24,7 +24,7 @@ def download(
 @router.delete("/documents/{document_id}", response_model=InstallationDocumentRead)
 def delete(
     document_id: int,
-    role: str = Depends(require_role([IIT, IMT])),
+    role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> InstallationDocumentRead:
     result = installation_documents.delete(db, document_id=document_id)
@@ -39,7 +39,7 @@ async def upload(
     file: UploadFile,
     file_type: str | None = None,
     file_name: str | None = None,
-    role: str = Depends(require_role([IIT,IMT])),
+    role: str = Depends(require_role([IIT])),
     db: Session = Depends(get_db),
 ) -> InstallationDocumentRead:
     contents = await file.read()
