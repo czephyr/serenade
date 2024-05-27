@@ -88,6 +88,7 @@ export default async function TicketPage({ params }) {
           <DocumentManager
             initialDocuments={documents}
             installation_id={params.id}
+            role={roleFound}
           />
         </div>
       </div>
