@@ -20,6 +20,13 @@ How to spin up the project:
    HOS
    username: dottore-alice
    pswd: alice
+
+   IMT
+   username: imt-vincenzo
+   pswd: vincenzo
+
+   UNIMI: ricercatore-stefano
+   pswd: stefano
    ```
 
 ## Project Overview
