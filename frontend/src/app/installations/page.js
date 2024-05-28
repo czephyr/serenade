@@ -36,13 +36,13 @@ export default async function Installations() {
                 <thead>
                   <tr>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
-                      Installation ID
+                      Alias
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
-                      Status
+                      Stato
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
-                      Ultimo Update
+                      Ultimo aggiornamento
                     </th>
                     <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
                       Dettagli

@@ -29,7 +29,7 @@ export default function AuthStatus() {
     return (
       <div className="my-3">
         <span className="text-black-100">
-          <b>Username:</b> {session?.user.name}
+          Benvenuto <b>{session?.user.name}</b>
         </span>
         <button
           className="bg-blue-900 font-bold text-white py-1 px-2 ml-3 rounded border border-gray-50"
