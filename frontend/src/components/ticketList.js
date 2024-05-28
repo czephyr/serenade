@@ -17,13 +17,13 @@ const TicketList = ({ installation_id, installationTickets }) => {
                 Tipologia
               </th>
               <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
-                Ultimo update
+                Ultimo aggiornamento
               </th>
               <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
-                Status
+                Stato
               </th>
               <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
-                Ultimo msg
+                Da
               </th>
               <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
                 Dettagli
