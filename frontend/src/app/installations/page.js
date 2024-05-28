@@ -59,7 +59,7 @@ export default async function Installations() {
                         <StatusBadge status={installation.status} />
                       </td>
                       <td className="px-5 py-5 border-b">
-                        {timeAgo.format(Date.now() - installation.date_delta)}
+                        {timeAgo.format(Date.now() - installation.date_delta * 1000)}
                       </td>
                       <td className="px-5 py-5 border-b">
                         <a
