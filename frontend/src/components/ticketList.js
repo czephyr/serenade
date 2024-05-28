@@ -35,7 +35,7 @@ const TicketList = ({ installation_id, installationTickets }) => {
               <tr key={ticket.ticket_id}>
                 <td className="px-5 py-5 border-b">{ticket.category}</td>
                 <td className="px-5 py-5 border-b">
-                  {timeAgo.format(Date.now() - ticket.date_delta)}
+                  {timeAgo.format(Date.now() - ticket.date_delta * 1000)}
                 </td>
                 <td className="px-5 py-5 border-b">
                   <StatusBadge status={ticket.status} />
