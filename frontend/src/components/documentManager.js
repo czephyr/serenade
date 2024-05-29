@@ -131,7 +131,7 @@ function DocumentManager({ initialDocuments, installation_id, role }) {
         ))}
       </div>
 
-      {role !== "unimi" && (
+      {role == "iit" && (
         <div className="mt-4 px-5">
           <input
             type="file"

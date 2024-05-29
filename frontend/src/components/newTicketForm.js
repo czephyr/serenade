@@ -13,10 +13,6 @@ const NewTicketForm = ({ installation_id }) => {
   const [showAddTicket, setShowAddTicket] = useState(false);
 
   async function addTicket(msg, category, patient_id) {
-    // const updatedContacts = [...contacts, contact];
-    // console.log(updatedContacts);
-    // console.log(contacts);
-
     const postBody = {
       patient_id: patient_id,
       message: {
