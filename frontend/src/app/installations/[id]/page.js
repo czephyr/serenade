@@ -10,6 +10,7 @@ import PatientDetail from "@/components/patientDetail";
 import InstallationDetail from "@/components/installationDetail";
 import genHue from "@/utils/hue";
 import BackButton from "@/components/backButton";
+import DashboardButton from "@/components/dashboardButton";
 
 export default async function TicketPage({ params }) {
   const session = await getServerSession(authOptions);
@@ -74,12 +75,15 @@ export default async function TicketPage({ params }) {
           {roleFound !== "unimi" && (
             <TicketList
               installation_id={params.id}
-              installationTickets={installationTickets}
+              installationTickets={installationTickets.sort(
+                (a, b) => a.date_delta - b.date_delta
+              )}
             />
           )}
           {(roleFound === "iit" || roleFound == "unimi") && (
             <PatientDetail initialData={patientDetails} role={roleFound} />
           )}
+          {roleFound == "unimi" && <DashboardButton initialData={params.id} />}
           <InstallationDetail
             installation_id={params.id}
             initialData={installation}

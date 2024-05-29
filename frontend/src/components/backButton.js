@@ -16,7 +16,7 @@ const BackButton = () => {
       viewBox="0 0 24 24"
       strokeWidth="3" // Increased stroke width for a thicker line
       stroke="currentColor"
-      className="w-8 h-8 cursor-pointer text-blue-500 hover:text-blue-700 fixed z-50"
+      className="w-8 h-8 cursor-pointer text-blue-500 hover:text-blue-700"
     >
       <path
         strokeLinecap="round"
