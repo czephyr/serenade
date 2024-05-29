@@ -83,7 +83,9 @@ export default async function TicketPage({ params }) {
           {(roleFound === "iit" || roleFound == "unimi") && (
             <PatientDetail initialData={patientDetails} role={roleFound} />
           )}
-          {roleFound == "unimi" && <DashboardButton initialData={params.id} />}
+          {roleFound == "unimi" && (
+            <DashboardButton installation_id={params.id} />
+          )}
           <InstallationDetail
             installation_id={params.id}
             initialData={installation}
