@@ -173,7 +173,7 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: true, editable: false },
-        dottore: { visible: true, editable: false },
+        dottore: { visible: false, editable: false },
       },
     },
     home_address: {
