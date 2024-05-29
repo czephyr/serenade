@@ -9,8 +9,8 @@ const StatusBadge = ({ status }) => {
   };
 
   const ticketStatusStyles = {
-    aperto: "bg-blue-50 text-blue-700 ring-blue-600/20",
-    chiuso: "bg-red-50 text-red-700 ring-red-600/10",
+    aperto: "bg-yellow-50 text-yellow-700 ring-yellow-600/20",
+    chiuso: "bg-gray-50 text-gray-700 ring-grey-600/10",
   };
 
   // Lowercase the status to ensure case insensitivity

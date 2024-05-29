@@ -101,35 +101,35 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: true }
-      }
+        dottore: { visible: true, editable: true },
+      },
     },
     first_name: {
       label: "Nome:",
       roles: {
         iit: { visible: false, editable: false },
-        imt: { visible: true, editable: false },
+        imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: false }
-      }
+        dottore: { visible: true, editable: false },
+      },
     },
     last_name: {
       label: "Cognome:",
       roles: {
         iit: { visible: false, editable: false },
-        imt: { visible: true, editable: false },
+        imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: false }
-      }
+        dottore: { visible: true, editable: false },
+      },
     },
     codice_fiscale: {
       label: "Codice fiscale:",
       roles: {
         iit: { visible: false, editable: false },
-        imt: { visible: true, editable: false },
+        imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: false }
-      }
+        dottore: { visible: true, editable: false },
+      },
     },
     gender: {
       label: "Sesso:",
@@ -137,8 +137,8 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: true, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: false }
-      }
+        dottore: { visible: true, editable: false },
+      },
     },
     date_of_birth: {
       label: "Data di nascita:",
@@ -146,8 +146,8 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: false }
-      }
+        dottore: { visible: true, editable: false },
+      },
     },
     place_of_birth: {
       label: "Nato a:",
@@ -155,8 +155,8 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: false }
-      }
+        dottore: { visible: true, editable: false },
+      },
     },
     age: {
       label: "Età:",
@@ -164,8 +164,8 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: false }
-      }
+        dottore: { visible: true, editable: false },
+      },
     },
     age_class: {
       label: "Classe:",
@@ -173,8 +173,8 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: true, editable: false },
-        dottore: { visible: true, editable: false }
-      }
+        dottore: { visible: true, editable: false },
+      },
     },
     home_address: {
       label: "Indirizzo:",
@@ -182,8 +182,8 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: false }
-      }
+        dottore: { visible: true, editable: false },
+      },
     },
     neuro_diag: {
       label: "Categoria:",
@@ -191,8 +191,8 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: true, editable: false },
-        dottore: { visible: true, editable: true }
-      }
+        dottore: { visible: true, editable: true },
+      },
     },
     medical_notes: {
       label: "Note mediche:",
@@ -200,8 +200,8 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: true }
-      }
+        dottore: { visible: true, editable: true },
+      },
     },
     date_exit: {
       label: "Data di Fine:",
@@ -209,13 +209,13 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: true }
-      }
-    }
+        dottore: { visible: true, editable: true },
+      },
+    },
   };
 
   const renderField = (field) => {
-    console.log("###########"+JSON.stringify(field))
+    console.log("###########" + JSON.stringify(field));
     if (!fields_acl[field]["roles"][role]["visible"]) {
       return null; // Don't render anything if the field is not included for the role
     }
@@ -235,7 +235,7 @@ const PatientDetail = ({ initialData, role }) => {
           </span>
         </label>
       );
-    } else if ((field === "date_of_birth")) {
+    } else if (field === "date_of_birth") {
       return (
         <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
@@ -243,16 +243,19 @@ const PatientDetail = ({ initialData, role }) => {
             <input
               type="text"
               id={field}
-              value={new Date(patient[field]).toLocaleString('it-IT',{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, year: 'numeric',
-              month: '2-digit',
-              day: '2-digit'})}
+              value={new Date(patient[field]).toLocaleString("it-IT", {
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+              })}
               disabled
               className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </span>
         </label>
       );
-    } else if ((field === "place_of_birth")) {
+    } else if (field === "place_of_birth") {
       return (
         <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
@@ -267,7 +270,7 @@ const PatientDetail = ({ initialData, role }) => {
           </span>
         </label>
       );
-    } else if ((field === "age")) {
+    } else if (field === "age") {
       return (
         <label htmlFor={field} className="block px-5">
           <span className="text-gray-700">
@@ -282,7 +285,7 @@ const PatientDetail = ({ initialData, role }) => {
           </span>
         </label>
       );
-    } else if ((field === "neuro_diag")) {
+    } else if (field === "neuro_diag") {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
@@ -295,25 +298,36 @@ const PatientDetail = ({ initialData, role }) => {
               onChange={(e) => handleChange(e, field)}
               disabled={!isEditing[field]}
               className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              style={
+                role === "unimi"
+                  ? {
+                      WebkitAppearance: "none" /* for Chrome, Safari */,
+                      MozAppearance: "none" /* for Firefox */,
+                      appearance: "none" /* Standard syntax */,
+                    }
+                  : {}
+              }
             >
               <option value={patient[field]}>{patient[field]}</option>
               <option value="neurodegen">neurodegen</option>
               <option value="no neurodegen">no neurodegen</option>
             </select>
-            {fields_acl[field]["roles"][role]["editable"] && (<button
-              className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
-              onClick={() =>
-                isEditing[field]
-                  ? handleSend(patient.patient_id, field, patient[field])
-                  : handleEdit(field)
-              }
-            >
-              {isEditing[field] ? "Salva" : "Modifica"}
-            </button>)}
+            {fields_acl[field]["roles"][role]["editable"] && (
+              <button
+                className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+                onClick={() =>
+                  isEditing[field]
+                    ? handleSend(patient.patient_id, field, patient[field])
+                    : handleEdit(field)
+                }
+              >
+                {isEditing[field] ? "Salva" : "Modifica"}
+              </button>
+            )}
           </div>
         </span>
       );
-    } else if ((field === "medical_notes")) {
+    } else if (field === "medical_notes") {
       return (
         <label htmlFor={field} className="block mt-3">
           <span className="text-gray-700">Note mediche:</span>
@@ -438,7 +452,7 @@ const PatientDetail = ({ initialData, role }) => {
         //   </span>
         // </label>
       );
-    } else if ((field == "codice_fiscale")) {
+    } else if (field == "codice_fiscale") {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
@@ -456,7 +470,7 @@ const PatientDetail = ({ initialData, role }) => {
           </div>
         </span>
       );
-    } else if ((field == "date_join")) {
+    } else if (field == "date_join") {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
@@ -484,7 +498,7 @@ const PatientDetail = ({ initialData, role }) => {
           </div>
         </span>
       );
-    } else if ((field === "date_exit")) {
+    } else if (field === "date_exit") {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
@@ -512,11 +526,11 @@ const PatientDetail = ({ initialData, role }) => {
           </div>
         </span>
       );
-    } else if ((field === "age_class")) {
+    } else if (field === "age_class") {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
-            Gruppo età:
+            Età:
           </label>
           <div className="flex flex-grow items-center">
             <input
@@ -530,8 +544,8 @@ const PatientDetail = ({ initialData, role }) => {
           </div>
         </span>
       );
-
-  }};
+    }
+  };
 
   async function addContact(contact, patient_id) {
     const updatedContacts = [...contacts, contact];
@@ -598,41 +612,43 @@ const PatientDetail = ({ initialData, role }) => {
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
             {fields.map(renderField)}
-            {role !== "unimi" && (<div className="bg-white p-6 mt-6 shadow-lg rounded">
-              <h3 className="text-lg font-semibold text-black leading-tight  mb-4">
-                Contatti
-              </h3>
-              <div className="space-y-4 ">
-                {console.log(contacts)}
-                {contacts.map((contact) => (
-                  <div
-                    key={contact.id}
-                    className="flex justify-between items-center mb-2 bg-white p-2"
-                  >
-                    <span className="text-gray-800">
-                      {contact.alias} - {contact.phone_no} - {contact.email}
-                    </span>
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        removeContactAtIndex(contact.id);
-                      }}
-                      className="py-1 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                      style={{ textDecoration: 'none' }}
+            {role !== "unimi" && (
+              <div className="bg-white p-6 mt-6 shadow-lg rounded">
+                <h3 className="text-lg font-semibold text-black leading-tight  mb-4">
+                  Contatti
+                </h3>
+                <div className="space-y-4 ">
+                  {console.log(contacts)}
+                  {contacts.map((contact) => (
+                    <div
+                      key={contact.id}
+                      className="flex justify-between items-center mb-2 bg-white p-2"
                     >
-                      Elimina
-                    </a>
-                  </div>
-                ))}
+                      <span className="text-gray-800">
+                        {contact.alias} - {contact.phone_no} - {contact.email}
+                      </span>
+                      <a
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          removeContactAtIndex(contact.id);
+                        }}
+                        className="py-1 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        style={{ textDecoration: "none" }}
+                      >
+                        Elimina
+                      </a>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setShowAddContactForm(true)}
+                  className="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-4 rounded"
+                >
+                  Aggiungi contatto
+                </button>
               </div>
-              <button
-                onClick={() => setShowAddContactForm(true)}
-                className="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-0.5 px-4 rounded"
-              >
-                Aggiungi contatto
-              </button>
-            </div>)}
+            )}
             {showAddContactForm && (
               <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
                 <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
