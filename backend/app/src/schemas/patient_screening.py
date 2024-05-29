@@ -13,4 +13,3 @@ class PatientScreeningRead(BaseModel):
 
 class PatientScreeningCreate(BaseModel):
     neuro_diag: str | None = None
-    age_class: str | None = None

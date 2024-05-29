@@ -1,21 +1,31 @@
 from sqlalchemy.orm import Session
 
 from ..core.excp import unfoundable
-from ..ormodels import PatientScreening
+from ..ormodels import PatientScreening, PatientFull
 from ..schemas.patient_screening import PatientScreeningRead
+from ..utils import to_age
 
 
 @unfoundable("patient")
 def read_one(db: Session, *, patient_id: str) -> PatientScreeningRead:
-    result_orm = (
-        db.query(PatientScreening)
-        .where(PatientScreening.patient_id == patient_id)
-        .order_by(PatientScreening.ts.desc())
-        .first()
+    # result_orm = (
+    #     db.query(PatientScreening)
+    #     .where(PatientScreening.patient_id == patient_id)
+    #     .order_by(PatientScreening.ts.desc())
+    #     .first()
+    # )
+    # if result_orm is None:
+    #     return PatientScreeningRead()
+
+    # result = PatientScreeningRead.model_validate(result_orm)
+
+    result_orm = db.query(PatientFull).where(PatientFull.patient_id == patient_id).one()
+    result = PatientScreeningRead(
+        neuro_diag=(
+            result_orm.screenings[-1].neuro_diag if result_orm.screenings else None
+        ),
+        age_class=str(to_age(result_orm.note.codice_fiscale)),
     )
-    if result_orm is None:
-        return PatientScreeningRead()
-    result = PatientScreeningRead.model_validate(result_orm)
     return result
 
 
