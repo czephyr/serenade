@@ -230,7 +230,7 @@ const PatientDetail = ({ initialData, role }) => {
               id={field}
               value={patient[field]}
               disabled
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`mt-1 block w-full px-3 py-2  ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
           </span>
         </label>
@@ -250,7 +250,7 @@ const PatientDetail = ({ initialData, role }) => {
                 day: "2-digit",
               })}
               disabled
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`mt-1 block w-full px-3 py-2  ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
           </span>
         </label>
@@ -265,7 +265,7 @@ const PatientDetail = ({ initialData, role }) => {
               id={field}
               value={patient[field]}
               disabled
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`mt-1 block w-full px-3 py-2  ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
           </span>
         </label>
@@ -280,7 +280,7 @@ const PatientDetail = ({ initialData, role }) => {
               id={field}
               value={patient[field]}
               disabled
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`mt-1 block w-full px-3 py-2  ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
           </span>
         </label>
@@ -297,7 +297,7 @@ const PatientDetail = ({ initialData, role }) => {
               value={patient[field]}
               onChange={(e) => handleChange(e, field)}
               disabled={!isEditing[field]}
-              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`mt-1 w-full px-3 py-2  ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
               style={
                 role === "unimi"
                   ? {
@@ -337,7 +337,7 @@ const PatientDetail = ({ initialData, role }) => {
               value={patient[field]}
               onChange={(e) => handleChange(e, field)}
               readOnly={!isEditing[field]}
-              className="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`flex-grow px-3 py-2  ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
             <button
               className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
@@ -365,7 +365,7 @@ const PatientDetail = ({ initialData, role }) => {
               value={patient[field]}
               onChange={(e) => handleChange(e, field)}
               readOnly={!isEditing[field]}
-              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`mt-1 w-full px-3 py-2  ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
             <button
               className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
@@ -388,7 +388,7 @@ const PatientDetail = ({ initialData, role }) => {
         //       value={patient[field]}
         //       onChange={(e) => handleChange(e, field)}
         //       readOnly={!isEditing[field]}
-        //       className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        //       className="mt-1 w-full px-3 py-2  ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         //     />
         //   </label>
         //   <button
@@ -412,7 +412,7 @@ const PatientDetail = ({ initialData, role }) => {
               type="text"
               id={field}
               value={patient[field]}
-              className="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`block w-full px-3 py-2 ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
               onChange={(e) => handleChange(e, field)}
               readOnly={!isEditing[field]}
             />
@@ -465,7 +465,7 @@ const PatientDetail = ({ initialData, role }) => {
               value={patient[field]}
               onChange={(e) => handleChange(e, field)}
               readOnly={!isEditing[field]}
-              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`block w-full px-3 py-2 ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
           </div>
         </span>
@@ -483,7 +483,7 @@ const PatientDetail = ({ initialData, role }) => {
               value={patient[field] ? patient[field].slice(0, 10) : ""}
               onChange={(e) => handleChange(e, field)}
               disabled={!isEditing[field]}
-              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`block w-full px-3 py-2 ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
             <button
               className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
@@ -511,7 +511,7 @@ const PatientDetail = ({ initialData, role }) => {
               value={patient[field] ? patient[field].slice(0, 10) : ""}
               onChange={(e) => handleChange(e, field)}
               disabled={!isEditing[field]}
-              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`block w-full px-3 py-2 ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
             <button
               className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
@@ -539,7 +539,7 @@ const PatientDetail = ({ initialData, role }) => {
               value={patient[field]}
               onChange={(e) => handleChange(e, field)}
               disabled={!isEditing[field]}
-              className="mt-1 w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`block w-full px-3 py-2 ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
           </div>
         </span>

@@ -98,8 +98,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: true } 
-      }
+        dottore: { visible: true, editable: true },
+      },
     },
     internet_type: {
       label: "Tipo connessione internet:",
@@ -107,8 +107,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: true } 
-      }
+        dottore: { visible: true, editable: true },
+      },
     },
     flatmates: {
       label: "Informazioni abitazione:",
@@ -116,8 +116,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: true, editable: true } 
-      }
+        dottore: { visible: true, editable: true },
+      },
     },
     pets: {
       label: "Animali domestici:",
@@ -125,8 +125,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
         unimi: { visible: true, editable: false },
-        dottore: { visible: true, editable: true } 
-      }
+        dottore: { visible: true, editable: true },
+      },
     },
     visitors: {
       label: "Visitatori:",
@@ -134,8 +134,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
         unimi: { visible: true, editable: false },
-        dottore: { visible: false, editable: false } 
-      }
+        dottore: { visible: false, editable: false },
+      },
     },
     smartphone_model: {
       label: "Modello smartphone:",
@@ -143,8 +143,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
         unimi: { visible: true, editable: false },
-        dottore: { visible: false, editable: false } 
-      }
+        dottore: { visible: false, editable: false },
+      },
     },
     appliances: {
       label: "Elettrodomestici:",
@@ -152,8 +152,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: false, editable: false } 
-      }
+        dottore: { visible: false, editable: false },
+      },
     },
     issues_notes: {
       label: "Note sui problemi:",
@@ -161,8 +161,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: false, editable: false } 
-      }
+        dottore: { visible: false, editable: false },
+      },
     },
     habits_notes: {
       label: "Note sulle abitudini:",
@@ -170,8 +170,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
         unimi: { visible: false, editable: false },
-        dottore: { visible: false, editable: false } 
-      }
+        dottore: { visible: false, editable: false },
+      },
     },
     other_notes: {
       label: "Altre note:",
@@ -179,29 +179,29 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         iit: { visible: true, editable: true },
         imt: { visible: true, editable: false },
         unimi: { visible: true, editable: false },
-        dottore: { visible: false, editable: false } 
-      }
+        dottore: { visible: false, editable: false },
+      },
     },
     date_start: {
       label: "Data inizio:",
       roles: {
-        iit: { visible: true, editable: true },
+        iit: { visible: true, editable: false },
         imt: { visible: true, editable: true },
         unimi: { visible: true, editable: false },
-        dottore: { visible: false, editable: false } 
-      }
+        dottore: { visible: false, editable: false },
+      },
     },
     date_end: {
       label: "Data conclusione:",
       roles: {
-        iit: { visible: true, editable: true },
+        iit: { visible: true, editable: false },
         imt: { visible: true, editable: true },
         unimi: { visible: true, editable: false },
-        dottore: { visible: false, editable: false } 
-      }
+        dottore: { visible: false, editable: false },
+      },
     },
-};
-  
+  };
+
   const renderField = (field) => {
     // Check if the field should be displayed for the current role
     if (!fields_acl[field]["roles"][role]["visible"]) {
@@ -226,7 +226,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
               value={patient[field]}
               onChange={(e) => handleChange(e, field)}
               readOnly={!isEditing[field]}
-              className="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`block w-full px-3 py-2 ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
           ) : field === "date_start" || field === "date_end" ? (
             <input
@@ -235,7 +235,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
               value={patient[field] ? patient[field].slice(0, 10) : ""}
               onChange={(e) => handleChange(e, field)}
               readOnly={!isEditing[field]}
-              className="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`block w-full px-3 py-2 ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
           ) : (
             <input
@@ -244,7 +244,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
               value={patient[field]}
               onChange={(e) => handleChange(e, field)}
               readOnly={!isEditing[field]}
-              className="flex-grow px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`block w-full px-3 py-2 ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
           )}
           {fields_acl[field]["roles"][role]["editable"] && (
@@ -271,7 +271,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
         <h1 className="text-lg font-bold leading-tight mb-4">Installazione</h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
-            {[...fields.imt_iit,...fields.dottore].map(renderField)}
+            {[...fields.imt_iit, ...fields.dottore].map(renderField)}
           </div>
         </div>
       </div>

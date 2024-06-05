@@ -109,14 +109,21 @@ export default function NewPatientForm() {
         // toast.success("Successfully created!", {
         //   position: "bottom-left",
         // });
+      } else if (response.status == 409) {
+        setCfInputError("Il codice fiscale e' gia' presente nel database");
+        return;
       } else {
         console.error("API call failed: ", result.error);
+        return;
       }
     } catch (error) {
-      console.error("Failed to submit patient data: ", error);
+      console.error("Failedeeeeeeeeeeee to submit patient data: ", error);
+      return;
     }
 
     const installationData = {
+      date_start: patientData.date_join,
+      date_end: patientData.date_exit,
       apartment_type: apartmentTypeRef.current.value,
       internet_type: internetTypeRef.current.value,
       flatmates: flatmatesRef.current.value,
@@ -305,7 +312,12 @@ export default function NewPatientForm() {
 
             <div className="mt-4">
               <h3 className="text-lg font-bold">Contatti</h3>
-              {contacts.map((contact,index) => (
+              {contacts.length == 0 && (
+                <p className="text-red-500 text-sm px-3 py-1">
+                  È necessario inserire almeno un contatto
+                </p>
+              )}
+              {contacts.map((contact, index) => (
                 <div
                   key={index}
                   className="flex justify-between items-center mb-2 bg-white p-2 shadow rounded"
@@ -381,11 +393,14 @@ export default function NewPatientForm() {
             <div className="mt-6">
               <button
                 type="submit"
-                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${isCfValid ? "bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500" : "bg-gray-500 cursor-not-allowed"}`}
-                disabled={!isCfValid}
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${isCfValid && contacts.length > 0 ? "bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500" : "bg-gray-500 cursor-not-allowed"}`}
+                disabled={!isCfValid && contacts.length == 0}
               >
                 Crea paziente
               </button>
+              {cfInputError && (
+                <p className="text-red-500 text-sm mt-2">{cfInputError}</p>
+              )}
             </div>
           </div>
         </form>
