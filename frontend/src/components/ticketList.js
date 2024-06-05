@@ -3,7 +3,7 @@ import StatusBadge from "./statusBadge";
 import TimeAgo from "javascript-time-ago";
 import it from "javascript-time-ago/locale/it";
 
-const TicketList = ({ installation_id, installationTickets }) => {
+const TicketList = ({ installation_id, installationTickets, role }) => {
   TimeAgo.addDefaultLocale(it);
   const timeAgo = new TimeAgo("it-IT");
   return (
@@ -68,9 +68,11 @@ const TicketList = ({ installation_id, installationTickets }) => {
           </tbody>
         </table>
       </div>
-      <div className="text-white">
-        <NewTicketForm installation_id={installation_id} />
-      </div>
+      {role == "imt" && (
+        <div className="text-white">
+          <NewTicketForm installation_id={installation_id} />
+        </div>
+      )}
     </div>
   );
 };
