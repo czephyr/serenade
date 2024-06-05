@@ -144,10 +144,13 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
     db.add_all([detail_orm, note_orm, patient_orm])
     db.commit()
 
+    current_age = to_age(patient.codice_fiscale)
+    age_class = "<75" if current_age < 75 else ("75-85" if current_age < 85 else "85+")
+
     screening_orm = PatientScreening(
         patient_id=patient_id,
         neuro_diag=patient.neuro_diag,
-        age_class=patient.age_class,
+        age_class=age_class,
     )
     db.add(screening_orm)
     db.commit()
