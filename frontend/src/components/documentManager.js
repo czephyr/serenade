@@ -3,7 +3,12 @@
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-function DocumentManager({ initialDocuments, installation_id, role }) {
+function DocumentManager({
+  initialDocuments,
+  installation_id,
+  role,
+  install_name,
+}) {
   const [documents, setDocuments] = useState(initialDocuments);
   const fileInputRef = useRef(null);
   const router = useRouter();
@@ -44,17 +49,24 @@ function DocumentManager({ initialDocuments, installation_id, role }) {
     window.open(downloadUrl, "_blank");
   };
 
-  async function uploadDocument(event) {
-    const file = event.target.files[0];
+  async function uploadDocument(file, type) {
     if (!file) {
       alert("Please select a file to upload.");
       return;
     }
 
     const formData = new FormData();
+    let file_name;
     formData.append("file", file);
     formData.append("file_type", file.type);
-    formData.append("file_name", file.name);
+    if (type == "scheda") {
+      file_name = `scheda_${install_name}_${file.name}`;
+    } else if (type == "mappa") {
+      file_name = `scheda_${install_name}_${file.name}`;
+    } else {
+      file_name = `${install_name}_${file.name}`;
+    }
+    formData.append("file_name", file_name);
     formData.append("installation_id", installation_id);
 
     try {
@@ -132,16 +144,26 @@ function DocumentManager({ initialDocuments, installation_id, role }) {
       </div>
 
       {role == "iit" && (
-        <div className="mt-4 px-5">
+        <div className="mt-4 px-5 flex">
+          <select className="block w-2/3 px-3 mx-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option value="mappa">Mappa</option>
+            <option value="scheda">Scheda</option>
+            <option value="altro">Altro</option>
+          </select>
           <input
             type="file"
             ref={fileInputRef}
             className="hidden"
-            onChange={uploadDocument}
+            onChange={(e) =>
+              uploadDocument(
+                e.target.files[0],
+                document.querySelector("select").value
+              )
+            }
           />
           <button
             onClick={triggerFileInput}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -157,6 +179,7 @@ function DocumentManager({ initialDocuments, installation_id, role }) {
                 d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
               />
             </svg>
+            <span className="ml-2">Upload</span>
           </button>
         </div>
       )}

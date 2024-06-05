@@ -96,6 +96,7 @@ export default async function TicketPage({ params }) {
             initialDocuments={documents}
             installation_id={params.id}
             role={roleFound}
+            install_name={genHue({ seed: installation.hue })}
           />
         </div>
       </div>

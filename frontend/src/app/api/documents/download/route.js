@@ -20,7 +20,7 @@ export async function GET(req) {
       const res = new NextResponse(resp.body, {
         status: 200,
         headers: new Headers({
-          "content-type": "application/pdf",
+          "content-type": resp.body.file_type,
         }),
       });
 
