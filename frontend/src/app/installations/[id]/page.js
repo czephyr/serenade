@@ -78,6 +78,7 @@ export default async function TicketPage({ params }) {
               installationTickets={installationTickets.sort(
                 (a, b) => a.date_delta - b.date_delta
               )}
+              role={roleFound}
             />
           )}
           {(roleFound === "iit" || roleFound == "unimi") && (

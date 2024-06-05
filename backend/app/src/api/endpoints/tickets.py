@@ -24,7 +24,7 @@ def read_many(
 def create(
     patient_id: str,
     ticket: TicketCreate,
-    role: str = Depends(require_role([IIT, IMT])),
+    role: str = Depends(require_role([IMT])),
     db: Session = Depends(get_db),
 ) -> TicketRead:
     result = maskable(tickets.create, role)(
