@@ -8,7 +8,7 @@ export async function POST(req) {
   console.log("reached internal post");
   if (session) {
     const postBody = await req.json();
-    const url = `${process.env.BACKEND_HOST}/api/v1/tickets/?patient_id=${postBody.patient_id}`;
+    const url = `${process.env.BACKEND_HOST}/api/v1/tickets?patient_id=${postBody.patient_id}`;
     let accessToken = await getAccessToken();
     console.log(
       "POST" +
