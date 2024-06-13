@@ -29,9 +29,7 @@ class PatientFull(Patient):
     screening: Mapped["PatientScreening"] = relationship(back_populates="patient")
     note: Mapped["PatientNote"] = relationship(back_populates="patient")
     contacts: Mapped[list["Contact"]] = relationship(back_populates="patient")
-    installations: Mapped[list["InstallationDetail"]] = relationship(
-        back_populates="patient"
-    )
+    installations: Mapped["InstallationDetail"] = relationship(back_populates="patient")
     tickets: Mapped[list["Ticket"]] = relationship(back_populates="patient")
 
 
@@ -88,9 +86,10 @@ class Contact(Base):
 class InstallationDetail(Base):
     __tablename__ = "installation_details"
 
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     ts: Mapped[datetime] = mapped_column(default=datetime.now)
-    patient_id: Mapped[str] = mapped_column(ForeignKey("patients.patient_id"))
+    patient_id: Mapped[str] = mapped_column(
+        ForeignKey("patients.patient_id"), primary_key=True
+    )
 
     apartment_type: Mapped[str | None]
     internet_type: Mapped[str | None]

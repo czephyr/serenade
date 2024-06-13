@@ -69,16 +69,14 @@ CREATE TABLE IF NOT EXISTS contacts (
 -- Table: installation_details
 -- Description: Records details about the installation setup of patients' residences.
 CREATE TABLE IF NOT EXISTS installation_details (
-    -- Auto identifier
-    id BIGSERIAL PRIMARY KEY,
+    -- Foreign key referencing patient ID
+    patient_id TEXT PRIMARY KEY,
     -- Timestamp of installation record
     ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- Date when installation has been opened
     date_start TIMESTAMP,
     -- Date when installation has been closed
     date_end TIMESTAMP,
-    -- Foreign key referencing patient ID
-    patient_id TEXT NOT NULL,
     -- Type of apartment (e.g., studio, 1-bedroom)
     apartment_type TEXT,
     -- Type of internet connection
