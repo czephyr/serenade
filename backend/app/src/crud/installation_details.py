@@ -12,7 +12,11 @@ from ..core.status import (
     INSTALLATION_OPENING,
     INSTALLATION_PAUSE,
     INSTALLATION_UNKNOW,
+    TICKET_OPEN,
     TICKET_CLOSED,
+    TICKET_INSTALLATION,
+    TICKET_MAINTENANCE,
+    TICKET_UNINSTALLATION,
 )
 from ..ormodels import InstallationDetail, Patient
 from ..schemas.installation import (
@@ -142,24 +146,19 @@ def read_status(db: Session, *, patient_id: str) -> str:
         else:
             raise excp
 
-    ticket_status = all(
-        e.status == TICKET_CLOSED for e in tickets.read_many(db, patient_id=patient_id)
-    )
-    context = (
-        result_orm.date_start is not None,
-        result_orm.date_end is not None,
-        ticket_status,
-    )
-    match context:
-        case (True, False, True):
-            return INSTALLATION_OPEN
-        case (True, False, False):
-            return INSTALLATION_PAUSE
-        case (_, True, True):
-            return INSTALLATION_CLOSED
-        case (False, _, False):
-            return INSTALLATION_OPENING
-        case (True, True, False):
-            return INSTALLATION_CLOSING
-        case _:
-            return INSTALLATION_UNKNOW
+    all_tickets = {
+        (e.category, e.status) for e in tickets.read_many(db, patient_id=patient_id)
+    }
+
+    if (TICKET_UNINSTALLATION, TICKET_CLOSED) in all_tickets:
+        return INSTALLATION_CLOSED
+    if (TICKET_UNINSTALLATION, TICKET_OPEN) in all_tickets:
+        return INSTALLATION_CLOSING
+    if (TICKET_INSTALLATION, TICKET_OPEN) in all_tickets:
+        return INSTALLATION_OPENING
+    if (TICKET_MAINTENANCE, TICKET_OPEN) in all_tickets:
+        return INSTALLATION_PAUSE
+    if (INSTALLATION_OPEN, INSTALLATION_OPEN) not in all_tickets:
+        return INSTALLATION_OPEN
+    else:
+        return INSTALLATION_UNKNOW
