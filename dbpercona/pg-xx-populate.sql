@@ -8,13 +8,13 @@ VALUES
     ('2024-04-12 12:00:00', '5YIQzgtnQnHY7qZbe8QwPwYQ9dEIV9CF', '2024-04-12 12:00:00', NULL);
 
 -- Populating patient_screenings table
-INSERT INTO patient_screenings (ts, patient_id, neuro_diag, age_class)
+INSERT INTO patient_screenings (patient_id, neuro_diag, age_class)
 VALUES 
-    ('2024-04-12 08:00:00', 'zu4MPOSl3ohg4yLU8fRbdv8_Dsr5_ysa', 'Alzheimer', 'Adult'),
-    ('2024-04-12 09:00:00', 'h7ZJchVHKAek6di7rcGQFl2B6grn_YDs', 'Parkinson', 'Elderly'),
-    ('2024-04-12 10:00:00', 'ehHOfOfoYF9z6fyQSrkWJhKQ3IlkrIsK', 'Alzheimer', 'Adult'),
-    ('2024-04-12 11:00:00', 'V8IeQNz5OPr8PTAEMEU6VEzFdjnGTY3_', 'Alzheimer', 'Elderly'),
-    ('2024-04-12 12:00:00', '5YIQzgtnQnHY7qZbe8QwPwYQ9dEIV9CF', 'Parkinson', 'Adult');
+    ('zu4MPOSl3ohg4yLU8fRbdv8_Dsr5_ysa', 'Alzheimer', 'Adult'),
+    ('h7ZJchVHKAek6di7rcGQFl2B6grn_YDs', 'Parkinson', 'Elderly'),
+    ('ehHOfOfoYF9z6fyQSrkWJhKQ3IlkrIsK', 'Alzheimer', 'Adult'),
+    ('V8IeQNz5OPr8PTAEMEU6VEzFdjnGTY3_', 'Alzheimer', 'Elderly'),
+    ('5YIQzgtnQnHY7qZbe8QwPwYQ9dEIV9CF', 'Parkinson', 'Adult');
 
 
 -- Populating patient_notes table

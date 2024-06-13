@@ -9,7 +9,3 @@ class PatientScreeningRead(BaseModel):
     ts: datetime | None = None
     neuro_diag: str | None = None
     age_class: str | None = None
-
-
-class PatientScreeningCreate(BaseModel):
-    neuro_diag: str | None = None

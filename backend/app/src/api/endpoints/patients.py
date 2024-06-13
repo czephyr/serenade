@@ -54,23 +54,13 @@ def read_one(
     return result
 
 
-@router.get("/{patient_id}/screenings", response_model=list[PatientScreeningRead])
-def read_info(
-    patient_id: str,
-    role: str = Depends(require_role([HOS, UNIMI])),
-    db: Session = Depends(get_db),
-) -> list[PatientScreeningRead]:
-    result = patient_screenings.read_many(db, patient_id=patient_id)
-    return result
-
-
 @router.get("/{patient_id}/screenings/lastest", response_model=PatientScreeningRead)
 def read_info(
     patient_id: str,
     role: str = Depends(require_role([HOS, UNIMI])),
     db: Session = Depends(get_db),
 ) -> PatientScreeningRead:
-    result = patient_screenings.read_one(db, patient_id=patient_id)
+    result = patient_screenings.read_screening(db, patient_id=patient_id)
     return result
 
 

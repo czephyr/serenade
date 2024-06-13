@@ -14,12 +14,8 @@ CREATE TABLE IF NOT EXISTS patients (
 -- Table: patient_screenings
 -- Description: Records screenings conducted for patients, use for UNIMI analysis.
 CREATE TABLE IF NOT EXISTS patient_screenings (
-    -- Auto identifier
-    id BIGSERIAL PRIMARY KEY,
-    -- Timestamp of screening insertion
-    ts TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- Foreign key referencing patient ID
-    patient_id TEXT NOT NULL,
+    patient_id TEXT PRIMARY KEY,
     -- Neurological diagnosis and degenreation classification
     neuro_diag VARCHAR(31),
     -- Age classification of patient

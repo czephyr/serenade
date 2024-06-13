@@ -26,9 +26,7 @@ class Patient(Base):
 
 class PatientFull(Patient):
     details: Mapped["PatientDetail"] = relationship(back_populates="patient")
-    screenings: Mapped[list["PatientScreening"]] = relationship(
-        back_populates="patient"
-    )
+    screening: Mapped["PatientScreening"] = relationship(back_populates="patient")
     note: Mapped["PatientNote"] = relationship(back_populates="patient")
     contacts: Mapped[list["Contact"]] = relationship(back_populates="patient")
     installations: Mapped[list["InstallationDetail"]] = relationship(
@@ -54,9 +52,9 @@ class PatientDetail(Base):
 class PatientScreening(Base):
     __tablename__ = "patient_screenings"
 
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    ts: Mapped[datetime] = mapped_column(default=datetime.now)
-    patient_id: Mapped[str] = mapped_column(ForeignKey("patients.patient_id"))
+    patient_id: Mapped[str] = mapped_column(
+        ForeignKey("patients.patient_id"), primary_key=True
+    )
     neuro_diag: Mapped[str | None]
     age_class: Mapped[str | None]
 

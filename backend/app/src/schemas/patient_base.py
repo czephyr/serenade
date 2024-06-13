@@ -28,7 +28,6 @@ class PatientDetailBase(BaseModel):
 class PatientScreeningBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    ts: datetime
     patient_id: str
     neuro_diag: str
     age_class: str

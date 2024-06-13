@@ -58,12 +58,7 @@ def read_one(db: Session, *, patient_id: str) -> PatientRead:
         date_of_birth=cf.decode(codice_fiscale)["birthdate"],
         place_of_birth=to_city(codice_fiscale),
         # PatientScreening
-        neuro_diag=(
-            result_orm.screenings[-1].neuro_diag if result_orm.screenings else None
-        ),
-        age_class=(
-            result_orm.screenings[-1].age_class if result_orm.screenings else None
-        ),
+        neuro_diag=result_orm.screening.neuro_diag,
         # Contact
         contacts=[
             ContactEntry.model_validate(contact) for contact in result_orm.contacts
@@ -81,9 +76,7 @@ def read_many(db: Session) -> list[PatientStatus]:
         PatientStatus(
             first_name=result_orm.details.first_name,
             last_name=result_orm.details.last_name,
-            neuro_diag=(
-                result_orm.screenings[-1].neuro_diag if result_orm.screenings else None
-            ),
+            neuro_diag=result_orm.screening.neuro_diag,
             patient_id=result_orm.patient_id,
             status=installation_details.read_status(
                 db, patient_id=result_orm.patient_id
@@ -199,19 +192,6 @@ def update(db: Session, *, patient_id: str, patient: PatientUpdate) -> PatientRe
 
     result_orm.date_join = date_join
     result_orm.date_exit = date_exit
-
-    if any([e in kw for e in ("neuro_diag", "age_class")]):
-        screening_orm = PatientScreening(
-            patient_id=patient_id,
-            neuro_diag=patient.neuro_diag,
-            age_class=patient.age_class,
-        )
-        if result_orm.screenings:
-            if "neuro_diag" not in kw:
-                screening_orm.neuro_diag = result_orm.screenings[-1].neuro_diag
-            if "age_class" not in kw:
-                screening_orm.age_class = result_orm.screenings[-1].age_class
-        db.add(screening_orm)
 
     if "home_address" in kw:
         result_orm.details.home_address = patient.home_address
