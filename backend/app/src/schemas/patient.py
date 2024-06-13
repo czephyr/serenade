@@ -23,9 +23,6 @@ class PatientCreate(BaseModel):
 
 
 class PatientUpdate(BaseModel):
-    first_name: str | None = None
-    last_name: str | None = None
-
     neuro_diag: str | None = None
     age_class: str | None = None
 
@@ -43,7 +40,7 @@ class PatientStatus(BaseModel):
     neuro_diag: str | None
     patient_id: str
     status: str
-    hue: int | None
+    hue: int | None = None
 
     date_join: datetime | None
     date_exit: datetime | None
@@ -61,7 +58,6 @@ class PatientRead(BaseModel):
     age: int
 
     neuro_diag: str | None
-    age_class: str | None
 
     home_address: str | None
     contacts: list[ContactEntry]
@@ -70,6 +66,8 @@ class PatientRead(BaseModel):
 
     date_join: datetime | None = None
     date_exit: datetime | None = None
+
+    hue: int | None = None
 
 
 class PatientInfo(BaseModel):

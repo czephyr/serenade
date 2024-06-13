@@ -198,16 +198,6 @@ def update(db: Session, *, patient_id: str, patient: PatientUpdate) -> PatientRe
     if "medical_notes" in kw:
         result_orm.note.medical_notes = patient.medical_notes
 
-    if "first_name" in kw:
-        if not patient.first_name:
-            raise BadValues("first_name cannot be empty")
-        result_orm.details.first_name = patient.first_name
-
-    if "last_name" in kw:
-        if not patient.last_name:
-            raise BadValues("last_name cannot be empty")
-        result_orm.details.last_name = patient.last_name
-
     db.commit()
 
     result = read_one(db, patient_id=patient_id)
