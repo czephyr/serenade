@@ -183,7 +183,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       },
     },
     date_start: {
-      label: "Data inizio:",
+      label: "Data inizio raccolta dati:",
       roles: {
         iit: { visible: true, editable: false },
         imt: { visible: true, editable: true },
@@ -192,7 +192,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       },
     },
     date_end: {
-      label: "Data conclusione:",
+      label: "Data fine raccolta dati:",
       roles: {
         iit: { visible: true, editable: false },
         imt: { visible: true, editable: true },

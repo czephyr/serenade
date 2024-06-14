@@ -79,7 +79,7 @@ function DocForm({ documents }) {
             name="file"
             ref={fileInputRef}
           />
-          <button type="submit">Upload PDF</button>
+          <button type="submit">Carica PDF</button>
         </form>
       </div>
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">

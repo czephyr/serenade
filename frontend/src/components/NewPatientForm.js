@@ -178,7 +178,7 @@ export default function NewPatientForm() {
           <div className="grid grid-cols-1 gap-1">
             <div className="grid grid-cols-2 gap-3 mb-1">
               <label htmlFor="joinDate" className="block">
-                <span className="text-gray-700">Data di ingresso:</span>
+                <span className="text-gray-700">Data arruolamento:</span>
                 <input
                   type="date"
                   id="joinDate"
@@ -189,7 +189,7 @@ export default function NewPatientForm() {
                 />
               </label>
               <label htmlFor="endingDate" className="block">
-                <span className="text-gray-700">Data di conclusione:</span>
+                <span className="text-gray-700">Data conclusione:</span>
                 <input
                   type="date"
                   id="endingDate"

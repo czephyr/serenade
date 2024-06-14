@@ -12,6 +12,7 @@ from ..core.excp import (
     johntitorable,
     unfoundable,
 )
+from ..core.status import TICKET_INSTALLATION
 from ..ormodels import (
     Patient,
     PatientDetail,
@@ -160,7 +161,7 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
             body=SMS_PATIENT_CREATE,
             sender=ADMIN_USERNAME,
         ),
-        category="PRIMA INSTALLAZIONE",
+        category=TICKET_INSTALLATION,
     )
 
     tickets.create(

@@ -96,7 +96,7 @@ const PatientDetail = ({ initialData, role }) => {
 
   const fields_acl = {
     date_join: {
-      label: "Data di Inizio:",
+      label: "Data arruolamento:",
       roles: {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
@@ -204,7 +204,7 @@ const PatientDetail = ({ initialData, role }) => {
       },
     },
     date_exit: {
-      label: "Data di Fine:",
+      label: "Data conclusione:",
       roles: {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
@@ -474,7 +474,7 @@ const PatientDetail = ({ initialData, role }) => {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
-            Data di Inizio:
+            Data arruolamento:
           </label>
           <div className="flex flex-grow items-center">
             <input
@@ -502,7 +502,7 @@ const PatientDetail = ({ initialData, role }) => {
       return (
         <span className="text-gray-700 flex w-full items-center">
           <label htmlFor={field} className="flex-1">
-            Data di Fine:
+            Data conclusione:
           </label>
           <div className="flex flex-grow items-center">
             <input
