@@ -55,7 +55,7 @@ export default async function Patients() {
                       </td>
                       <td className="px-5 py-5 border-b">
                         <StatusBadge
-                          status={patient.date_exit ? "inattivo" : "attivo"}
+                          status={patient.status}
                         />
                       </td>
                       <td className="px-5 py-5 border-b">

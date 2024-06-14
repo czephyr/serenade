@@ -166,6 +166,9 @@ export default function NewPatientForm() {
     return <div>Loading...</div>;
   }
 
+  const currentDate = new Date();
+  const futureDate = new Date(currentDate.getTime() + 365 * 24 * 60 * 60 * 1000 / 2);
+
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
       <Toaster />
@@ -183,7 +186,7 @@ export default function NewPatientForm() {
                   type="date"
                   id="joinDate"
                   ref={joinDateRef}
-                  defaultValue={new Date().toISOString().substring(0, 10)}
+                  defaultValue={currentDate.toISOString().substring(0, 10)}
                   className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
                 />
@@ -194,6 +197,7 @@ export default function NewPatientForm() {
                   type="date"
                   id="endingDate"
                   ref={endingDateRef}
+                  defaultValue={futureDate.toISOString().substring(0, 10)}
                   className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </label>
