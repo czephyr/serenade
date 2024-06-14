@@ -36,7 +36,7 @@ export default async function TicketPage({ params }) {
         endpoint = `installations/${params.id}/info`;
       } else if (roleFound == "unimi") {
         infoType = "patient unimi info";
-        endpoint = `patients/${params.id}/screenings/lastest`;
+        endpoint = `patients/${params.id}/screening`;
       }
 
       patientDetails = await fetchFromBackend(infoType, endpoint);

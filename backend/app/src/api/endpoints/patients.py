@@ -54,7 +54,7 @@ def read_one(
     return result
 
 
-@router.get("/{patient_id}/screenings/lastest", response_model=PatientScreeningRead)
+@router.get("/{patient_id}/screening", response_model=PatientScreeningRead)
 def read_info(
     patient_id: str,
     role: str = Depends(require_role([HOS, UNIMI])),
