@@ -75,6 +75,7 @@ VALUES
 
 -- Populating the `installation_details` table
 INSERT INTO installation_details (
+    date_start,
     patient_id, 
     apartment_type, 
     internet_type, 
@@ -87,8 +88,8 @@ INSERT INTO installation_details (
     habits_notes, 
     other_notes
 ) VALUES
-('zu4MPOSl3ohg4yLU8fRbdv8_Dsr5_ysa', '1-bedroom', 'Fiber optic', 'None', '1 dog', 'Occasional', 'iPhone 12', 'Refrigerator, Oven, Washing machine', 'None', 'Early riser, enjoys cooking', 'Patient prefers email communication over phone calls.'),
-('h7ZJchVHKAek6di7rcGQFl2B6grn_YDs', 'Studio', 'Cable', '1 roommate', 'No pets', 'Rare', 'Samsung Galaxy S20', 'Microwave, Coffee maker', 'Occasional connectivity issues reported', 'Frequent night owl, streaming movies', 'Patient has specific dietary requirements, vegetarian.'),
-('ehHOfOfoYF9z6fyQSrkWJhKQ3IlkrIsK', '2-bedroom', 'DSL', 'Family (2 adults, 2 children)', '1 cat', 'Frequent', 'Google Pixel 5', 'Dishwasher, Toaster, Blender', 'None', 'Family-oriented, busy lifestyle', 'Patient expresses interest in smart home devices.'),
-('V8IeQNz5OPr8PTAEMEU6VEzFdjnGTY3_', '1-bedroom', 'Fiber optic', 'None', '2 cats', 'Occasional', 'iPhone 11', 'Stove, TV, Iron', 'None', 'Patient enjoys gardening on weekends', 'None'),
-('5YIQzgtnQnHY7qZbe8QwPwYQ9dEIV9CF', 'Studio', 'Satellite', 'None', '1 dog, 1 cat', 'Frequent', 'OnePlus 9', 'Air conditioner, Heater', 'None', 'Patient prefers quiet environment, early sleeper', 'None');
+('2024-04-14 09:00:00','zu4MPOSl3ohg4yLU8fRbdv8_Dsr5_ysa', '1-bedroom', 'Fiber optic', 'None', '1 dog', 'Occasional', 'iPhone 12', 'Refrigerator, Oven, Washing machine', 'None', 'Early riser, enjoys cooking', 'Patient prefers email communication over phone calls.'),
+('2024-04-14 09:00:00','h7ZJchVHKAek6di7rcGQFl2B6grn_YDs', 'Studio', 'Cable', '1 roommate', 'No pets', 'Rare', 'Samsung Galaxy S20', 'Microwave, Coffee maker', 'Occasional connectivity issues reported', 'Frequent night owl, streaming movies', 'Patient has specific dietary requirements, vegetarian.'),
+('2024-04-14 09:00:00','ehHOfOfoYF9z6fyQSrkWJhKQ3IlkrIsK', '2-bedroom', 'DSL', 'Family (2 adults, 2 children)', '1 cat', 'Frequent', 'Google Pixel 5', 'Dishwasher, Toaster, Blender', 'None', 'Family-oriented, busy lifestyle', 'Patient expresses interest in smart home devices.'),
+('2024-04-14 09:00:00','V8IeQNz5OPr8PTAEMEU6VEzFdjnGTY3_', '1-bedroom', 'Fiber optic', 'None', '2 cats', 'Occasional', 'iPhone 11', 'Stove, TV, Iron', 'None', 'Patient enjoys gardening on weekends', 'None'),
+('2024-04-14 09:00:00','5YIQzgtnQnHY7qZbe8QwPwYQ9dEIV9CF', 'Studio', 'Satellite', 'None', '1 dog, 1 cat', 'Frequent', 'OnePlus 9', 'Air conditioner, Heater', 'None', 'Patient prefers quiet environment, early sleeper', 'None');
