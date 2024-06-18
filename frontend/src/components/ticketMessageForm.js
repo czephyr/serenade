@@ -4,7 +4,13 @@ import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
+function TicketMessages({
+  ticketMessages,
+  ticketNum,
+  isOpen,
+  installNum,
+  role,
+}) {
   const [messages, setMessages] = useState(ticketMessages);
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -46,11 +52,14 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString('it-IT',{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'})
+    return date.toLocaleString("it-IT", {
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   async function closeTicket(ticket_num) {
@@ -126,7 +135,7 @@ function TicketMessages({ ticketMessages, ticketNum, isOpen, installNum }) {
           </form>
         )}
       </div>
-      {isOpen && (
+      {isOpen && role == "imt" && (
         <div className="flex justify-center mt-4">
           <button
             onClick={() => closeTicket(ticketNum)}

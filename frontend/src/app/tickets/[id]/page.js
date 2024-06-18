@@ -27,20 +27,29 @@ function TicketDetails({ ticket }) {
     {
       key: "ts",
       label: "Data di apertura",
-      formatter: (value) => new Date(value).toLocaleString('it-IT',{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'}),
+      formatter: (value) =>
+        new Date(value).toLocaleString("it-IT", {
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
     },
     {
       key: "date_closed",
       label: "Data di chiusura",
-      formatter: (value) => value && new Date(value).toLocaleString('it-IT',{ timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'}),
+      formatter: (value) =>
+        value &&
+        new Date(value).toLocaleString("it-IT", {
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
     },
     {
       key: "category",
@@ -95,6 +104,7 @@ export default async function TicketPage({ params }) {
           ticketNum={ticket.ticket_id}
           isOpen={!ticket.date_closed}
           installNum={ticket.patient_id}
+          role={roleFound}
         />
       </div>
     </main>
