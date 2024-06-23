@@ -167,7 +167,10 @@ export default function NewPatientForm() {
   }
 
   const currentDate = new Date();
-  const futureDate = new Date(currentDate.getTime() + 365 * 24 * 60 * 60 * 1000 / 2);
+  // set the ending date with a default value of today + 12months
+  const futureDate = new Date(
+    currentDate.getTime() + 365 * 24 * 60 * 60 * 1000
+  );
 
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
