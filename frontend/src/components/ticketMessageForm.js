@@ -69,7 +69,7 @@ function TicketMessages({
       return; // If the user cancels, exit the function
     }
 
-    if (session && session.roles?.includes("iit")) {
+    if (session) {
       const postBody = {
         ticket_num: ticket_num,
       };
