@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS patient_screenings (
     -- Age classification of patient
     age_class VARCHAR(31),
 
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
 ) USING pg_tde;
 
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS patient_notes(
     -- Notes on medical conditions 
     medical_notes TEXT,
 
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
 );
 
 -- Table: patient_details
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS patient_details (
     last_name VARCHAR(127) NOT NULL,
     -- Home address of the patient
     home_address VARCHAR(255),
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
 ) USING pg_tde;
 
 -- Table: contacts
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS contacts (
     phone_no VARCHAR(15) ,
     -- Phone number of the contact
     email VARCHAR(31),
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
 ) USING pg_tde;
 
 -- Table: installation_details
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS installation_details (
     habits_notes TEXT,
     -- Other relevant notes
     other_notes TEXT,
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
 );
 
 -- Table storing installation documents associated with patients.
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS installation_documents(
     -- Binary content of the uploaded file
     file_content BYTEA NOT NULL,
     -- Foreign key constraint referencing the patient ID from the patients table
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
 );
 
 
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS tickets (
     category VARCHAR(31),
     -- End date of the ticket
     date_closed TIMESTAMP,
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
 );
 
 -- Table: ticket_messages
@@ -149,5 +149,5 @@ CREATE TABLE IF NOT EXISTS ticket_messages (
     -- Foreign key referencing ticket ID
     ticket_id INT NOT NULL,
 
-    FOREIGN KEY (ticket_id) REFERENCES tickets(ticket_id)
+    FOREIGN KEY (ticket_id) REFERENCES tickets(ticket_id) ON DELETE CASCADE
 );
