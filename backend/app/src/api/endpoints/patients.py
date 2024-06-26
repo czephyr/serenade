@@ -68,11 +68,13 @@ def read_info(
 def update(
     patient_id: str,
     patient: PatientUpdate,
-    role: str = Depends(require_role([HOS,IIT])),
+    role: str = Depends(require_role([HOS, IIT])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
-        result = maskable(patients.update, role)(db, patient_id=patient_id, patient=patient)
+        result = maskable(patients.update, role)(
+            db, patient_id=patient_id, patient=patient
+        )
     except BadValues as excp:
         raise HTTPException(
             status.HTTP_422_UNPROCESSABLE_ENTITY,

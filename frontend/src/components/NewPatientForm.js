@@ -88,10 +88,6 @@ export default function NewPatientForm() {
       contacts: contacts,
       date_join: joinDateRef.current.value,
     };
-    // Conditionally add 'ending_date' if it is not empty
-    if (endingDateRef.current && endingDateRef.current.value !== "") {
-      patientData.date_exit = endingDateRef.current.value;
-    }
 
     console.log(JSON.stringify(patientData));
     try {
@@ -123,7 +119,6 @@ export default function NewPatientForm() {
 
     const installationData = {
       date_start: patientData.date_join,
-      date_end: patientData.date_exit,
       apartment_type: apartmentTypeRef.current.value,
       internet_type: internetTypeRef.current.value,
       flatmates: flatmatesRef.current.value,

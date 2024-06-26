@@ -21,7 +21,6 @@ class Patient(Base):
     ts: Mapped[datetime] = mapped_column(default=datetime.now)
     patient_id: Mapped[str] = mapped_column(primary_key=True)
     date_join: Mapped[datetime | None]
-    date_exit: Mapped[datetime | None]
 
 
 class PatientFull(Patient):

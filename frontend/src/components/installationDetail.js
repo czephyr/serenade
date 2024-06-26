@@ -34,7 +34,6 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
     date_start: false,
     date_end: false,
     date_join: false,
-    date_exit: false,
   });
 
   const handleEdit = (field) => {

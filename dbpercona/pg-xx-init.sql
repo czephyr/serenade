@@ -6,9 +6,7 @@ CREATE TABLE IF NOT EXISTS patients (
     -- Unique identifier for the patient
     patient_id TEXT PRIMARY KEY,
     -- Date when patient join the project
-    date_join TIMESTAMP,
-    -- Exit date if patient leave the project
-    date_exit TIMESTAMP
+    date_join TIMESTAMP
 ) USING pg_tde;
 
 -- Table: patient_screenings

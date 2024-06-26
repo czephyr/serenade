@@ -19,7 +19,6 @@ class PatientCreate(BaseModel):
     medical_notes: str | None = None
 
     date_join: datetime | None = None
-    date_exit: datetime | None = None
 
 
 class PatientUpdate(BaseModel):
@@ -31,7 +30,6 @@ class PatientUpdate(BaseModel):
     medical_notes: str | None = None
 
     date_join: datetime | None = None
-    date_exit: datetime | None = None
 
 
 class PatientStatus(BaseModel):
@@ -43,7 +41,6 @@ class PatientStatus(BaseModel):
     hue: int | None = None
 
     date_join: datetime | None
-    date_exit: datetime | None
 
 
 class PatientRead(BaseModel):
@@ -65,7 +62,6 @@ class PatientRead(BaseModel):
     medical_notes: str | None = None
 
     date_join: datetime | None = None
-    date_exit: datetime | None = None
 
     hue: int | None = None
 
