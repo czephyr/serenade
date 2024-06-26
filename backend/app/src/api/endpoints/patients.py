@@ -82,6 +82,16 @@ def update(
         return result
 
 
+@router.delete("/{patient_id}", response_model=str)
+def delete(
+    patient_id: str,
+    role: str = Depends(require_role([HOS])),
+    db: Session = Depends(get_db),
+) -> str:
+    result = patients.delete(db, patient_id=patient_id)
+    return result
+
+
 @router.post("/{patient_id}/contacts", response_model=ContactEntry)
 def create_contact(
     patient_id: str,

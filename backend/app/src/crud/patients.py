@@ -40,6 +40,13 @@ def query_one(db: Session, *, patient_id: str) -> PatientFull:
     return result_orm
 
 
+def delete(db: Session, *, patient_id: str) -> str:
+    result_orm = query_one(db, patient_id=patient_id)
+    db.delete(result_orm)
+    db.commit()
+    return patient_id
+
+
 def read_one(db: Session, *, patient_id: str) -> PatientRead:
     result_orm = query_one(db, patient_id=patient_id)
     codice_fiscale = result_orm.note.codice_fiscale
