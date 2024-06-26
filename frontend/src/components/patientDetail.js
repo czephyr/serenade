@@ -107,7 +107,7 @@ const PatientDetail = ({ initialData, role }) => {
     first_name: {
       label: "Nome:",
       roles: {
-        iit: { visible: false, editable: false },
+        iit: { visible: true, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
         dottore: { visible: true, editable: false },
@@ -116,7 +116,7 @@ const PatientDetail = ({ initialData, role }) => {
     last_name: {
       label: "Cognome:",
       roles: {
-        iit: { visible: false, editable: false },
+        iit: { visible: true, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
         dottore: { visible: true, editable: false },
@@ -179,7 +179,7 @@ const PatientDetail = ({ initialData, role }) => {
     home_address: {
       label: "Indirizzo:",
       roles: {
-        iit: { visible: false, editable: false },
+        iit: { visible: true, editable: true },
         imt: { visible: false, editable: false },
         unimi: { visible: false, editable: false },
         dottore: { visible: true, editable: false },
@@ -191,7 +191,7 @@ const PatientDetail = ({ initialData, role }) => {
         iit: { visible: false, editable: false },
         imt: { visible: false, editable: false },
         unimi: { visible: true, editable: false },
-        dottore: { visible: true, editable: true },
+        dottore: { visible: true, editable: false },
       },
     },
     medical_notes: {
@@ -215,7 +215,15 @@ const PatientDetail = ({ initialData, role }) => {
   };
 
   const renderField = (field) => {
-    console.log("###########" + JSON.stringify(field));
+    console.log(
+      "###########" +
+        JSON.stringify(field) +
+        JSON.stringify(role) +
+        "aaaaaaaaaa"
+    );
+    console.log(
+      "@@@@@" + JSON.stringify(fields_acl[field]["roles"][role]["editable"])
+    );
     if (!fields_acl[field]["roles"][role]["visible"]) {
       return null; // Don't render anything if the field is not included for the role
     }
@@ -367,41 +375,21 @@ const PatientDetail = ({ initialData, role }) => {
               readOnly={!isEditing[field]}
               className={`mt-1 w-full px-3 py-2  ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
-            <button
-              className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
-              onClick={() =>
-                isEditing[field]
-                  ? handleSend(patient.patient_id, field, patient[field])
-                  : handleEdit(field)
-              }
-            >
-              {isEditing[field] ? "Salva" : "Modifica"}
-            </button>
+
+            {fields_acl[field]["roles"][role]["editable"] && (
+              <button
+                className={`ml-2 text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
+                onClick={() =>
+                  isEditing[field]
+                    ? handleSend(patient.patient_id, field, patient[field])
+                    : handleEdit(field)
+                }
+              >
+                {isEditing[field] ? "Salva" : "Modifica"}
+              </button>
+            )}
           </div>
         </span>
-        // <span className="text-gray-700 flex w-full">
-        //   <label htmlFor={field}>
-        //     {field === "first_name" ? "Nome:" : "Cognome:"}
-        //     <input
-        //       type="text"
-        //       id={field}
-        //       value={patient[field]}
-        //       onChange={(e) => handleChange(e, field)}
-        //       readOnly={!isEditing[field]}
-        //       className="mt-1 w-full px-3 py-2  ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        //     />
-        //   </label>
-        //   <button
-        //     className={`text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
-        //     onClick={() =>
-        //       isEditing[field]
-        //         ? handleSend(patient.patient_id, field, patient[field])
-        //         : handleEdit(field)
-        //     }
-        //   >
-        //     {isEditing[field] ? "Send" : "Edit"}
-        //   </button>{" "}
-        // </span>
       );
     } else if (field == "home_address") {
       return (
