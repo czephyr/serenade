@@ -34,7 +34,6 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
     date_start: false,
     date_end: false,
     date_join: false,
-    date_exit: false,
   });
 
   const handleEdit = (field) => {
@@ -214,6 +213,8 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
       "habits_notes",
       "other_notes",
       "flatmates",
+      "visitors",
+      "appliances",
     ];
 
     return (
@@ -226,7 +227,7 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
               value={patient[field]}
               onChange={(e) => handleChange(e, field)}
               readOnly={!isEditing[field]}
-              className={`block w-full px-3 py-2 ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+              className={`block w-full px-3 py-2 h-40 ${!isEditing[field] ? "bg-gray-50 text-gray-600" : "bg-white"} border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
           ) : field === "date_start" || field === "date_end" ? (
             <input

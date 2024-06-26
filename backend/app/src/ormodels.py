@@ -21,16 +21,27 @@ class Patient(Base):
     ts: Mapped[datetime] = mapped_column(default=datetime.now)
     patient_id: Mapped[str] = mapped_column(primary_key=True)
     date_join: Mapped[datetime | None]
-    date_exit: Mapped[datetime | None]
 
 
 class PatientFull(Patient):
-    details: Mapped["PatientDetail"] = relationship(back_populates="patient")
-    screening: Mapped["PatientScreening"] = relationship(back_populates="patient")
-    note: Mapped["PatientNote"] = relationship(back_populates="patient")
-    contacts: Mapped[list["Contact"]] = relationship(back_populates="patient")
-    installations: Mapped["InstallationDetail"] = relationship(back_populates="patient")
-    tickets: Mapped[list["Ticket"]] = relationship(back_populates="patient")
+    details: Mapped["PatientDetail"] = relationship(
+        back_populates="patient", cascade="all,delete"
+    )
+    screening: Mapped["PatientScreening"] = relationship(
+        back_populates="patient", cascade="all,delete"
+    )
+    note: Mapped["PatientNote"] = relationship(
+        back_populates="patient", cascade="all,delete"
+    )
+    contacts: Mapped[list["Contact"]] = relationship(
+        back_populates="patient", cascade="all,delete"
+    )
+    installations: Mapped["InstallationDetail"] = relationship(
+        back_populates="patient", cascade="all,delete"
+    )
+    tickets: Mapped[list["Ticket"]] = relationship(
+        back_populates="patient", cascade="all,delete"
+    )
 
 
 class PatientDetail(Base):
@@ -44,7 +55,7 @@ class PatientDetail(Base):
     last_name: Mapped[str]
     home_address: Mapped[str | None]
 
-    patient: Mapped[Patient] = relationship()
+    patient: Mapped[Patient] = relationship(cascade="all,delete")
 
 
 class PatientScreening(Base):
@@ -56,7 +67,7 @@ class PatientScreening(Base):
     neuro_diag: Mapped[str | None]
     age_class: Mapped[str | None]
 
-    patient: Mapped[Patient] = relationship()
+    patient: Mapped[Patient] = relationship(cascade="all,delete")
 
 
 class PatientNote(Base):
@@ -68,7 +79,7 @@ class PatientNote(Base):
     codice_fiscale: Mapped[str] = mapped_column(unique=True)
     medical_notes: Mapped[str | None]
 
-    patient: Mapped[Patient] = relationship()
+    patient: Mapped[Patient] = relationship(cascade="all,delete")
 
 
 class Contact(Base):
@@ -80,7 +91,7 @@ class Contact(Base):
     phone_no: Mapped[str | None]
     email: Mapped[str | None]
 
-    patient: Mapped[Patient] = relationship()
+    patient: Mapped[Patient] = relationship(cascade="all,delete")
 
 
 class InstallationDetail(Base):
@@ -104,9 +115,9 @@ class InstallationDetail(Base):
     date_start: Mapped[datetime | None]
     date_end: Mapped[datetime | None]
 
-    patient: Mapped[Patient] = relationship()
+    patient: Mapped[Patient] = relationship(cascade="all,delete")
     documents: Mapped[list["InstallationDocument"]] = relationship(
-        back_populates="installation"
+        back_populates="installation", cascade="all,delete"
     )
 
 
@@ -123,7 +134,7 @@ class InstallationDocument(Base):
     file_type: Mapped[str | None]
     file_content: Mapped[bytes]
 
-    installation: Mapped[InstallationDetail] = relationship()
+    installation: Mapped[InstallationDetail] = relationship(cascade="all,delete")
 
 
 class TicketMessage(Base):
@@ -135,7 +146,9 @@ class TicketMessage(Base):
     body: Mapped[str]
     ticket_id: Mapped[int] = mapped_column(ForeignKey("tickets.ticket_id"))
 
-    ticket: Mapped["Ticket"] = relationship(back_populates="messages")
+    ticket: Mapped["Ticket"] = relationship(
+        back_populates="messages", cascade="all,delete"
+    )
 
 
 class Ticket(Base):
@@ -148,5 +161,7 @@ class Ticket(Base):
     date_closed: Mapped[datetime | None]
     category: Mapped[str | None]
 
-    patient: Mapped[Patient] = relationship()
-    messages: Mapped[list[TicketMessage]] = relationship(back_populates="ticket")
+    patient: Mapped[Patient] = relationship(cascade="all,delete")
+    messages: Mapped[list[TicketMessage]] = relationship(
+        back_populates="ticket", cascade="all,delete"
+    )

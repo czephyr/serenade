@@ -68,11 +68,13 @@ def read_info(
 def update(
     patient_id: str,
     patient: PatientUpdate,
-    role: str = Depends(require_role([HOS,IIT])),
+    role: str = Depends(require_role([HOS, IIT])),
     db: Session = Depends(get_db),
 ) -> PatientRead:
     try:
-        result = maskable(patients.update, role)(db, patient_id=patient_id, patient=patient)
+        result = maskable(patients.update, role)(
+            db, patient_id=patient_id, patient=patient
+        )
     except BadValues as excp:
         raise HTTPException(
             status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -80,6 +82,16 @@ def update(
         ) from excp
     else:
         return result
+
+
+@router.delete("/{patient_id}", response_model=str)
+def delete(
+    patient_id: str,
+    role: str = Depends(require_role([HOS])),
+    db: Session = Depends(get_db),
+) -> str:
+    result = patients.delete(db, patient_id=patient_id)
+    return result
 
 
 @router.post("/{patient_id}/contacts", response_model=ContactEntry)

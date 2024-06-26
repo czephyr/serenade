@@ -40,6 +40,13 @@ def query_one(db: Session, *, patient_id: str) -> PatientFull:
     return result_orm
 
 
+def delete(db: Session, *, patient_id: str) -> str:
+    result_orm = query_one(db, patient_id=patient_id)
+    db.delete(result_orm)
+    db.commit()
+    return patient_id
+
+
 def read_one(db: Session, *, patient_id: str) -> PatientRead:
     result_orm = query_one(db, patient_id=patient_id)
     codice_fiscale = result_orm.note.codice_fiscale
@@ -66,7 +73,6 @@ def read_one(db: Session, *, patient_id: str) -> PatientRead:
         ],
         # DATES
         date_join=result_orm.date_join,
-        date_exit=result_orm.date_exit,
     )
     return result
 
@@ -84,28 +90,16 @@ def read_many(db: Session) -> list[PatientStatus]:
             ),
             hue=crypto.hue(result_orm.patient_id),
             date_join=result_orm.date_join,
-            date_exit=result_orm.date_exit,
         )
         for result_orm in results_orm
     ]
     return results
 
 
-@johntitorable
 def create(db: Session, *, patient: PatientCreate) -> PatientRead:
     if not cf.is_valid(patient.codice_fiscale):
         raise BadValues("Invalid codice_fiscale")
     patient.codice_fiscale = "".join(filter(str.isalnum, patient.codice_fiscale))
-
-    if john_titor(patient.date_join, patient.date_exit):
-        raise JhonTitor(
-            JHON_TITOR.format(
-                prev_key="date_join",
-                prev_value=patient.date_join,
-                curr_key="date_exit",
-                curr_value=patient.date_exit,
-            )
-        )
 
     if (
         db.query(PatientNote)
@@ -122,7 +116,6 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
     patient_orm = Patient(
         patient_id=patient_id,
         date_join=patient.date_join,
-        date_exit=patient.date_exit,
     )
     detail_orm = PatientDetail(
         patient_id=patient_id,
@@ -174,25 +167,13 @@ def create(db: Session, *, patient: PatientCreate) -> PatientRead:
     return result
 
 
-@johntitorable
 def update(db: Session, *, patient_id: str, patient: PatientUpdate) -> PatientRead:
     result_orm = query_one(db, patient_id=patient_id)
     kw = patient.model_dump(exclude_unset=True)
 
     date_join = result_orm.date_join if "date_join" not in kw else kw["date_join"]
-    date_exit = result_orm.date_exit if "date_exit" not in kw else kw["date_exit"]
-    if john_titor(date_join, date_exit):
-        raise JhonTitor(
-            JHON_TITOR.format(
-                prev_key="date_join",
-                prev_value=date_join,
-                curr_key="date_exit",
-                curr_value=date_exit,
-            )
-        )
 
     result_orm.date_join = date_join
-    result_orm.date_exit = date_exit
 
     if "home_address" in kw:
         result_orm.details.home_address = patient.home_address
