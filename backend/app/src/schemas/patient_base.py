@@ -10,7 +10,6 @@ class PatientBase(BaseModel):
     patient_id: str
 
     date_join: datetime | None
-    date_exit: datetime | None
 
 
 class PatientDetailBase(BaseModel):
