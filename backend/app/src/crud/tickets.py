@@ -91,7 +91,7 @@ def update(db: Session, *, ticket_id: int) -> TicketRead:
             db, patient_id=result_orm.patient_id
         )
         installation_orm.date_start = right_now
-        installation_orm.date_end = right_now + timedelta(days=7 * 26)
+        installation_orm.date_end = right_now + timedelta(days=365)
 
     db.commit()
     db.refresh(result_orm)
