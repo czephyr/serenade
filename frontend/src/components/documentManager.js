@@ -62,7 +62,7 @@ function DocumentManager({
     if (type == "scheda") {
       file_name = `scheda_${install_name}_${file.name}`;
     } else if (type == "mappa") {
-      file_name = `scheda_${install_name}_${file.name}`;
+      file_name = `mappa_${install_name}_${file.name}`;
     } else {
       file_name = `${install_name}_${file.name}`;
     }
