@@ -268,8 +268,12 @@ const InstallationDetail = ({ installation_id, initialData, role }) => {
   return (
     <main>
       <Toaster />
-      <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
-        <h1 className="text-lg font-bold leading-tight mb-4">Installazione</h1>
+      <div className="max-w-5xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+        <h1 className="text-lg font-bold leading-tight mb-4">
+          {role === "iit" || role === "imt"
+            ? "Installazione"
+            : "Dettagli abitazione"}
+        </h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
             {[...fields.imt_iit, ...fields.dottore].map(renderField)}

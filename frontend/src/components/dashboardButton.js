@@ -3,7 +3,7 @@
 const DashboardButton = ({ installation_id }) => {
   return (
     <main>
-      <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+      <div className="max-w-5xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <h1 className="text-lg font-bold leading-tight mb-4">Dashboard</h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">

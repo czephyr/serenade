@@ -6,47 +6,113 @@ import React, { useState, useEffect } from "react";
 
 import StatusBadge from "@/components/statusBadge";
 import genHue from "@/utils/hue";
+import { formatDate } from "@/utils/dateUtils";
 
 TimeAgo.addLocale(it);
 
 const InstallationTable = ({ data }) => {
   const timeAgo = new TimeAgo("it-IT");
   const [sortDirection, setSortDirection] = useState("asc");
-  const [sortedInstallations, setSortedInstallations] = useState([]);
+  const [sortColumn, setSortColumn] = useState("date_delta"); // Default sort column
+  const [sortedInstallations, setSortedInstallations] = useState(
+    sortFunction(data, sortColumn, sortDirection)
+  );
 
-  const sortTable = () => {
-    const sortedData = sortedInstallations.sort((a, b) => {
-      const dateA = new Date(Date.now() - a.date_delta * 1000);
-      const dateB = new Date(Date.now() - b.date_delta * 1000);
-      return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
+  const getSortIndicator = (column) => {
+    if (sortColumn === column) {
+      return sortDirection === "asc" ? "▲" : "▼";
+    }
+    return "▲▼";
+  };
+
+  function sortFunction(installations, column, direction) {
+    console.log("sorting");
+    return installations.sort((a, b) => {
+      let aValue, bValue;
+
+      switch (column) {
+        case "status":
+          aValue = a.status;
+          bValue = b.status;
+          break;
+        case "date":
+          aValue = new Date(a.date_join);
+          bValue = new Date(b.date_join);
+          break;
+        case "date_delta":
+          aValue = a.date_delta;
+          bValue = b.date_delta;
+          break;
+        default:
+          return 0;
+      }
+
+      if (aValue < bValue) {
+        return direction === "asc" ? -1 : 1;
+      } else if (aValue > bValue) {
+        return direction === "asc" ? 1 : -1;
+      } else {
+        return 0;
+      }
     });
-    setSortedInstallations([...sortedData]);
-    setSortDirection(sortDirection === "asc" ? "desc" : "asc"); // Toggle sort direction
+  }
+
+  const sortTable = (column) => {
+    const direction =
+      sortColumn === column
+        ? sortDirection === "asc"
+          ? "desc"
+          : "asc"
+        : "asc";
+    setSortDirection(direction);
+    setSortColumn(column);
+    setSortedInstallations([
+      ...sortFunction(sortedInstallations, column, direction),
+    ]);
   };
 
   useEffect(() => {
-    setSortedInstallations(data);
-  }, [data]); // Dependency array ensures this only runs when data changes
+    console.log(sortFunction(data, sortColumn, sortDirection));
+    setSortedInstallations(sortFunction(data, sortColumn, sortDirection));
+  }, [data, sortColumn, sortDirection]);
 
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
-      <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+      <div className="max-w-5xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <h1 className="text-2xl font-bold text-center mb-2">Installazioni</h1>
         <div className="overflow-x-auto">
           <table className="min-w-full leading-normal">
             <thead>
               <tr>
-                <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
-                  Alias
-                </th>
-                <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
-                  Stato
+                <th
+                  onClick={() => sortTable("name")}
+                  className={`px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer text-gray-500`}
+                >
+                  Alias paziente
                 </th>
                 <th
-                  className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider"
-                  onClick={sortTable}
+                  onClick={() => sortTable("status")}
+                  className={`px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer ${
+                    sortColumn === "status" ? "text-black" : "text-gray-500"
+                  }`}
                 >
-                  Ultimo aggiornamento {sortDirection === "asc" ? " 🔼" : " 🔽"}
+                  Stato {getSortIndicator("status")}
+                </th>
+                <th
+                  onClick={() => sortTable("date")}
+                  className={`px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer ${
+                    sortColumn === "date" ? "text-black" : "text-gray-500"
+                  }`}
+                >
+                  Arruolamento {getSortIndicator("date")}
+                </th>
+                <th
+                  onClick={() => sortTable("date_delta")}
+                  className={`px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer ${
+                    sortColumn === "date_delta" ? "text-black" : "text-gray-500"
+                  }`}
+                >
+                  Ultimo aggiornamento {getSortIndicator("date_delta")}
                 </th>
                 <th className="px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider">
                   Dettagli
@@ -61,6 +127,9 @@ const InstallationTable = ({ data }) => {
                   </td>
                   <td className="px-5 py-5 border-b">
                     <StatusBadge status={installation.status} />
+                  </td>
+                  <td className="px-5 py-5 border-b">
+                    {formatDate(installation.date_join)}
                   </td>
                   <td className="px-5 py-5 border-b">
                     {timeAgo.format(

@@ -7,7 +7,7 @@ const TicketList = ({ installation_id, installationTickets, role }) => {
   TimeAgo.addDefaultLocale(it);
   const timeAgo = new TimeAgo("it-IT");
   return (
-    <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+    <div className="max-w-5xl mx-auto px-4 bg-white shadow rounded-lg p-6">
       <h1 className="text-lg font-bold leading-tight mb-4">Tickets</h1>
       <div className="overflow-x-auto">
         <table className="min-w-full leading-normal">

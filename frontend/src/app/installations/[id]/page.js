@@ -66,8 +66,8 @@ export default async function TicketPage({ params }) {
 
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
-      <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
-        <BackButton />
+      <div className="max-w-5xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+        <BackButton location={"/redirect"} />
         <h1 className="text-2xl font-bold text-center text-black mb-2">
           Installazione {genHue({ seed: installation.hue })}
         </h1>
