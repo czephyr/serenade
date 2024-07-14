@@ -52,3 +52,4 @@ class InstallationStatus(BaseModel):
     status: str
     date_delta: float
     hue: int | None
+    date_join: datetime | None
