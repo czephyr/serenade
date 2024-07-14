@@ -1,12 +1,18 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sqlalchemy.orm import Session
 
 from ..core import crypto
-from ..core.status import TICKET_CLOSED, TICKET_OPEN
+from ..core.excp import unfoundable
+from ..core.status import (
+    TICKET_CLOSED,
+    TICKET_INSTALLATION,
+    TICKET_OPEN,
+    TICKET_UNINSTALLATION,
+)
 from ..ormodels import Ticket, TicketMessage
 from ..schemas.ticket import TicketCreate, TicketRead, TicketStatus
-from ..core.excp import unfoundable
+from . import installation_details
 
 
 @unfoundable("patient")
@@ -28,6 +34,13 @@ def create(db: Session, *, patient_id: str, ticket: TicketCreate) -> TicketRead:
 
     db.commit()
     db.refresh(result_orm)
+
+    if result_orm.category == TICKET_UNINSTALLATION:
+        installation_orm = installation_details.query_one(
+            db, patient_id=result_orm.patient_id
+        )
+        installation_orm.date_end = datetime.now()
+    db.commit()
 
     result = read_one(db, ticket_id=result_orm.ticket_id)
     return result
@@ -68,7 +81,17 @@ def read_many(db: Session, *, patient_id: str | None = None) -> list[TicketStatu
 
 def update(db: Session, *, ticket_id: int) -> TicketRead:
     result_orm = query_one(db, ticket_id=ticket_id)
-    result_orm.date_closed = datetime.now()
+    right_now = datetime.now()
+    result_orm.date_closed = right_now
+
+    db.commit()
+
+    if result_orm.category == TICKET_INSTALLATION:
+        installation_orm = installation_details.query_one(
+            db, patient_id=result_orm.patient_id
+        )
+        installation_orm.date_start = right_now
+        installation_orm.date_end = right_now + timedelta(days=7 * 26)
 
     db.commit()
     db.refresh(result_orm)

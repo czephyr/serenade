@@ -28,7 +28,6 @@ export default function NewPatientForm() {
   const neuroRef = useRef();
   const formRef = useRef();
   const joinDateRef = useRef();
-  const endingDateRef = useRef();
 
   const apartmentTypeRef = useRef();
   const internetTypeRef = useRef();
@@ -88,10 +87,6 @@ export default function NewPatientForm() {
       contacts: contacts,
       date_join: joinDateRef.current.value,
     };
-    // Conditionally add 'ending_date' if it is not empty
-    if (endingDateRef.current && endingDateRef.current.value !== "") {
-      patientData.date_exit = endingDateRef.current.value;
-    }
 
     console.log(JSON.stringify(patientData));
     try {
@@ -122,8 +117,6 @@ export default function NewPatientForm() {
     }
 
     const installationData = {
-      date_start: patientData.date_join,
-      date_end: patientData.date_exit,
       apartment_type: apartmentTypeRef.current.value,
       internet_type: internetTypeRef.current.value,
       flatmates: flatmatesRef.current.value,
@@ -192,16 +185,6 @@ export default function NewPatientForm() {
                   defaultValue={currentDate.toISOString().substring(0, 10)}
                   className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   required
-                />
-              </label>
-              <label htmlFor="endingDate" className="block">
-                <span className="text-gray-700">Data conclusione:</span>
-                <input
-                  type="date"
-                  id="endingDate"
-                  ref={endingDateRef}
-                  defaultValue={futureDate.toISOString().substring(0, 10)}
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </label>
             </div>
