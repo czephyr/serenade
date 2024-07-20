@@ -26,7 +26,6 @@ const InstallationTable = ({ data }) => {
   };
 
   function sortFunction(installations, column, direction) {
-    console.log("sorting");
     return installations.sort((a, b) => {
       let aValue, bValue;
 

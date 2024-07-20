@@ -6,7 +6,7 @@ import { formatDate } from "@/utils/dateUtils";
 
 const PatientsTable = ({ data }) => {
   const [sortDirection, setSortDirection] = useState("asc");
-  const [sortColumn, setSortColumn] = useState("cognome"); // Default sort column
+  const [sortColumn, setSortColumn] = useState("date"); // Default sort column
   const [sortedPatients, setSortedPatients] = useState(
     sortFunction(data, sortColumn, sortDirection)
   );
