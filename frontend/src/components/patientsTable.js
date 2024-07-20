@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import StatusBadge from "@/components/statusBadge";
+import { formatDate } from "@/utils/dateUtils";
 
 const PatientsTable = ({ data }) => {
   const [sortDirection, setSortDirection] = useState("asc");
@@ -33,6 +34,10 @@ const PatientsTable = ({ data }) => {
         case "categoria":
           aValue = a.neuro_diag.toLowerCase();
           bValue = b.neuro_diag.toLowerCase();
+          break;
+        case "date":
+          aValue = new Date(a.date_join);
+          bValue = new Date(b.date_join);
           break;
         case "status":
           aValue = a.status.toLowerCase();
@@ -100,6 +105,15 @@ const PatientsTable = ({ data }) => {
                 >
                   Categoria {getSortIndicator("categoria")}
                 </th>
+
+                <th
+                  onClick={() => sortTable("date")}
+                  className={`px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer ${
+                    sortColumn === "date" ? "text-black" : "text-gray-500"
+                  }`}
+                >
+                  Arruolamento {getSortIndicator("date")}
+                </th>
                 <th
                   onClick={() => sortTable("status")}
                   className={`px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer ${
@@ -122,6 +136,9 @@ const PatientsTable = ({ data }) => {
                   <td className="px-5 py-5 border-b">{patient.first_name}</td>
                   <td className="px-5 py-5 border-b">{patient.last_name}</td>
                   <td className="px-5 py-5 border-b">{patient.neuro_diag}</td>
+                  <td className="px-5 py-5 border-b">
+                    {formatDate(patient.date_join)}
+                  </td>
                   <td className="px-5 py-5 border-b">
                     <StatusBadge status={patient.status} />
                   </td>
