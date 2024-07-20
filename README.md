@@ -9,6 +9,7 @@ How to spin up the project:
     127.0.0.1 frontend
     127.0.0.1 keycloak
     127.0.0.1 backend
+    127.0.0.1 docs
     ```
 4. Access the components at `http://component_name` ex: `http://frontend`
 5. Login as users:
