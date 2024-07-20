@@ -100,14 +100,17 @@ function TicketMessages({
   return (
     <div className="text-black">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h3 className="text-lg font-bold leading-tight mb-4">Messaggi</h3>
+        <h3 className="text-lg font-bold leading-tight mb-4">Chat</h3>
         <ul className="list-disc pl-5 mb-4">
-          {messages.map((msg, index) => (
-            <li key={index} className="mb-1">
-              <strong>{formatDate(msg.ts)}</strong>{" "}
-              <span className="text-indigo-600">{msg.sender}:</span> {msg.body}
-            </li>
-          ))}
+          {messages
+            .sort((a, b) => new Date(a.ts) - new Date(b.ts))
+            .map((msg, index) => (
+              <li key={index} className="mb-1">
+                <strong>{formatDate(msg.ts)}</strong>{" "}
+                <span className="text-indigo-600">{msg.sender}:</span>{" "}
+                {msg.body}
+              </li>
+            ))}
         </ul>
 
         {isOpen && (

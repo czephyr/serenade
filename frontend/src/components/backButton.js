@@ -1,11 +1,15 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-const BackButton = () => {
+const BackButton = ({ location }) => {
   const router = useRouter();
 
   const goBack = () => {
-    router.back(); // This method navigates back to the previous page
+    if (location) {
+      router.push(location); // This method navigates to the specified location
+    } else {
+      router.back(); // This method navigates back to the previous page
+    }
   };
 
   return (

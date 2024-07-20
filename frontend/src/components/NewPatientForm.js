@@ -45,16 +45,34 @@ export default function NewPatientForm() {
     }
   }, [session, status, router]);
 
-  const handleCfChange = (e) => {
-    const cfInput = e.target.value;
+  const handleCfChange = () => {
+    const cfInput = cfRef.current.value;
     try {
-      new CodiceFiscale(cfInput); // Attempt to create a CodiceFiscale instance
-      setIsCfValid(true);
-      setCfInputError(""); // Clear any previous error message
+      const cf = new CodiceFiscale(cfInput); // Attempt to create a CodiceFiscale instance
+      const firstName = firstNameRef.current.value.toLowerCase();
+      const lastName = lastNameRef.current.value.toLowerCase();
+      const isNameValid = [...cf.name.toLowerCase()].every((char) =>
+        firstName.includes(char)
+      );
+      const isSurnameValid = [...cf.surname.toLowerCase()].every((char) =>
+        lastName.includes(char)
+      );
+      if (isNameValid && isSurnameValid) {
+        setIsCfValid(true);
+        setCfInputError(""); // Clear any previous error message
+      } else {
+        setIsCfValid(false);
+        setCfInputError("Nome o cognome non corrisponde al Codice Fiscale");
+      }
     } catch (error) {
       setIsCfValid(false);
       setCfInputError("Codice Fiscale non valido");
     }
+  };
+
+  const handleNameChange = () => {
+    handleCfChange();
+    console.log("0000");
   };
 
   const addContact = () => {
@@ -168,7 +186,7 @@ export default function NewPatientForm() {
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
       <Toaster />
-      <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+      <div className="max-w-5xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <BackButton />
         <h1 className="text-2xl font-bold text-center mb-2">
           Creazione paziente
@@ -197,6 +215,7 @@ export default function NewPatientForm() {
                 ref={firstNameRef}
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 required
+                onChange={handleNameChange}
               />
             </label>
             <label htmlFor="lastName" className="block">
@@ -208,6 +227,7 @@ export default function NewPatientForm() {
                 ref={lastNameRef}
                 className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 required
+                onChange={handleNameChange}
               />
             </label>
             <label htmlFor="neuro" className="block">

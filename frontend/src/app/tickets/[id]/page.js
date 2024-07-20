@@ -58,14 +58,12 @@ function TicketDetails({ ticket }) {
   ];
 
   return (
-    <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+    <div className="max-w-5xl mx-auto px-4 bg-white shadow rounded-lg p-6">
       <BackButton />
-      <h1 className="text-2xl font-bold text-center text-black mb-4">
-        Dettagli del ticket
-      </h1>
+      <h1 className="text-2xl font-bold text-center text-black mb-4">Chat</h1>
       <div className="space-y-6 text-black">
         <div className="grid grid-cols-1 gap-1">
-          {ticketFields.map((field) => renderField(field, ticket))}
+          {/* {ticketFields.map((field) => renderField(field, ticket))} */}
         </div>
       </div>
     </div>
@@ -97,8 +95,8 @@ export default async function TicketPage({ params }) {
 
   return (
     <main className="bg-gray-100 min-h-screen pt-10 pb-6 px-2 md:px-0">
-      <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
-        <TicketDetails ticket={ticket} />
+      <div className="max-w-5xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+        {/* <TicketDetails ticket={ticket} /> */}
         <TicketMessages
           ticketMessages={ticketMessages}
           ticketNum={ticket.ticket_id}

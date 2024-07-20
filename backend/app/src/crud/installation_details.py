@@ -62,6 +62,7 @@ def read_many(db: Session) -> list[InstallationStatus]:
             status=read_status(db, patient_id=result_orm.patient_id),
             date_delta=last_update(db, patient_id=result_orm.patient_id),
             hue=crypto.hue(result_orm.patient_id),
+            date_join=result_orm.date_join,
         )
         for result_orm in results_orm
     ]

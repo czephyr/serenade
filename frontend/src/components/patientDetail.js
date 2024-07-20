@@ -15,15 +15,7 @@ const PatientDetail = ({ initialData, role }) => {
   const aliasRef = useRef(null);
   const phoneNoRef = useRef(null);
   const emailRef = useRef(null);
-  useEffect(() => {
-    // if (
-    //   status === "unauthenticated" ||
-    //   (status === "authenticated" && !session.roles?.includes("dottore"))
-    // ) {
-    //   router.push("/unauthorized");
-    //   router.refresh();
-    // }
-  }, [session, status, router]);
+  useEffect(() => {}, [session, status, router]);
 
   const [isEditing, setIsEditing] = useState({
     first_name: false,
@@ -298,10 +290,10 @@ const PatientDetail = ({ initialData, role }) => {
               style={
                 role === "unimi"
                   ? {
-                    WebkitAppearance: "none" /* for Chrome, Safari */,
-                    MozAppearance: "none" /* for Firefox */,
-                    appearance: "none" /* Standard syntax */,
-                  }
+                      WebkitAppearance: "none" /* for Chrome, Safari */,
+                      MozAppearance: "none" /* for Firefox */,
+                      appearance: "none" /* Standard syntax */,
+                    }
                   : {}
               }
             >
@@ -405,29 +397,6 @@ const PatientDetail = ({ initialData, role }) => {
             </button>
           </div>
         </label>
-        // <label htmlFor={field} className="block">
-        //   <span className="text-gray-700">
-        //     Address:
-        //     <input
-        //       type="text"
-        //       id={field}
-        //       value={patient[field]}
-        //       className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        //       onChange={(e) => handleChange(e, field)}
-        //       readOnly={!isEditing[field]}
-        //     />
-        //     <button
-        //       className={`text-white ${isEditing[field] ? "bg-blue-600 hover:bg-blue-700" : "bg-red-600 hover:bg-red-700"} focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center`}
-        //       onClick={() =>
-        //         isEditing[field]
-        //           ? handleSend(patient.patient_id, field, patient[field])
-        //           : handleEdit(field)
-        //       }
-        //     >
-        //       {isEditing[field] ? "Send" : "Edit"}
-        //     </button>
-        //   </span>
-        // </label>
       );
     } else if (field == "codice_fiscale") {
       return (
@@ -556,7 +525,7 @@ const PatientDetail = ({ initialData, role }) => {
   return (
     <main>
       <Toaster />
-      <div className="max-w-3xl mx-auto px-4 bg-white shadow rounded-lg p-6">
+      <div className="max-w-5xl mx-auto px-4 bg-white shadow rounded-lg p-6">
         <h1 className="text-lg font-bold leading-tight mb-4">Paziente</h1>
         <div className="space-y-6 text-black">
           <div className="grid grid-cols-1 gap-1">
