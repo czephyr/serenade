@@ -230,6 +230,23 @@ It's not neede to specify the capabilities for all lookup combinations, anyone w
 
 ## Authentication with KeyCloak
 
+### JWT Authorization 
+```mermaid
+sequenceDiagram
+    actor Doctor
+    participant Frontend
+    participant Backend
+    participant KeyCloak
+    Doctor ->> KeyCloak: login(email,pswd)
+    KeyCloak ->> Doctor: JWT
+    Doctor->>Frontend: ask_data(JWT, user_id)
+    Frontend->>Backend: get_data(JWT, user_id)
+    Backend->>KeyCloak: check_jwt(JWT)
+    KeyCloak->>Backend: jwt_ok
+    Backend->>Frontend: data 
+    Frontend->>Doctor: html
+```
+
 ### Signup without IdP
 ```mermaid
 sequenceDiagram
