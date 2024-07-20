@@ -4,7 +4,18 @@ Estendere la piattaforma richiede una buona conoscenza di OpenID-Connect, Docker
 
 Si consiglia di lavorare sul branch `dev` e poi una volta testato il codice di mergiare ad un branch di produzione.
 
-Per lavorare in un ambiente `development` basta clonare la repository del progetto e avviare il comando `docker compose up`.
+Per lavorare in un ambiente *development*:
+
+- `git checkout` sul branch di development
+- `docker compose up` nella root folder
+- inserire nel file `hosts`
+```
+127.0.0.1 frontend
+127.0.0.1 keycloak
+127.0.0.1 backend
+127.0.0.1 docs
+```
+- Accedere ai componenti con `http://component_name` ex: `http://frontend`
 
 Cambiamenti locali al sistema di backend richiedono di riavviare il container che ospita il backend. 
 

@@ -33,7 +33,7 @@ Nel file `.keycloak_realms/serenade.json` e' riportato un json di snapshot dell'
 A seguito di una modifica su Keycloak con lo script `.utils/export.realm.sh` dando in input il nome del container di Keycloak si puo' salvare un nuovo `json` snapshot.
 
 
-## Utenti
+## Ruoli utenti
 
 Una volta selezionato il realm `serenade` nella tab `Manage/Users` si possono aggiungere nuovi utenti premendo `Add users`.
 
