@@ -7,6 +7,7 @@ import authOptions from "@/app/api/auth/[...nextauth]/options";
 import PatientDetail from "@/components/patientDetail";
 import InstallationDetail from "@/components/installationDetail";
 import BackButton from "@/components/backButton";
+import DeleteButton from "@/components/deletePatient";
 
 export default async function TicketPage({ params }) {
   const session = await getServerSession(authOptions);
@@ -41,6 +42,7 @@ export default async function TicketPage({ params }) {
           initialData={installation}
           role={roleFound}
         />
+        <DeleteButton patient_id={params.id} />
       </div>
     </main>
   );
