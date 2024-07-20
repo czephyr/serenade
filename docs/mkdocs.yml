@@ -13,6 +13,7 @@ nav:
     - Keycloak: componenti/keycloak.md
     - Traefik: componenti/traefik.md
     - Database: componenti/database.md
+  - Logging: logging.md
 
 # Repository
 repo_name: czephyr/serenade
