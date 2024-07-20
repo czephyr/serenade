@@ -2,6 +2,7 @@ site_name: Documentazione Serenade
 
 # Page tree
 nav:
+  - Introduzione: index.md
   - Backend: backend.md
   - Frontend: frontend.md
   - Keycloak: keycloak.md
@@ -79,4 +80,8 @@ markdown_extensions:
   - md_in_html
   - toc:
       permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences 
+
 
