@@ -45,7 +45,7 @@ const DeleteButton = ({ patient_id }) => {
         onClick={() => {
           handleDelete(patient_id);
         }}
-        className="bg-purple-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         style={{ textDecoration: "none" }}
       >
         Elimina paziente
