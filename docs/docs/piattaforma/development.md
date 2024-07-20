@@ -1,6 +1,6 @@
 ## Consigli di development
 
-Estendere la piattaforma richiede una buona conoscenza di OAuth, Docker e Docker compose, NextJS, FastAPI, SQL e MkDocs.
+Estendere la piattaforma richiede una buona conoscenza di OpenID-Connect, Docker e Docker compose, NextJS, FastAPI, SQL e MkDocs.
 
 Si consiglia di lavorare sul branch `dev` e poi una volta testato il codice di mergiare ad un branch di produzione.
 

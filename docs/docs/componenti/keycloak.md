@@ -2,6 +2,28 @@
 
 Per informazioni aggiuntive si rimanda alla documentazione di Keycloak.
 
+## Autenticazione
+
+La piattaforma utilizza `OpenID-connect` come meccanismo di autorizzazione. 
+
+Ad ogni richiesta al backend e' associato un token JWT che viene assegnato alla sessione da Keycloak. Il backend prima di rispondere controlla se il token JWT e' attivo e se il ruolo dell'utente a cui e' associato il token ha accesso alle informazioni richieste. 
+
+```mermaid
+sequenceDiagram
+    actor Doctor
+    participant Frontend
+    participant Backend
+    participant KeyCloak
+    Doctor ->> KeyCloak: login(email,pswd)
+    KeyCloak ->> Doctor: JWT
+    Doctor->>Frontend: ask_data(JWT, user_id)
+    Frontend->>Backend: get_data(JWT, user_id)
+    Backend->>KeyCloak: check_jwt(JWT)
+    KeyCloak->>Backend: jwt_ok
+    Backend->>Frontend: data 
+    Frontend->>Doctor: html
+```
+
 ## Configurazioni
 
 Nel file `.envars/.env.keycloak` sono impostate le credenziali amministrative per la piattaforma keycloak.
