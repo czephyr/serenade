@@ -90,37 +90,41 @@ All the endpoints have their request and response body parameters documented.
 
 ### Folder structure explaination
 
+Inside the `backend/app` folder:
+
 ```
-── api  ## rest endpoints
-│   ├── api.py  ## url routes
-│   ├── deps.py ## dependency injections
-│   └── endpoints
-│       ├── auth.py
-│       ├── installations.py
-│       └── patients.py
-|       ...
-├── crud  ## functions accessing the db
-│   ├── crud_installation.py
-│   └── crud_patient.py
-|    ...
-├── models  ## SQLAlchemy db object models
-│   ├── notes.py
-│   └── patient.py
-|   ...
-├── schemas ## Pydantic logical object schemas
-│   ├── installation.py
-│   └── patient.py
-|   ...
-├── core  ## various configs
-│   ├── config.py
-│   ├── keycloak_config.py
-│   └── security.py
-├── db   ## db configs
-│   ├── base_class.py
-│   └── session.py
-├── main.py
-└── utils  ## various utils
-    └── local_utils.py
+.
+└── app
+    ├── api  ## rest endpoints
+    │   ├── api.py  ## url routes
+    │   ├── deps.py ## dependency injections
+    │   └── endpoints
+    │       ├── auth.py
+    │       ├── installations.py
+    │       └── patients.py
+    |       ...
+    ├── crud  ## functions accessing the db
+    │   ├── crud_installation.py
+    │   └── crud_patient.py
+    |    ...
+    ├── models  ## SQLAlchemy db object models
+    │   ├── notes.py
+    │   └── patient.py
+    |   ...
+    ├── schemas ## Pydantic logical object schemas
+    │   ├── installation.py
+    │   └── patient.py
+    |   ...
+    ├── core  ## various configs
+    │   ├── config.py
+    │   ├── keycloak_config.py
+    │   └── security.py
+    ├── db   ## db configs
+    │   ├── base_class.py
+    │   └── session.py
+    ├── main.py
+    └── utils  ## various utils
+        └── local_utils.py
 ```
 
 ## Database
@@ -134,6 +138,34 @@ The database table storing data that could identify patients is stored under tra
 <img src="https://next-auth.js.org/img/logo/logo-sm.png" width=36 height=36 /> NextAuth.js | <img src="https://static-00.iconduck.com/assets.00/nextjs-icon-512x512-y563b8iq.png" width=36 height=36 /> Next.js |
 
 The frontend is in NextJS, NextAuth.js offers interoperability with Keycloak. NextJS provides serverside loading, where that is possible requests tokens are checked for validity and authorization based on user role against Keycloak.
+
+### Folder structure explaination
+
+Inside the `frontend/src` folder:
+
+```
+.
+└── src
+    ├── app
+    │   ├── api
+    │   │   ├── auth ## Configs for NextAuth
+    │   │   │   └── ...
+    │   │   ├── documents ## NextJS rest api endpoints that forward requests to the backend
+    │   │   │   └── ...                 
+    │   │   ├── installations ## NextJS rest api endpoints that forward requests to the backend
+    │   │   │   └── ...
+    │   │   ...
+    │   ├── installations ## NextJS routes
+    │   │   └── ...
+    │   ├── patients ## NextJS routes
+    │   │   └── ...
+    |   ...
+    ├── components ## react components
+    │   └── ...
+    ├── utils ## utils functions
+    |   └── ...
+    ...
+```
 
 ## IAM
 ### Tools
@@ -300,4 +332,3 @@ sequenceDiagram
         App->>Doctor: Send (Patient)
     end
 ```
-
