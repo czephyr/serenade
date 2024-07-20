@@ -1,5 +1,13 @@
 site_name: Documentazione Serenade
 
+# Page tree
+nav:
+  - Backend: backend.md
+  - Frontend: frontend.md
+  - Keycloak: keycloak.md
+  - Traefik: traefik.md
+  - Database: database.md
+
 # Repository
 repo_name: czephyr/serenade
 repo_url: https://github.com/czephyr/serenade
@@ -72,7 +80,3 @@ markdown_extensions:
   - toc:
       permalink: true
 
-# Page tree
-nav:
-  - Pag1: we.md
-  - Pag2: we2.md

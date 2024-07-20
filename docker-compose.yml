@@ -2,8 +2,6 @@ services:
   documentation:
     container_name: mkdocs
     build: docs
-    env_file:
-      - .envars/.env.docs    
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.docs_solid.tls=true"
