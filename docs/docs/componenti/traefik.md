@@ -26,7 +26,7 @@ Or other rules for middlewares or loadbalancers.
 
 ## HTTPS and SSL Termination
 
-In this project two entrypoinst are available: `web` (aka `http`) and `websecure` (aka `https`). An auto-redirect to HTTPS is set in the `traefik.toml` file.
+In this project two entrypoints are available: `web` (aka `http`) and `websecure` (aka `https`). An auto-redirect to HTTPS is set in the `traefik.toml` file.
 
 ```yaml
 [entryPoints.web.http.redirections]

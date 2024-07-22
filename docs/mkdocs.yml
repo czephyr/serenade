@@ -8,12 +8,12 @@ nav:
     - Comportamenti: piattaforma/comportamenti.md
     - Development: piattaforma/development.md
   - Componenti:
+    - Traefik: componenti/traefik.md
+    - Keycloak: componenti/keycloak.md
+    - Database: componenti/database.md
     - Backend: componenti/backend.md
     - Frontend: componenti/frontend.md
-    - Keycloak: componenti/keycloak.md
-    - Traefik: componenti/traefik.md
-    - Database: componenti/database.md
-    - Logging: logging.md
+  - Sviluppi Futuri: future.md
 
 # Repository
 repo_name: czephyr/serenade

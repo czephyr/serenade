@@ -1,22 +1,61 @@
-## Consigli di development
+# Development
 
-Estendere la piattaforma richiede una buona conoscenza di OpenID-Connect, Docker e Docker compose, NextJS, FastAPI, SQL e MkDocs.
+Per poter estendere lo sviluppo della piattaforma è necessaria una discreta conoscenza di:
 
-Si consiglia di lavorare sul branch `dev` e poi una volta testato il codice di mergiare ad un branch di produzione.
+- git
+- Docker e Traefik
+- Keycloak e OpenID-Connect
+- Javascript con NextJS
+- Python con FastAPI e SQLAlchemy
 
-Per lavorare in un ambiente *development*:
+Il progetto è versionato con `git`.
+Si consiglia di usare `dev` come branch di lavoro, e usare invece `area-51` per il deployment di produzione.
+Quando le modifiche in `dev` sono state testate con successo, è possibile aggiornare `area-51` con una [Merge Request](https://docs.gitlab.com/ee/user/project/merge_requests/) o una operazione di `git merge`.
 
-- `git checkout` sul branch di development
-- `docker compose up` nella root folder
-- inserire nel file `hosts`
-```
-127.0.0.1 frontend
+## Development in locale
+
+Per lavorare in un ambiente di development locale:
+
+- `git clone` di questo progetto
+- Accedere alla directory del progetto
+- `git checkout` su `dev` o un qualsiasi altro branch di development
+- Inserire nel file `hosts` (`/etc/hosts` per Unix, `C:\Windows\System32\drivers\etc\hosts` per Windows) i nomi dei servizi registrati nel file `docker-compose.yml`, per esempio:
+
+```ps1
 127.0.0.1 keycloak
 127.0.0.1 backend
+127.0.0.1 frontend
 127.0.0.1 docs
 ```
-- Accedere ai componenti con `http://component_name` ex: `http://frontend`
 
-Cambiamenti locali al sistema di backend richiedono di riavviare il container che ospita il backend. 
+- Modificare in parallelo il file `.env`:
 
-Cambiamenti locali al sistema di frontend vengono renderizzati automaticamente senza dover riavviare il container grazie al binding dei volumi; per far si che questo avvenga assicurarsi che l'ENTRYPOINT dell'img sia in modalita' `run dev`. Anche la documentazione basata su MkDocs renderizza i cambi automaticamente utilizzando gli stessi principi.
+```sh
+KEYCLOAK_HOSTNAME="keycloak"
+BACKEND_HOSTNAME="backend"
+FRONTEND_HOSTNAME="frontend"
+DOCS_HOSTNAME="docs"
+```
+
+- `docker compose up --build` per avviare.
+
+Ora puoi accedere ai componenti con `http://nome_servizio/`, ad esempio `http://frontend/`
+
+### Hot reload
+
+È necessario ravviare il container che ospita `backend` per poter applicare le modifiche effettuate.
+
+Invece i servizi `frontend` e `docs` supportano l'**hot reload**: i cambiamenti al codice vengono applicati automaticamente senza riavviare il container.
+È comunque necessario specificare il *binding dei volumi* nel file `docker-compose.yml`, ad esempio:
+
+```yml
+volumes:
+    - ./frontend/src/components:/src/components
+```
+
+Assicurarsi che l'`ENTRYPOINT` dell'immagine sia in modalita' `run dev`.
+
+#### DDL
+
+Se non è necessario effettuare migrazioni di dati, è possibile applicare modifiche al DDL eliminando il container che ospita il database (`dbpercona`) e i volumi ad essso collegati (a.e. `docker rm dbpercona -v`).
+Viceversa la migrazione va effettuata manualmente con query di DML, o avvalendosi di SQLAlchemy.

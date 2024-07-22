@@ -2,7 +2,8 @@
 
 ## Amministratore
 
-L'amministratore della piattaforma e' in possesso delle credenziali amministrative di Keycloak e si occupa di creare le utenze degli utenti che faranno uso della piattaforma. Per informazioni sul processo di creazione delle utenze riferirsi alla sezione `Componenti/Keycloak` di questa documentazione.
+L'amministratore della piattaforma è in possesso delle credenziali amministrative di Keycloak e si occupa di creare le utenze degli utenti che faranno uso della piattaforma.
+Per informazioni sul processo di creazione delle utenze riferirsi alla sezione `Componenti/Keycloak` di questa documentazione.
 
 ## Utenti
 
@@ -14,11 +15,11 @@ L'`imt` puo' visionare le installazioni, creare ticket e inserire messaggi sui t
 
 ### IIT
 
-L'`iit` puo' visionare le installazioni, chiudere ticket e inserire messaggi sui ticket. 
+L'`iit` puo' visionare le installazioni, chiudere ticket e inserire messaggi sui ticket.
 
 ### Dottore
 
-Gli utenti con ruolo `dottore` possono creare/eliminare pazienti e accedere alle visualizzazioni dei dati dei pazienti. 
+Gli utenti con ruolo `dottore` possono creare/eliminare pazienti e accedere alle visualizzazioni dei dati dei pazienti.
 
 ### Unimi
 
