@@ -123,7 +123,7 @@ export default function NewPatientForm() {
         //   position: "bottom-left",
         // });
       } else if (response.status == 409) {
-        setCfInputError("Il codice fiscale e' gia' presente nel database");
+        setCfInputError("Il codice fiscale è gia' presente nel database");
         return;
       } else {
         console.error("API call failed: ", result.error);
