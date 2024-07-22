@@ -2,7 +2,7 @@ site_name: Documentazione Serenade
 
 # Page tree
 nav:
-  - Introduzione: index.md
+  - Introduzione: readme.md
   - Piattaforma:
     - Workflow utenti: piattaforma/workflow.md
     - Comportamenti: piattaforma/comportamenti.md
@@ -13,7 +13,7 @@ nav:
     - Database: componenti/database.md
     - Backend: componenti/backend.md
     - Frontend: componenti/frontend.md
-  - Sviluppi Futuri: future.md
+  - Sviluppi Futuri: sviluppi-futuri/readme.md
 
 # Repository
 repo_name: czephyr/serenade
