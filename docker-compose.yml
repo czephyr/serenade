@@ -1,4 +1,18 @@
 services:
+  documentation:
+    container_name: mkdocs
+    build: docs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.docs_solid.tls=true"
+      - "traefik.http.routers.docs_solid.rule=Host(`${DOCS_HOSTNAME}`)"
+      - "traefik.http.routers.docs_solid.entrypoints=websecure"
+      - "traefik.http.routers.docs_risky.rule=Host(`${DOCS_HOSTNAME}`)"
+      - "traefik.http.routers.docs_risky.entrypoints=web"
+      - "traefik.http.services.docs.loadbalancer.server.port=80"
+    volumes:
+      - ./docs/docs:/docs
+      - ./docs/mkdocs.yml:/mkdocs.yml
   dbkeycloak:
     container_name: dbkeycloak
     image: postgres:latest

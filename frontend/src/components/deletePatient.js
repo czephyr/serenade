@@ -9,7 +9,7 @@ const DeleteButton = ({ patient_id }) => {
   async function handleDelete(patient_id) {
     if (
       window.confirm(
-        "Sei sicuro di voler eliminare questo paziente? Questa azione e' IRREVERSIBILE ed elimina tutti i dati riguardanti il paziente, anche per gli altri utenti della piattaforma."
+        "Sei sicuro di voler eliminare questo paziente? Questa azione è IRREVERSIBILE ed elimina TUTTI i dati riguardanti il paziente, anche i dati disponibili agli utenti tecnici."
       )
     ) {
       const postBody = {

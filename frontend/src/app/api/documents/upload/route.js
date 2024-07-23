@@ -23,11 +23,8 @@ export async function POST(req) {
       method: "POST",
       body: outgoingFormData,
     });
-    console.log(resp);
     if (resp.ok) {
       const data = await resp.json();
-      console.log("we");
-      console.log(data);
       return NextResponse.json({ data }, { status: resp.status });
     }
 
