@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS patient_notes(
     medical_notes TEXT,
 
     FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
-);
+) USING pg_tde;
 
 -- Table: patient_details
 -- Description: Stores additional details useful for HOS and IIT to reach the patients.

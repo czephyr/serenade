@@ -51,4 +51,5 @@ def delete_many(db: Session, *, patient_id: str) -> list[ContactEntry]:
     results_orm = query_many(db, patient_id=patient_id)
     result = [ContactEntry.model_validate(result_orm) for result_orm in results_orm]
     db.delete(results_orm)
+    db.commit()
     return result
