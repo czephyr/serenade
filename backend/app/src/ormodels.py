@@ -25,22 +25,22 @@ class Patient(Base):
 
 class PatientFull(Patient):
     details: Mapped["PatientDetail"] = relationship(
-        back_populates="patient", cascade="all,delete"
+        back_populates="patient",
     )
     screening: Mapped["PatientScreening"] = relationship(
-        back_populates="patient", cascade="all,delete"
+        back_populates="patient",
     )
     note: Mapped["PatientNote"] = relationship(
-        back_populates="patient", cascade="all,delete"
+        back_populates="patient",
     )
     contacts: Mapped[list["Contact"]] = relationship(
-        back_populates="patient", cascade="all,delete"
+        back_populates="patient",
     )
     installations: Mapped["InstallationDetail"] = relationship(
-        back_populates="patient", cascade="all,delete"
+        back_populates="patient",
     )
     tickets: Mapped[list["Ticket"]] = relationship(
-        back_populates="patient", cascade="all,delete"
+        back_populates="patient",
     )
 
 
@@ -55,7 +55,7 @@ class PatientDetail(Base):
     last_name: Mapped[str]
     home_address: Mapped[str | None]
 
-    patient: Mapped[Patient] = relationship(cascade="all,delete")
+    patient: Mapped[Patient] = relationship()
 
 
 class PatientScreening(Base):
@@ -67,7 +67,7 @@ class PatientScreening(Base):
     neuro_diag: Mapped[str | None]
     age_class: Mapped[str | None]
 
-    patient: Mapped[Patient] = relationship(cascade="all,delete")
+    patient: Mapped[Patient] = relationship()
 
 
 class PatientNote(Base):
@@ -79,7 +79,7 @@ class PatientNote(Base):
     codice_fiscale: Mapped[str] = mapped_column(unique=True)
     medical_notes: Mapped[str | None]
 
-    patient: Mapped[Patient] = relationship(cascade="all,delete")
+    patient: Mapped[Patient] = relationship()
 
 
 class Contact(Base):
@@ -91,7 +91,7 @@ class Contact(Base):
     phone_no: Mapped[str | None]
     email: Mapped[str | None]
 
-    patient: Mapped[Patient] = relationship(cascade="all,delete")
+    patient: Mapped[Patient] = relationship()
 
 
 class InstallationDetail(Base):
@@ -115,9 +115,9 @@ class InstallationDetail(Base):
     date_start: Mapped[datetime | None]
     date_end: Mapped[datetime | None]
 
-    patient: Mapped[Patient] = relationship(cascade="all,delete")
+    patient: Mapped[Patient] = relationship()
     documents: Mapped[list["InstallationDocument"]] = relationship(
-        back_populates="installation", cascade="all,delete"
+        back_populates="installation",
     )
 
 
@@ -134,7 +134,7 @@ class InstallationDocument(Base):
     file_type: Mapped[str | None]
     file_content: Mapped[bytes]
 
-    installation: Mapped[InstallationDetail] = relationship(cascade="all,delete")
+    installation: Mapped[InstallationDetail] = relationship()
 
 
 class TicketMessage(Base):
@@ -147,7 +147,7 @@ class TicketMessage(Base):
     ticket_id: Mapped[int] = mapped_column(ForeignKey("tickets.ticket_id"))
 
     ticket: Mapped["Ticket"] = relationship(
-        back_populates="messages", cascade="all,delete"
+        back_populates="messages",
     )
 
 
@@ -161,7 +161,7 @@ class Ticket(Base):
     date_closed: Mapped[datetime | None]
     category: Mapped[str | None]
 
-    patient: Mapped[Patient] = relationship(cascade="all,delete")
+    patient: Mapped[Patient] = relationship()
     messages: Mapped[list[TicketMessage]] = relationship(
-        back_populates="ticket", cascade="all,delete"
+        back_populates="ticket",
     )
