@@ -2,18 +2,20 @@ site_name: Documentazione Serenade
 
 # Page tree
 nav:
-  - Introduzione: readme.md
+  - Introduzione: README.md
   - Piattaforma:
     - Workflow utenti: piattaforma/workflow.md
     - Comportamenti: piattaforma/comportamenti.md
+  - Aspetti Tecnici:
     - Development: piattaforma/development.md
+    - Sicurezza: piattaforma/sicurezza.md
   - Componenti:
     - Traefik: componenti/traefik.md
     - Keycloak: componenti/keycloak.md
     - Database: componenti/database.md
     - Backend: componenti/backend.md
     - Frontend: componenti/frontend.md
-  - Sviluppi Futuri: sviluppi-futuri/readme.md
+  - Sviluppi Futuri: sviluppi-futuri/README.md
 
 # Repository
 repo_name: czephyr/serenade

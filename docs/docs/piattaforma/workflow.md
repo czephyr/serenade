@@ -8,6 +8,14 @@ Per informazioni sul processo di creazione delle utenze riferirsi alla sezione `
 ## Utenti
 
 La piattaforma definisce 4 tipologie di utenti che sono `imt`, `iit`, `unimi`, `dottore`.
+Account demo:
+
+|Ruolo|`username`|`password`|
+|-|-|-|
+|HOS|`dottore-alice`|`alice`|
+|IIT|`iit-gennaro`|`gennaro`|
+|IMT|`imt-vincenzo`|`vincenzo`|
+|UNIMI|`ricercatore-stefano`|`stefano`|
 
 ### IMT
 
