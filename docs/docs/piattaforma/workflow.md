@@ -11,11 +11,11 @@ La piattaforma definisce 4 tipologie di utenti che sono `imt`, `iit`, `unimi`, `
 
 ### IMT
 
-L'`imt` puo' visionare le installazioni, creare ticket e inserire messaggi sui ticket.
+L'`imt` può visionare le installazioni, creare ticket e inserire messaggi sui ticket.
 
 ### IIT
 
-L'`iit` puo' visionare le installazioni, chiudere ticket e inserire messaggi sui ticket.
+L'`iit` può visionare le installazioni, chiudere ticket e inserire messaggi sui ticket.
 
 ### Dottore
 

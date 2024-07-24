@@ -19,13 +19,13 @@ Per lavorare in un ambiente di development locale:
 - `git clone` di questo progetto
 - Accedere alla directory del progetto
 - `git checkout` su `dev` o un qualsiasi altro branch di development
-- Inserire nel file `hosts` (`/etc/hosts` per Unix, `C:\Windows\System32\drivers\etc\hosts` per Windows) i nomi dei servizi registrati nel file `docker-compose.yml`, per esempio:
+- Inserire nel file `hosts` (`/etc/hosts` per Unix, `C:\Windows\System32\drivers\etc\hosts` per Windows) **i nomi dei servizi (`container_name`) registrati nel file** `docker-compose.yml`, per esempio:
 
 ```ps1
 127.0.0.1 keycloak
 127.0.0.1 backend
 127.0.0.1 frontend
-127.0.0.1 docs
+127.0.0.1 mkdocs
 ```
 
 - Modificare in parallelo il file `.env`:
@@ -34,7 +34,7 @@ Per lavorare in un ambiente di development locale:
 KEYCLOAK_HOSTNAME="keycloak"
 BACKEND_HOSTNAME="backend"
 FRONTEND_HOSTNAME="frontend"
-DOCS_HOSTNAME="docs"
+DOCS_HOSTNAME="mkdocs"
 ```
 
 - `docker compose up --build` per avviare.
@@ -53,7 +53,7 @@ volumes:
     - ./frontend/src/components:/src/components
 ```
 
-Assicurarsi che l'`ENTRYPOINT` dell'immagine sia in modalita' `run dev`.
+Assicurarsi che l'`ENTRYPOINT` dell'immagine sia in modalità `run dev`.
 
 #### DDL
 

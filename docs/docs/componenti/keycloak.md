@@ -57,7 +57,7 @@ Da qui possono cambaire la password e integrare informazioni facoltative.
 Verranno presentate più schede, quelle rilevanti sono `Users` e `Realm roles` per la gestione rispettivamente degli utenti e dei ruoli ad essi collegati:
 
 - Una volta selezionato il realm `serenade` nella tab `Manage/Users` si possono aggiungere nuovi utenti premendo `Add users`.
-- Una volta creato un nuovo utente e selezionato l'utente nella tab `Role Mapping` si puo' assegnare un nuovo ruolo premendo `Add role`.
+- Una volta creato un nuovo utente e selezionato l'utente nella tab `Role Mapping` si può assegnare un nuovo ruolo premendo `Add role`.
 
 I ruoli utilizzati per i meccanismi di autorizzazione sono:
 

@@ -1,5 +1,7 @@
 # Serenade
 
+## Componenti
+
 Questa piattaforma è sviluppata come progetto Docker Compose. I servizi sviluppati sono:
 
 - `traefik` come reverse proxy per il progetto
