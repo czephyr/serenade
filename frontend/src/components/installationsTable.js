@@ -1,6 +1,7 @@
 "use client";
 import TimeAgo from "javascript-time-ago";
 import it from "javascript-time-ago/locale/it";
+import Cookies from "js-cookie";
 
 import React, { useState, useEffect } from "react";
 
@@ -12,13 +13,26 @@ TimeAgo.addLocale(it);
 
 const InstallationTable = ({ data }) => {
   const timeAgo = new TimeAgo("it-IT");
+
   const [sortDirection, setSortDirection] = useState("asc");
-  const [sortColumn, setSortColumn] = useState("date_delta"); // Default sort column
-  const [sortedInstallations, setSortedInstallations] = useState(
-    sortFunction(data, sortColumn, sortDirection)
-  );
+  const [sortColumn, setSortColumn] = useState("date_delta");
+  const [sortedInstallations, setSortedInstallations] = useState([]);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    const defaultSortColumn = Cookies.get("sortColumn") || "date_delta";
+    const defaultSortDirection = Cookies.get("sortDirection") || "asc";
+
+    setSortColumn(defaultSortColumn);
+    setSortDirection(defaultSortDirection);
+    setSortedInstallations(
+      sortFunction(data, defaultSortColumn, defaultSortDirection)
+    );
+    setIsClient(true);
+  }, [data]);
 
   const getSortIndicator = (column) => {
+    if (!isClient) return ""; // Avoid mismatch during SSR
     if (sortColumn === column) {
       return sortDirection === "asc" ? "▲" : "▼";
     }
@@ -30,6 +44,10 @@ const InstallationTable = ({ data }) => {
       let aValue, bValue;
 
       switch (column) {
+        case "name":
+          aValue = a.hue;
+          bValue = b.hue;
+          break;
         case "status":
           aValue = a.status;
           bValue = b.status;
@@ -68,9 +86,13 @@ const InstallationTable = ({ data }) => {
     setSortedInstallations([
       ...sortFunction(sortedInstallations, column, direction),
     ]);
+
+    Cookies.set("sortColumn", column);
+    Cookies.set("sortDirection", direction);
   };
 
   useEffect(() => {
+    console.log(sortColumn);
     console.log(sortFunction(data, sortColumn, sortDirection));
     setSortedInstallations(sortFunction(data, sortColumn, sortDirection));
   }, [data, sortColumn, sortDirection]);
@@ -85,9 +107,10 @@ const InstallationTable = ({ data }) => {
               <tr>
                 <th
                   onClick={() => sortTable("name")}
-                  className={`px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer text-gray-500`}
+                  className={`px-5 py-3 border-b-2 text-left text-xs font-semibold uppercase tracking-wider cursor-pointer
+                  ${sortColumn === "name" ? "text-black" : "text-gray-500"}`}
                 >
-                  Alias paziente
+                  Alias paziente {getSortIndicator("name")}
                 </th>
                 <th
                   onClick={() => sortTable("status")}
