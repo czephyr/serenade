@@ -1,5 +1,7 @@
 "use client";
 
+import Cookies from "js-cookie";
+
 import React, { useState, useEffect } from "react";
 import StatusBadge from "@/components/statusBadge";
 import { formatDate } from "@/utils/dateUtils";
@@ -7,11 +9,23 @@ import { formatDate } from "@/utils/dateUtils";
 const PatientsTable = ({ data }) => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [sortColumn, setSortColumn] = useState("date"); // Default sort column
-  const [sortedPatients, setSortedPatients] = useState(
-    sortFunction(data, sortColumn, sortDirection)
-  );
+  const [sortedPatients, setSortedPatients] = useState([]);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    const defaultSortColumn = Cookies.get("sortColumn") || "date";
+    const defaultSortDirection = Cookies.get("sortDirection") || "asc";
+
+    setSortColumn(defaultSortColumn);
+    setSortDirection(defaultSortDirection);
+    setSortedPatients(
+      sortFunction(data, defaultSortColumn, defaultSortDirection)
+    );
+    setIsClient(true);
+  }, [data]);
 
   const getSortIndicator = (column) => {
+    if (!isClient) return ""; // Avoid mismatch during SSR
     if (sortColumn === column) {
       return sortDirection === "asc" ? "▲" : "▼";
     }
@@ -67,6 +81,10 @@ const PatientsTable = ({ data }) => {
     setSortDirection(direction);
     setSortColumn(column);
     setSortedPatients([...sortFunction(sortedPatients, column, direction)]);
+
+    // Save sort settings in cookies
+    Cookies.set("sortColumn", column);
+    Cookies.set("sortDirection", direction);
   };
 
   useEffect(() => {
