@@ -26,21 +26,27 @@ class Patient(Base):
 class PatientFull(Patient):
     details: Mapped["PatientDetail"] = relationship(
         back_populates="patient",
+        cascade="all, delete-orphan",
     )
     screening: Mapped["PatientScreening"] = relationship(
         back_populates="patient",
+        cascade="all, delete-orphan",
     )
     note: Mapped["PatientNote"] = relationship(
         back_populates="patient",
+        cascade="all, delete-orphan",
     )
     contacts: Mapped[list["Contact"]] = relationship(
         back_populates="patient",
+        cascade="all, delete-orphan",
     )
     installations: Mapped["InstallationDetail"] = relationship(
         back_populates="patient",
+        cascade="all, delete-orphan",
     )
     tickets: Mapped[list["Ticket"]] = relationship(
         back_populates="patient",
+        cascade="all, delete-orphan",
     )
 
 
@@ -118,6 +124,7 @@ class InstallationDetail(Base):
     patient: Mapped[Patient] = relationship()
     documents: Mapped[list["InstallationDocument"]] = relationship(
         back_populates="installation",
+        cascade="all, delete-orphan",
     )
 
 
@@ -164,4 +171,5 @@ class Ticket(Base):
     patient: Mapped[Patient] = relationship()
     messages: Mapped[list[TicketMessage]] = relationship(
         back_populates="ticket",
+        cascade="all, delete-orphan",
     )
