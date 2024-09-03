@@ -12,18 +12,6 @@ const PatientsTable = ({ data }) => {
   const [sortedPatients, setSortedPatients] = useState([]);
   const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    const defaultSortColumn = Cookies.get("sortColumn") || "date";
-    const defaultSortDirection = Cookies.get("sortDirection") || "asc";
-
-    setSortColumn(defaultSortColumn);
-    setSortDirection(defaultSortDirection);
-    setSortedPatients(
-      sortFunction(data, defaultSortColumn, defaultSortDirection)
-    );
-    setIsClient(true);
-  }, [data]);
-
   const getSortIndicator = (column) => {
     if (!isClient) return ""; // Avoid mismatch during SSR
     if (sortColumn === column) {
@@ -88,7 +76,15 @@ const PatientsTable = ({ data }) => {
   };
 
   useEffect(() => {
-    setSortedPatients(sortFunction(data, sortColumn, sortDirection));
+    const defaultSortColumn = Cookies.get("sortColumn") || "date";
+    const defaultSortDirection = Cookies.get("sortDirection") || "asc";
+
+    setSortColumn(defaultSortColumn);
+    setSortDirection(defaultSortDirection);
+    setSortedPatients(
+      sortFunction(data, defaultSortColumn, defaultSortDirection)
+    );
+    setIsClient(true);
   }, [data, sortColumn, sortDirection]);
 
   return (

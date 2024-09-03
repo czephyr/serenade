@@ -19,18 +19,6 @@ const InstallationTable = ({ data }) => {
   const [sortedInstallations, setSortedInstallations] = useState([]);
   const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    const defaultSortColumn = Cookies.get("sortColumn") || "date_delta";
-    const defaultSortDirection = Cookies.get("sortDirection") || "asc";
-
-    setSortColumn(defaultSortColumn);
-    setSortDirection(defaultSortDirection);
-    setSortedInstallations(
-      sortFunction(data, defaultSortColumn, defaultSortDirection)
-    );
-    setIsClient(true);
-  }, [data]);
-
   const getSortIndicator = (column) => {
     if (!isClient) return ""; // Avoid mismatch during SSR
     if (sortColumn === column) {
@@ -92,9 +80,15 @@ const InstallationTable = ({ data }) => {
   };
 
   useEffect(() => {
-    console.log(sortColumn);
-    console.log(sortFunction(data, sortColumn, sortDirection));
-    setSortedInstallations(sortFunction(data, sortColumn, sortDirection));
+    const defaultSortColumn = Cookies.get("sortColumn") || "date_delta";
+    const defaultSortDirection = Cookies.get("sortDirection") || "asc";
+
+    setSortColumn(defaultSortColumn);
+    setSortDirection(defaultSortDirection);
+    setSortedInstallations(
+      sortFunction(data, defaultSortColumn, defaultSortDirection)
+    );
+    setIsClient(true);
   }, [data, sortColumn, sortDirection]);
 
   return (
