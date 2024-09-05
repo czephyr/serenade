@@ -44,8 +44,8 @@ function DocumentManager({
     }
   }
 
-  const downloadDocument = (documentId) => {
-    const downloadUrl = `/api/documents/download?documentId=${documentId}`;
+  const downloadDocument = (document) => {
+    const downloadUrl = `/api/documents/download?documentId=${document.document_id}&fileType=${document.file_type}&fileName=${document.file_name}`;
     window.open(downloadUrl, "_blank");
   };
 
@@ -102,7 +102,7 @@ function DocumentManager({
               <p>{doc.file_name}</p>
               <div className="flex space-x-2">
                 <button
-                  onClick={() => downloadDocument(doc.document_id)}
+                  onClick={() => downloadDocument(doc)}
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
                 >
                   <svg

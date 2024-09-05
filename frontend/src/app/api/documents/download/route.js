@@ -20,7 +20,8 @@ export async function GET(req) {
       const res = new NextResponse(resp.body, {
         status: 200,
         headers: new Headers({
-          "content-type": resp.body.file_type,
+          "Content-Type": req.nextUrl.searchParams.get("fileType"),
+          "Content-Disposition": `inline; filename="${req.nextUrl.searchParams.get("fileName")}"`
         }),
       });
 
